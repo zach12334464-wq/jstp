@@ -1,9 +1,10 @@
 import asyncio
 import urllib.parse
 from playwright.async_api import async_playwright
-from scraper.config import FACEBOOK_AD_SEARCH_TERMS, FACEBOOK_AD_COUNTRY
-from scraper.utils.helpers import polite_delay, build_job_dict
-from scraper.utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+from config import FACEBOOK_AD_SEARCH_TERMS, FACEBOOK_AD_COUNTRY
+from utils.helpers import polite_delay, build_job_dict
+from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+
 from loguru import logger
 
 async def scrape() -> list[dict]:

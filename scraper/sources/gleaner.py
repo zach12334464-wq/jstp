@@ -1,8 +1,9 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
-from scraper.utils.helpers import get_random_user_agent, polite_delay, build_job_dict
-from scraper.utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+from utils.helpers import get_random_user_agent, polite_delay, build_job_dict
+from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+
 
 def scrape() -> list[dict]:
     """Scrapes job listings from Jamaica Gleaner."""

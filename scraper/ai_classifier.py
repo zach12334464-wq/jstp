@@ -1,8 +1,9 @@
 import json
 from groq import Groq
-from scraper.config import GROQ_API_KEY, GROQ_MODEL, BATCH_SIZE, MIN_RELEVANCE_SCORE, MAX_SCAM_SCORE
-from scraper.utils.helpers import rule_based_filter, is_student_relevant
-from scraper.utils.logger import log_ai_batch, log_job_discarded
+from config import GROQ_API_KEY, GROQ_MODEL, BATCH_SIZE, MIN_RELEVANCE_SCORE, MAX_SCAM_SCORE
+from utils.helpers import rule_based_filter, is_student_relevant
+from utils.logger import log_ai_batch, log_job_discarded
+
 from loguru import logger
 
 def _rule_based_fallback(title: str, description: str) -> tuple[float, float]:

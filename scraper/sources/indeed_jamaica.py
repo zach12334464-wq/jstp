@@ -2,9 +2,10 @@ import requests
 import time
 from bs4 import BeautifulSoup
 from datetime import datetime
-from scraper.config import MAX_RETRIES
-from scraper.utils.helpers import get_random_user_agent, polite_delay, build_job_dict
-from scraper.utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+from config import MAX_RETRIES
+from utils.helpers import get_random_user_agent, polite_delay, build_job_dict
+from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+
 from loguru import logger
 
 def scrape() -> list[dict]:

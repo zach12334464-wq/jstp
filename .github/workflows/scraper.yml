@@ -59,6 +59,7 @@ jobs:
 
       - name: Run scraper
         run: |
+          export PYTHONPATH="${PYTHONPATH}:$(pwd)/scraper"
           cd scraper
           python main.py --run-now
 

@@ -2,7 +2,8 @@ import random
 import time
 import re
 from datetime import datetime
-from scraper.config import USER_AGENTS, REQUEST_DELAY, STUDENT_KEYWORDS, DISCARD_KEYWORDS, SCAM_KEYWORDS, REMOTE_BLOCKLIST
+from config import USER_AGENTS, REQUEST_DELAY, STUDENT_KEYWORDS, DISCARD_KEYWORDS, SCAM_KEYWORDS, REMOTE_BLOCKLIST
+
 
 def get_random_user_agent() -> str:
     return random.choice(USER_AGENTS)

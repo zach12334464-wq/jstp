@@ -1,8 +1,9 @@
 import requests
 from datetime import datetime
-from scraper.config import REMOTE_BLOCKLIST
-from scraper.utils.helpers import polite_delay, build_job_dict
-from scraper.utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+from config import REMOTE_BLOCKLIST
+from utils.helpers import polite_delay, build_job_dict
+from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+
 
 def scrape() -> list[dict]:
     """Scrapes remote job listings from Remotive API."""

@@ -1,6 +1,7 @@
 from playwright.sync_api import sync_playwright
-from scraper.utils.helpers import polite_delay, build_job_dict
-from scraper.utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+from utils.helpers import polite_delay, build_job_dict
+from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
+
 from loguru import logger
 
 def scrape() -> list[dict]:

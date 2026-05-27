@@ -2,6 +2,7 @@ from supabase import create_client, Client
 from config import SUPABASE_URL, SUPABASE_KEY
 from utils.logger import log_scraper_error, log_job_inserted
 from utils.freshness import update_freshness_scores, should_archive
+
 from datetime import datetime
 
 supabase: Client = None
