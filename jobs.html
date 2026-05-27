@@ -1,0 +1,1980 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jobs - JSTP</title>
+  <meta name="description" content="Browse internships, part-time jobs, and global remote opportunities for Jamaican students." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/jobs.css">
+  <style>
+    /* ── Business Trust Badges ── */
+    .biz-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-radius: 3px;
+      padding: 2px 7px;
+      vertical-align: middle;
+      position: relative;
+      top: -1px;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .biz-badge:hover {
+      opacity: 0.8;
+    }
+    .biz-verified {
+      background: #0a0a0a;
+      color: #fff;
+    }
+    .biz-verified::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4ade80;
+      flex-shrink: 0;
+    }
+    .biz-unverified {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+    .biz-unverified::before {
+      content: '';
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #ef4444;
+      flex-shrink: 0;
+    }
+    /* remove emoji from search icon */
+    .search-icon svg { display: block; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar" role="banner">
+    <div class="nav-inner">
+      <a href="index.html" class="brand" aria-label="JSTP Home">
+        <div class="logo-mark-nav">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="28" height="28" rx="4" fill="#0a0a0a"/>
+            <text x="14" y="20" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="800" font-size="16">J</text>
+          </svg>
+        </div>
+        <span class="brand-name">JSTP</span>
+      </a>
+
+      <nav class="nav-center" role="navigation" aria-label="Main">
+        <a href="jobs.html" class="nav-active" id="navJobs">Jobs</a>
+        <a href="profile.html" id="navProfile">My Profile</a>
+      </nav>
+
+      <div class="nav-actions">
+        <div class="nav-avatar" id="navAvatar" title="Account" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">?</div>
+        <div class="nav-dropdown" id="navDropdown" aria-hidden="true">
+          <a href="profile.html" id="editProfileLink">Edit Profile</a>
+          <a href="index.html" id="signOutLink">Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LAYOUT -->
+  <main class="jobs-page">
+    <div class="dash-layout">
+
+      <!-- LEFT SIDEBAR - Filters -->
+      <aside class="jobs-sidebar" aria-label="Job filters">
+        <div class="search-wrap">
+          <span class="search-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+          <input class="search-input" type="text" id="searchInput" placeholder="Search jobs..." aria-label="Search jobs">
+        </div>
+
+        <div class="feed-tabs" role="tablist">
+          <button class="feed-tab active" data-feed="local" role="tab" aria-selected="true" id="tabLocal">Jamaica Jobs</button>
+          <button class="feed-tab" data-feed="global" role="tab" aria-selected="false" id="tabGlobal">Global Remote</button>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">JOB TYPE</div>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Internship"> Internship</label>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Part-time"> Part-time</label>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Summer Job"> Summer Job</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">PARISH</div>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Kingston"> Kingston</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St Andrew"> St Andrew</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St Catherine"> St Catherine</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St James"> St James</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Manchester"> Manchester</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Clarendon"> Clarendon</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Spanish Town"> Spanish Town</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">INDUSTRY</div>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Business"> Business</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Technology"> Technology</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Healthcare"> Healthcare</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Education"> Education</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Media"> Media</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Government"> Government</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-title">ACADEMIC LEVEL</div>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Sixth Form"> Sixth Form</label>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Undergraduate"> Undergraduate</label>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Postgraduate"> Postgraduate</label>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Any"> Any Level</label>
+        </div>
+
+        <button class="clear-btn" id="clearFilters">Clear All Filters</button>
+      </aside>
+
+      <!-- MAIN FEED -->
+      <section class="jobs-feed" aria-label="Job listings">
+        <div class="feed-header">
+          <h2 class="feed-title">Job Listings</h2>
+          <span class="feed-count" id="feedCount">6 Opportunities</span>
+        </div>
+
+        <!-- LOCAL JOBS PANEL -->
+        <div class="feed-panel" id="feed-local" role="tabpanel" aria-labelledby="tabLocal">
+
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fdf2d0; color:#92400e;">IC</div>
+              <div class="job-card-body">
+                <div class="job-company">Island Co. <span class="biz-badge biz-unverified">Unverified</span></div>
+                <div class="job-title">Marketing Intern</div>
+                <div class="job-desc">Support our marketing team with campaigns and social media</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Island Co. - Marketing Intern">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">2 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Support our marketing team with campaigns, content creation, and brand awareness initiatives. You'll work alongside a small team to create content for social media, email, and print.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Strong communication skills. Interest in marketing or business. Available for at least 3 months.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">Unpaid</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">June 30, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://islandco.com" class="job-detail-link" target="_blank" rel="noopener">https://islandco.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="Island Co. - Marketing Intern">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <article class="job-card"
+            data-type="Part-time"
+            data-parish="Montego Bay"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#d1fae5; color:#065f46;">CF</div>
+              <div class="job-card-body">
+                <div class="job-company">Caribbean Foods <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Retail Assistant</div>
+                <div class="job-desc">Assist customers and manage floor operations part-time</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Montego Bay</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Caribbean Foods - Retail Assistant">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">2 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist customers on the shop floor, manage inventory, and operate the till during busy periods. Great experience for anyone interested in retail or hospitality.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Friendly, reliable, and punctual. No experience required - full training provided.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$12,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">June 15, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="#" class="job-detail-link">Not provided</a>
+              </div>
+              <button class="btn-apply-full" data-job="Caribbean Foods - Retail Assistant">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-industry="Technology"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#ede9fe; color:#5b21b6;">TW</div>
+              <div class="job-card-body">
+                <div class="job-company">Tech Wave <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Junior Web Developer</div>
+                <div class="job-desc">Build and maintain web features for local clients</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Technology</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Tech Wave - Junior Web Developer">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">3 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Build and maintain web features for local clients. Work alongside senior developers on real projects. Great exposure to full-stack development in a professional environment.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Basic HTML, CSS, JavaScript knowledge. Interest in web development. Bonus: experience with React or any framework.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$20,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">July 1, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://techwave.jm" class="job-detail-link" target="_blank" rel="noopener">https://techwave.jm</a>
+              </div>
+              <button class="btn-apply-full" data-job="Tech Wave - Junior Web Developer">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-industry="Business"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fef3c7; color:#92400e;">GK</div>
+              <div class="job-card-body">
+                <div class="job-company">GraceKennedy <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Finance Intern</div>
+                <div class="job-desc">Assist the finance team with reporting and data entry</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="GraceKennedy - Finance Intern">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">4 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the GraceKennedy finance team with reporting, data entry, and reconciliation tasks. A great opportunity to gain hands-on experience with one of Jamaica's largest companies.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Studying accounting, finance or business. Detail oriented. Strong Excel skills preferred.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">Unpaid</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">June 20, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://gracekennedy.com" class="job-detail-link" target="_blank" rel="noopener">https://gracekennedy.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="GraceKennedy - Finance Intern">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <article class="job-card"
+            data-type="Part-time"
+            data-parish="Spanish Town"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fee2e2; color:#991b1b;">DJ</div>
+              <div class="job-card-body">
+                <div class="job-company">Digicel Jamaica <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Customer Service Rep</div>
+                <div class="job-desc">Handle customer inquiries and resolve account issues</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Spanish Town</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Digicel Jamaica - Customer Service Rep">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">5 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Handle customer inquiries, resolve account issues, and provide excellent service to Digicel customers. You'll be part of a fast-paced team making a real difference.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Good communication skills. Patient and professional demeanour. No experience required.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$15,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://digicelgroup.com" class="job-detail-link" target="_blank" rel="noopener">https://digicelgroup.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="Digicel Jamaica - Customer Service Rep">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <article class="job-card"
+            data-type="Summer Job"
+            data-parish="Kingston"
+            data-industry="Government"
+            data-level="Sixth Form"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#e0f2fe; color:#075985;">ME</div>
+              <div class="job-card-body">
+                <div class="job-company">Ministry of Education <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Admin Assistant</div>
+                <div class="job-desc">Support administrative operations during the summer term</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Summer Job</span>
+                  <span class="job-tag tag-industry">Government</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Ministry of Education - Admin Assistant">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">1 week ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Support administrative operations during the summer term. Filing, scheduling, data entry, and general office support across the Ministry's Kingston office.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Organised and professional. Basic computer skills. Sixth Form or recent graduate preferred.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">Stipend</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">May 31, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Sixth Form</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="#" class="job-detail-link">Not provided</a>
+              </div>
+              <button class="btn-apply-full" data-job="Ministry of Education - Admin Assistant">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 7 -->
+          <article class="job-card"
+            data-type="Part-time"
+            data-parish="St James"
+            data-industry="Business"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#e0e7ff; color:#3730a3;">NCB</div>
+              <div class="job-card-body">
+                <div class="job-company">National Commercial Bank <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Part-Time Teller</div>
+                <div class="job-desc">Assist with customer transactions and general inquiries in Montego Bay</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St James</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="NCB - Part-Time Teller">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">3 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Perfect for students looking for financial services experience. You will handle cash transactions, balance tills, and deliver exceptional customer service.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Excellent customer care, numeric agility, pursuing Business or related degree. St James resident preferred.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$18,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">July 10, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://jncb.com" class="job-detail-link" target="_blank" rel="noopener">https://jncb.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="NCB - Part-Time Teller">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 8 -->
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-industry="Technology"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fff7ed; color:#c2410c;">SV</div>
+              <div class="job-card-body">
+                <div class="job-company">Supreme Ventures <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">IT Support Intern</div>
+                <div class="job-desc">Help maintain our internal computing network and troubleshoot systems</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Technology</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Supreme Ventures - IT Support Intern">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">4 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the Supreme IT team with daily workstation configurations, software updates, and network troubleshooting.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Knowledge of operating systems, hardware setups, and network protocols. Eager to solve problems.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$22,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">July 1, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://supremeventures.com" class="job-detail-link" target="_blank" rel="noopener">https://supremeventures.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="Supreme Ventures - IT Support Intern">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 9 -->
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="St James"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#eff6ff; color:#1e40af;">AT</div>
+              <div class="job-card-body">
+                <div class="job-company">Appliance Traders Ltd <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Sales Operations Associate</div>
+                <div class="job-desc">Gain experience in commercial sales, client support, and order processing</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St James</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="ATL - Sales Operations Associate">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">5 days ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Work alongside our appliance sales reps, handle client queries, and manage stock allocations. Highly practical business operations experience.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Energetic personality, good communication skills, computer literacy.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$15,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">June 25, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">COMPANY WEBSITE</div>
+                <a href="https://atljamaica.com" class="job-detail-link" target="_blank" rel="noopener">https://atljamaica.com</a>
+              </div>
+              <button class="btn-apply-full" data-job="ATL - Sales Operations Associate">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 10 -->
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="St Catherine"
+            data-industry="Technology"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fef2f2; color:#991b1b;">JP</div>
+              <div class="job-card-body">
+                <div class="job-company">Jamaica Public Service <span class="biz-badge biz-unverified">Unverified</span></div>
+                <div class="job-title">Grid Technology Assistant</div>
+                <div class="job-desc">Work with smart grid systems and network monitoring software</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St Catherine</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Technology</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="JPS - Grid Technology Assistant">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">1 week ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the grid maintenance and analytics unit in Spanish Town with tech integration, smart meter dashboards, and daily monitoring tools.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Pursuing Engineering, Computer Science or equivalent. Strong data analysis interests.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$25,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">June 30, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <button class="btn-apply-full" data-job="JPS - Grid Technology Assistant">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 11 -->
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="St Andrew"
+            data-industry="Business"
+            data-level="Undergraduate"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#ecfdf5; color:#065f46;">SJ</div>
+              <div class="job-card-body">
+                <div class="job-company">Sagicor Jamaica <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Financial Analyst Intern</div>
+                <div class="job-desc">Help build financial portfolios, log data, and generate client reports</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St Andrew</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Sagicor - Financial Analyst Intern">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">1 week ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Fabulous resume builder in wealth management. Assist investment advisors with financial reports, data entry, and portfolio logs.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Studying Finance, Economics, or Accounting. High proficiency in Microsoft Excel.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$20,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">July 15, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Undergraduate</div>
+                </div>
+              </div>
+              <button class="btn-apply-full" data-job="Sagicor - Financial Analyst Intern">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 12 -->
+          <article class="job-card"
+            data-type="Summer Job"
+            data-parish="Kingston"
+            data-industry="Business"
+            data-level="Sixth Form"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fee2e2; color:#b91c1c;">RS</div>
+              <div class="job-card-body">
+                <div class="job-company">Red Stripe <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Brand Ambassador</div>
+                <div class="job-desc">Promote our brand at summer events, concerts, and campaigns</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">Kingston</span>
+                  <span class="job-tag tag-type">Summer Job</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Red Stripe - Brand Ambassador">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">1 week ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the marketing crew with summer brand distributions, activation events, and social campaigns.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Outgoing personality, must be 18+, great team worker. Kingston base.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">Stipend</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Sixth Form</div>
+                </div>
+              </div>
+              <button class="btn-apply-full" data-job="Red Stripe - Brand Ambassador">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 13 -->
+          <article class="job-card"
+            data-type="Part-time"
+            data-parish="St Andrew"
+            data-industry="Media"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#faf5ff; color:#7e22ce;">JW</div>
+              <div class="job-card-body">
+                <div class="job-company">J. Wray &amp; Nephew <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Social Media Assistant</div>
+                <div class="job-desc">Help generate social media content and coordinate brand uploads part-time</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St Andrew</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-industry">Media</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="JWN - Social Media Assistant">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">2 weeks ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the digital team with content calendars, TikTok / IG stories, and engagement reporting. Great part-time role alongside studies.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Familiarity with video editing apps, creative eye, copywriting interests.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$15,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <button class="btn-apply-full" data-job="JWN - Social Media Assistant">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <!-- JOB CARD 14 -->
+          <article class="job-card"
+            data-type="Internship"
+            data-parish="St Mary"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#f0fdf4; color:#166534;">JP</div>
+              <div class="job-card-body">
+                <div class="job-company">Jamaica Producers <span class="biz-badge biz-verified">Verified</span></div>
+                <div class="job-title">Agricultural Operations Intern</div>
+                <div class="job-desc">Work with logistics and agricultural operations in St Mary</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-parish">St Mary</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-industry">Business</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Jamaica Producers - Agricultural Operations Intern">Apply Now</button>
+                <button class="btn-report" onclick="openReportModal(this)">Report</button>
+                <div class="job-time">2 weeks ago</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Assist the operational farm and transport managers in St Mary with inventory systems, shipping schedules, and logs.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Attention to detail, basic accounting/admin skills, living in St Mary / Portland.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">$17,000/mo</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">July 5, 2025</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <button class="btn-apply-full" data-job="Jamaica Producers - Agricultural Operations Intern">Apply Now on JSTP</button>
+            </div>
+          </article>
+
+          <div class="no-results hidden" id="noResults">
+            <div class="no-results-icon" style="font-size:28px;font-weight:800;color:#ccc;letter-spacing:-0.02em;">JSTP</div>
+            <div class="no-results-title">No jobs match your filters</div>
+            <div class="no-results-sub">Try adjusting your search or clearing the filters</div>
+            <button class="clear-btn" onclick="document.getElementById('clearFilters').click()">Clear Filters</button>
+          </div>
+
+          <div class="pagination" id="localPagination"></div>
+
+          <!-- GOOGLE-STYLE ADS -->
+          <div class="google-ads-section">
+            <div class="google-ads-label">Sponsored</div>
+            <div class="google-ads-grid">
+              <div class="gad-card gad-blue">
+                <div class="gad-sponsored">Jamaica Jobs Today</div>
+                <div class="gad-logo" style="background:#4285F4;">JT</div>
+                <div class="gad-title">Find Jobs Near You in Jamaica</div>
+                <div class="gad-domain">jamaicajobstoday.com</div>
+                <p class="gad-text">Browse 500+ live job postings updated daily across all parishes.</p>
+                <a href="#" class="gad-cta blue">Search Now</a>
+              </div>
+              <div class="gad-card gad-green">
+                <div class="gad-sponsored">Caribbean HR</div>
+                <div class="gad-logo" style="background:#188038;">CH</div>
+                <div class="gad-title">Free CV Builder for Students</div>
+                <div class="gad-domain">caribbeanhr.com</div>
+                <p class="gad-text">Build a professional resume in minutes. Get noticed by top Caribbean employers.</p>
+                <a href="#" class="gad-cta green">Build Free CV</a>
+              </div>
+              <div class="gad-card gad-red">
+                <div class="gad-sponsored">FlowJamaica</div>
+                <div class="gad-logo" style="background:#EA4335;">FL</div>
+                <div class="gad-title">Student Internet Plans from $1,200/mo</div>
+                <div class="gad-domain">flowjamaica.com</div>
+                <p class="gad-text">Work from home or campus. Blazing fast internet for remote work & study.</p>
+                <a href="#" class="gad-cta red">View Plans</a>
+              </div>
+              <div class="gad-card gad-purple">
+                <div class="gad-sponsored">UWI Open Campus</div>
+                <div class="gad-logo" style="background:#7c3aed;">UW</div>
+                <div class="gad-title">Online Degrees — Apply Now</div>
+                <div class="gad-domain">open.uwi.edu</div>
+                <p class="gad-text">Earn your bachelor's or diploma online. Flexible schedules built for working students.</p>
+                <a href="#" class="gad-cta purple">Apply Today</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- GLOBAL REMOTE PANEL -->
+        <div class="feed-panel hidden" id="feed-global" role="tabpanel" aria-labelledby="tabGlobal">
+
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Media"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#f0fdf4; color:#14532d;">ND</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">NoDesk Inc.</div>
+                <div class="job-title">Content Writer</div>
+                <div class="job-desc">Write blog posts, articles and web copy for international clients. Fully remote, set your own hours.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="NoDesk - Content Writer" data-link="https://nodesk.co">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Write blog posts, articles and web copy for international clients. Fully remote - set your own hours and work from anywhere in Jamaica. Paid per article.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Strong written English. Reliable internet connection. Portfolio or writing samples preferred.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $15-25/article</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://nodesk.co" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on NoDesk →</a>
+            </div>
+          </article>
+
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Technology"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#eff6ff; color:#1e3a8a;">AP</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">Appen</div>
+                <div class="job-title">Data Entry Specialist</div>
+                <div class="job-desc">Complete micro-tasks including data labelling and AI training datasets. Flexible hours.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Appen - Data Entry Specialist" data-link="https://appen.com/join-our-team/">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Complete micro-tasks including data labelling, transcription, and AI training datasets. Flexible hours - work when you want, as much or as little as you like.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Reliable internet connection. Attention to detail. Basic computer skills.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $10-15/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://appen.com/join-our-team/" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on Appen →</a>
+            </div>
+          </article>
+
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fdf4ff; color:#6b21a8;">VA</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">We Work Remotely</div>
+                <div class="job-title">Virtual Assistant</div>
+                <div class="job-desc">Provide administrative support to international clients. Scheduling, email management, research.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="We Work Remotely - Virtual Assistant" data-link="https://weworkremotely.com">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Provide administrative support to international clients including scheduling, email management, research tasks, and data organisation. Ideal for organised, self-motivated students.</p>
+              </div>
+              <div class="job-detail-section">
+                <div class="job-detail-label">REQUIREMENTS</div>
+                <p class="job-detail-text">Strong English communication. Organised and reliable. Experience with Google Workspace a plus.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $12-18/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://weworkremotely.com" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Browse on We Work Remotely →</a>
+            </div>
+          </article>
+
+          <!-- GLOBAL JOB CARD 4 -->
+          <article class="job-card global-card"
+            data-type="Internship"
+            data-parish="Remote"
+            data-industry="Technology"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fef2f2; color:#b91c1c;">GL</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">GitLab</div>
+                <div class="job-title">Technical Support Intern</div>
+                <div class="job-desc">Help GitLab customers troubleshoot technical platform problems. Fully remote.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="GitLab - Technical Support Intern" data-link="https://about.gitlab.com/jobs/">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Troubleshoot customer environment integrations, GitLab runners, and hosting setups. A remote-first organization with a highly technical environment.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $20/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://about.gitlab.com/jobs/" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on GitLab →</a>
+            </div>
+          </article>
+
+          <!-- GLOBAL JOB CARD 5 -->
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Technology"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#eff6ff; color:#1e40af;">AM</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">Automattic</div>
+                <div class="job-title">Happiness Engineer Intern</div>
+                <div class="job-desc">Assist WordPress.com users with building and maintaining their sites. Fully remote.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Automattic - Happiness Engineer Intern" data-link="https://automattic.com/work-with-us/">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Guide WordPress.com users through customization options, domain purchases, CSS adjustments, and platform capabilities. Flexible hourly work.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $18/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://automattic.com/work-with-us/" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on Automattic →</a>
+            </div>
+          </article>
+
+          <!-- GLOBAL JOB CARD 6 -->
+          <article class="job-card global-card"
+            data-type="Internship"
+            data-parish="Remote"
+            data-industry="Media"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#ecfdf5; color:#065f46;">CV</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">Canva</div>
+                <div class="job-title">Graphic Design Intern</div>
+                <div class="job-desc">Work with the templates team to design templates for global users. Fully remote.</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Internship</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Canva - Graphic Design Intern" data-link="https://www.canva.com/careers/">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Create beautiful templates, graphic assets, and social layouts. Collaborate with art directors on canvas trends.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $22/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://www.canva.com/careers/" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on Canva →</a>
+            </div>
+          </article>
+
+          <!-- GLOBAL JOB CARD 7 -->
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Business"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#faf5ff; color:#7e22ce;">SF</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">Shopify</div>
+                <div class="job-title">Customer Success Assistant</div>
+                <div class="job-desc">Support global merchants with setting up and configuring their e-commerce stores</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Shopify - Customer Success Assistant" data-link="https://www.shopify.com/careers">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Provide technical support and guidance to Shopify merchants, helping them manage checkouts, themes, and apps. Set your own hours.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $16/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://www.shopify.com/careers" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on Shopify →</a>
+            </div>
+          </article>
+
+          <!-- GLOBAL JOB CARD 8 -->
+          <article class="job-card global-card"
+            data-type="Part-time"
+            data-parish="Remote"
+            data-industry="Media"
+            data-level="Any"
+            tabindex="0"
+            aria-expanded="false">
+            <div class="job-card-top">
+              <div class="job-company-mark" style="background:#fffbeb; color:#d97706;">FV</div>
+              <div class="job-card-body">
+                <div class="global-tag-pill">GLOBAL REMOTE</div>
+                <div class="job-company">Fiverr</div>
+                <div class="job-title">Patois Translation Specialist</div>
+                <div class="job-desc">Translate english scripts, transcriptions, and audio files to Jamaican Patois</div>
+                <div class="job-tags">
+                  <span class="job-tag tag-remote">Remote</span>
+                  <span class="job-tag tag-type">Part-time</span>
+                  <span class="job-tag tag-usd">USD Pay</span>
+                </div>
+              </div>
+              <div class="job-card-meta">
+                <button class="btn-apply" data-job="Fiverr - Patois Translation Specialist" data-link="https://www.fiverr.com">View &amp; Apply</button>
+                <div class="job-time">Rolling</div>
+              </div>
+            </div>
+            <div class="job-details">
+              <div class="job-detail-section">
+                <div class="job-detail-label">ABOUT THE ROLE</div>
+                <p class="job-detail-text">Provide script translation, audio transcripts, or patois voiceovers for international media firms. Flexible micro-gigs.</p>
+              </div>
+              <div class="job-detail-grid">
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">SALARY</div>
+                  <div class="job-detail-value">USD $25/hr</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">DEADLINE</div>
+                  <div class="job-detail-value">Rolling</div>
+                </div>
+                <div class="job-detail-cell">
+                  <div class="job-detail-label">LEVEL</div>
+                  <div class="job-detail-value">Any</div>
+                </div>
+              </div>
+              <a href="https://www.fiverr.com" target="_blank" rel="noopener" class="btn-apply-full" style="text-align:center; text-decoration:none; display:block;">Apply on Fiverr →</a>
+            </div>
+          </article>
+
+
+          <div class="pagination" id="globalPagination"></div>
+
+          <!-- GOOGLE-STYLE ADS -->
+          <div class="google-ads-section">
+            <div class="google-ads-label">Sponsored</div>
+            <div class="google-ads-grid">
+              <div class="gad-card gad-blue">
+                <div class="gad-sponsored">Payoneer</div>
+                <div class="gad-logo" style="background:#ff4800;">P</div>
+                <div class="gad-title">Get Paid in USD from Anywhere</div>
+                <div class="gad-domain">payoneer.com</div>
+                <p class="gad-text">Receive USD, EUR & GBP directly to your Payoneer account. Withdraw to Jamaican banks.</p>
+                <a href="#" class="gad-cta blue">Open Free Account</a>
+              </div>
+              <div class="gad-card gad-green">
+                <div class="gad-sponsored">Fiverr Business</div>
+                <div class="gad-logo" style="background:#1dbf73;">FV</div>
+                <div class="gad-title">Sell Your Skills Online</div>
+                <div class="gad-domain">fiverr.com</div>
+                <p class="gad-text">Turn your talent into income. Graphic design, writing, video, coding — all in demand.</p>
+                <a href="#" class="gad-cta green">Start Selling</a>
+              </div>
+              <div class="gad-card gad-red">
+                <div class="gad-sponsored">Toptal</div>
+                <div class="gad-logo" style="background:#204ECF;">TT</div>
+                <div class="gad-title">Top 3% Remote Talent Network</div>
+                <div class="gad-domain">toptal.com</div>
+                <p class="gad-text">Apply to join the world's most exclusive remote talent network. Earn USD with global companies.</p>
+                <a href="#" class="gad-cta red">Apply Now</a>
+              </div>
+              <div class="gad-card gad-purple">
+                <div class="gad-sponsored">Wise</div>
+                <div class="gad-logo" style="background:#00b9ff;">W</div>
+                <div class="gad-title">Best Exchange Rates for JMD</div>
+                <div class="gad-domain">wise.com</div>
+                <p class="gad-text">Send & receive money internationally with real exchange rates. No hidden fees.</p>
+                <a href="#" class="gad-cta purple">Try Wise Free</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT PANEL -->
+      <aside class="jobs-right" aria-label="Quick stats">
+        <div class="right-card">
+          <div class="right-card-title">YOUR APPLICATIONS</div>
+          <div class="right-card-count" id="appCount">0</div>
+          <div class="right-card-label">applications submitted</div>
+          <div class="apps-list" id="appsList">
+            <div class="app-empty">Apply to a job to track it here</div>
+          </div>
+          <a class="right-link" href="profile.html">View My Profile →</a>
+        </div>
+
+        <div class="right-card">
+          <div class="right-card-title">JOB ALERTS</div>
+          <div class="right-card-desc">Get notified on WhatsApp when new jobs match your profile</div>
+          <a class="btn-outline-right" href="profile.html">Update WhatsApp</a>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- APPLY MODAL -->
+  <div class="modal-overlay hidden" id="applyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <button class="modal-close" id="modalClose" aria-label="Close">×</button>
+      <div class="modal-eyebrow">APPLY ON JSTP</div>
+      <h2 class="modal-title" id="modalTitle">Job Title</h2>
+      <div class="modal-body">
+        <div class="modal-field">
+          <label for="appName">Full Name</label>
+          <input type="text" id="appName" placeholder="Your name">
+        </div>
+        <div class="modal-field">
+          <label for="appEmail">Email</label>
+          <input type="email" id="appEmail" placeholder="your@email.com">
+        </div>
+        <div class="modal-field">
+          <label for="appWhatsapp">WhatsApp Number</label>
+          <input type="tel" id="appWhatsapp" placeholder="+1 (876) 555-0123">
+        </div>
+        <div class="modal-field">
+          <label for="appNote">Cover Note (optional)</label>
+          <textarea id="appNote" rows="4" placeholder="Briefly tell the employer why you're a great fit..."></textarea>
+        </div>
+      </div>
+      <button class="modal-submit" id="modalSubmit">Submit Application →</button>
+      <p class="modal-fine">The employer will contact you via WhatsApp or email</p>
+    </div>
+  </div>
+
+  <!-- VERIFICATION MODAL -->
+  <div class="modal-overlay hidden" id="verificationModal" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle" style="z-index: 600;">
+    <div class="modal" style="max-width: 480px; padding: 36px; border-radius: 8px;">
+      <button class="modal-close" id="verifyModalClose" aria-label="Close" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: #888;">&times;</button>
+      <div id="verifyModalUnverifiedContent">
+        <div class="modal-eyebrow" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #b91c1c; font-weight: 800; margin-bottom: 6px;">TRUST &amp; SAFETY ADVISORY</div>
+        <h2 class="modal-title" id="verifyModalTitle" style="font-size: 22px; font-weight: 800; color: #0a0a0a; margin-bottom: 16px; line-height: 1.3;">Unverified Employer</h2>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: left;">This company has not yet completed JSTP's official business verification process. Please keep the following safety guidelines in mind:</p>
+        <div style="background: #fdf2f2; border-left: 4px solid #ef4444; padding: 12px 16px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+          <strong style="display: block; font-size: 13px; color: #991b1b; margin-bottom: 8px;">Guidelines for Students:</strong>
+          <ul style="margin-left: 20px; font-size: 13px; color: #555; line-height: 1.6; padding-left: 0; list-style-type: disc;">
+            <li style="margin-bottom: 8px; padding-left: 4px;">Never share highly sensitive details like banking passwords, full tax IDs (TRN), or passport copies before an interview.</li>
+            <li style="margin-bottom: 8px; padding-left: 4px;">Wait for a formal, written employment contract detailing the agreed salary and responsibilities.</li>
+            <li style="margin-bottom: 0; padding-left: 4px;">JSTP never permits employers to charge fees to candidates for job applications or training.</li>
+          </ul>
+        </div>
+        <button class="modal-submit" id="verifyModalOk" style="width: 100%; padding: 14px; background: #0a0a0a; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;">Got It</button>
+      </div>
+      <div id="verifyModalVerifiedContent" class="hidden">
+        <div class="modal-eyebrow" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #1a7a4a; font-weight: 800; margin-bottom: 6px;">VETTED &amp; TRUSTED</div>
+        <h2 class="modal-title" style="font-size: 22px; font-weight: 800; color: #0a0a0a; margin-bottom: 16px; line-height: 1.3;">Verified Account Status</h2>
+        <div style="text-align: center; margin-bottom: 20px; padding: 12px;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: #e8f5e9; color: #1a7a4a; border-radius: 50%; font-size: 28px; font-weight: bold; margin-bottom: 12px; border: 2px solid #81c784;">✓</div>
+          <p style="font-size: 14px; color: #1a7a4a; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">This Business is Fully Verified</p>
+        </div>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 16px; text-align: left;">This company has successfully completed our verification process, including company domain confirmation and official business registry validation.</p>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: left;">By hiring from verified employers, students are guaranteed legitimate contracts, professional work environments, and secure payment processing.</p>
+        <button class="modal-submit" id="verifyModalVerifiedOk" style="width: 100%; padding: 14px; background: #0a0a0a; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;">Great</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+  (function(){
+    // Supabase stub
+    const supabase = {
+      from: (table) => ({
+        insert: async (data) => ({ error: null }),
+        select: async () => ({ data: [], error: null }),
+      })
+    };
+
+    // Nav setup
+    const navAvatar = document.getElementById('navAvatar');
+    const navDropdown = document.getElementById('navDropdown');
+
+    const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+    const profile = JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+    if (profile.photoDataUrl) {
+      navAvatar.style.backgroundImage = 'url(' + profile.photoDataUrl + ')';
+      navAvatar.style.backgroundSize = 'cover';
+      navAvatar.style.backgroundPosition = 'center';
+      navAvatar.textContent = '';
+    } else if (user.firstName) {
+      navAvatar.textContent = (user.firstName[0] + (user.lastName ? user.lastName[0] : '')).toUpperCase();
+    }
+
+    navAvatar.addEventListener('click', function(){
+      const isOpen = navDropdown.classList.toggle('open');
+      navAvatar.setAttribute('aria-expanded', isOpen);
+    });
+    navAvatar.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navAvatar.click(); }
+    });
+    document.addEventListener('click', function(e){
+      if (!navAvatar.contains(e.target) && !navDropdown.contains(e.target)){
+        navDropdown.classList.remove('open');
+      }
+    });
+
+    document.getElementById('signOutLink').addEventListener('click', function(e){
+      e.preventDefault();
+      localStorage.removeItem('jstp_user');
+      window.location.href = 'index.html';
+    });
+
+    // Toast
+    const toast = document.getElementById('toast');
+    function showToast(msg, duration) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), duration || 3000);
+    }
+
+    // Job card toggle - SINGLE CLICK (not double)
+    document.querySelectorAll('.job-card').forEach(function(card){
+      const top = card.querySelector('.job-card-top');
+      if (!top) return;
+
+      top.addEventListener('click', function(e){
+        if (e.target.closest('.btn-apply')) return;
+        toggleCard(card);
+      });
+
+      card.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggleCard(card);
+        }
+      });
+    });
+
+    function toggleCard(card) {
+      const isOpen = card.classList.contains('open');
+      document.querySelectorAll('.job-card.open').forEach(c => {
+        c.classList.remove('open');
+        c.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        card.classList.add('open');
+        card.setAttribute('aria-expanded', 'true');
+        setTimeout(() => {
+          const rect = card.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 50);
+      }
+    }
+
+    // Apply Now buttons
+    const applyModal = document.getElementById('applyModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalClose = document.getElementById('modalClose');
+    const modalSubmit = document.getElementById('modalSubmit');
+    let currentJob = '';
+    let currentLink = '';
+
+    document.querySelectorAll('.btn-apply, .btn-apply-full').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        currentJob = this.dataset.job || 'this position';
+        currentLink = this.dataset.link || '';
+
+        if (currentLink && (this.classList.contains('btn-apply') || this.tagName === 'A')) {
+          if (currentLink.startsWith('http')) {
+            window.open(currentLink, '_blank', 'noopener');
+            return;
+          }
+        }
+
+        modalTitle.textContent = currentJob;
+
+        const profile = JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+        document.getElementById('appName').value = ((profile.firstName||'') + ' ' + (profile.lastName||'')).trim();
+        document.getElementById('appWhatsapp').value = profile.whatsapp || '';
+
+        applyModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        document.getElementById('appName').focus();
+      });
+    });
+
+    function closeModal() {
+      applyModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    applyModal.addEventListener('click', function(e){
+      if (e.target === applyModal) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeModal();
+    });
+
+    // Applications tracking
+    let applications = JSON.parse(localStorage.getItem('jstp_applications') || '[]');
+
+    function updateAppPanel() {
+      document.getElementById('appCount').textContent = applications.length;
+      const list = document.getElementById('appsList');
+      if (applications.length === 0) {
+        list.innerHTML = '<div class="app-empty">Apply to a job to track it here</div>';
+      } else {
+        list.innerHTML = applications.slice(-3).reverse().map(a =>
+          '<div class="app-item"><div class="app-item-title">' + a.job + '</div><div class="app-item-date">' + a.date + '</div></div>'
+        ).join('');
+      }
+    }
+
+    updateAppPanel();
+
+    modalSubmit.addEventListener('click', async function(){
+      const name = document.getElementById('appName').value.trim();
+      const email = document.getElementById('appEmail').value.trim();
+      const whatsapp = document.getElementById('appWhatsapp').value.trim();
+      const note = document.getElementById('appNote').value.trim();
+
+      if (!name || !email) {
+        showToast('Please enter your name and email', 3000);
+        return;
+      }
+
+      this.textContent = 'Submitting...';
+      this.disabled = true;
+
+      await new Promise(r => setTimeout(r, 800));
+
+      const app = {
+        job: currentJob,
+        name,
+        email,
+        whatsapp,
+        note,
+        date: new Date().toLocaleDateString('en-JM', { month: 'short', day: 'numeric' }),
+      };
+      applications.push(app);
+      localStorage.setItem('jstp_applications', JSON.stringify(applications));
+      updateAppPanel();
+
+      closeModal();
+      showToast('✓ Application submitted! The employer will contact you soon.', 4000);
+      this.textContent = 'Submit Application →';
+      this.disabled = false;
+    });
+
+    // Feed tabs
+    const feedTabs = document.querySelectorAll('.feed-tab');
+    const feedPanels = document.querySelectorAll('.feed-panel');
+
+    feedTabs.forEach(function(tab){
+      tab.addEventListener('click', function(){
+        feedTabs.forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+        feedPanels.forEach(p => p.classList.add('hidden'));
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected','true');
+        const panel = document.getElementById('feed-' + tab.dataset.feed);
+        panel.classList.remove('hidden');
+        document.querySelectorAll('.job-card.open').forEach(c => c.classList.remove('open'));
+        applyFilters(false);
+      });
+    });
+
+    // Search + Filters
+    const searchInput = document.getElementById('searchInput');
+    let currentPage = 1;
+    const itemsPerPage = 6;
+
+    function applyFilters(keepPage = false) {
+      if (!keepPage) {
+        currentPage = 1;
+      }
+      const q = searchInput.value.toLowerCase();
+      const checked = { type: [], parish: [], industry: [], level: [] };
+
+      document.querySelectorAll('[data-filter]').forEach(function(cb){
+        if (cb.checked) checked[cb.dataset.filter].push(cb.value.toLowerCase());
+      });
+
+      const activePanel = document.querySelector('.feed-panel:not(.hidden)');
+      if (!activePanel) return;
+
+      const matchedCards = [];
+
+      activePanel.querySelectorAll('.job-card').forEach(function(card){
+        const text = card.innerText.toLowerCase();
+        const matchQ = !q || text.includes(q);
+        const matchType = !checked.type.length || checked.type.includes((card.dataset.type||'').toLowerCase());
+        const matchParish = !checked.parish.length || checked.parish.includes((card.dataset.parish||'').toLowerCase());
+        const matchIndustry = !checked.industry.length || checked.industry.includes((card.dataset.industry||'').toLowerCase());
+        const matchLevel = !checked.level.length || checked.level.includes((card.dataset.level||'').toLowerCase()) || checked.level.includes('any');
+
+        const show = matchQ && matchType && matchParish && matchIndustry && matchLevel;
+        if (show) {
+          matchedCards.push(card);
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      const noResults = document.getElementById('noResults');
+      if (noResults) noResults.classList.toggle('hidden', matchedCards.length > 0);
+
+      // Render pagination for the active panel
+      const panelId = activePanel.id;
+      const paginationContainer = (panelId === 'feed-local') 
+        ? document.getElementById('localPagination') 
+        : document.getElementById('globalPagination');
+
+      if (paginationContainer) {
+        renderPagination(paginationContainer, matchedCards);
+      }
+
+      // Update feed count
+      const total = matchedCards.length;
+      document.getElementById('feedCount').textContent = total + ' Opportunit' + (total === 1 ? 'y' : 'ies');
+    }
+
+    function renderPagination(container, matchedCards) {
+      const totalPages = Math.ceil(matchedCards.length / itemsPerPage) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      matchedCards.forEach((card, index) => {
+        if (index >= startIndex && index < endIndex) {
+          card.style.display = '';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (totalPages <= 1) {
+        container.innerHTML = '';
+        return;
+      }
+
+      let html = '';
+      if (currentPage > 1) {
+        html += '<button class="page-btn page-btn-prev">← Prev</button>';
+      }
+
+      for (let i = 1; i <= totalPages; i++) {
+        const activeClass = i === currentPage ? 'active' : '';
+        html += `<button class="page-btn ${activeClass}" data-page="${i}">${i}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += '<button class="page-btn-next">Next →</button>';
+      }
+
+      container.innerHTML = html;
+
+      // Event listeners
+      container.querySelectorAll('.page-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.preventDefault();
+          currentPage = parseInt(this.dataset.page);
+          applyFilters(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      const prevBtn = container.querySelector('.page-btn-prev');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          currentPage--;
+          applyFilters(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const nextBtn = container.querySelector('.page-btn-next');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          currentPage++;
+          applyFilters(true);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    }
+
+    searchInput.addEventListener('input', () => applyFilters(false));
+    document.querySelectorAll('[data-filter]').forEach(cb => cb.addEventListener('change', () => applyFilters(false)));
+
+    document.getElementById('clearFilters').addEventListener('click', function(){
+      searchInput.value = '';
+      document.querySelectorAll('[data-filter]').forEach(cb => cb.checked = false);
+      const noResults = document.getElementById('noResults');
+      if (noResults) noResults.classList.add('hidden');
+      applyFilters(false);
+    });
+
+    // Verification Modal Handling
+    const verificationModal = document.getElementById('verificationModal');
+    const verifyModalClose = document.getElementById('verifyModalClose');
+    const verifyModalOk = document.getElementById('verifyModalOk');
+    const verifyModalVerifiedOk = document.getElementById('verifyModalVerifiedOk');
+    const unverifiedContent = document.getElementById('verifyModalUnverifiedContent');
+    const verifiedContent = document.getElementById('verifyModalVerifiedContent');
+
+    function openVerificationModal(isVerified) {
+      if (isVerified) {
+        unverifiedContent.classList.add('hidden');
+        verifiedContent.classList.remove('hidden');
+      } else {
+        unverifiedContent.classList.remove('hidden');
+        verifiedContent.classList.add('hidden');
+      }
+      verificationModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeVerificationModal() {
+      verificationModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    // Attach click listener to verified/unverified badges
+    document.addEventListener('click', function(e) {
+      const badge = e.target.closest('.biz-badge');
+      if (badge) {
+        e.stopPropagation();
+        const isVerified = badge.classList.contains('biz-verified');
+        openVerificationModal(isVerified);
+      }
+    });
+
+    if (verifyModalClose) verifyModalClose.addEventListener('click', closeVerificationModal);
+    if (verifyModalOk) verifyModalOk.addEventListener('click', closeVerificationModal);
+    if (verifyModalVerifiedOk) verifyModalVerifiedOk.addEventListener('click', closeVerificationModal);
+    if (verificationModal) {
+      verificationModal.addEventListener('click', function(e) {
+        if (e.target === verificationModal) closeVerificationModal();
+      });
+    }
+
+    // Init
+    applyFilters(false);
+
+  })();
+  </script>
+
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="reportModal" style="display:none">
+  <div class="report-modal">
+    <h3>Report This Listing</h3>
+    <p>Select a reason for your report. All reports are reviewed by the JSTP admin team.</p>
+    <div class="report-reasons">
+      <label class="report-reason"><input type="radio" name="reportReason" value="scam"> Possible scam or fraud</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="inappropriate"> Inappropriate content</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="misleading"> Misleading job description</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="payment"> Requested upfront payment</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="other"> Other</label>
+    </div>
+    <button class="report-submit" onclick="submitReport()">Submit Report</button>
+    <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+  let currentReportedJob = null;
+  function openReportModal(btn) {
+    const card = btn.closest('.job-card');
+    const title = card.querySelector('.job-title').textContent.trim();
+    const companyDiv = card.querySelector('.job-company');
+    let company = companyDiv.textContent.trim();
+    if (companyDiv.querySelector('.biz-badge')) {
+      const clone = companyDiv.cloneNode(true);
+      const span = clone.querySelector('.biz-badge');
+      if (span) span.remove();
+      company = clone.textContent.trim();
+    }
+    currentReportedJob = { title, company };
+    document.getElementById('reportModal').style.display = 'flex';
+  }
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+    document.querySelectorAll('input[name="reportReason"]').forEach(r => r.checked = false);
+  }
+  function submitReport() {
+    const selected = document.querySelector('input[name="reportReason"]:checked');
+    if (!selected) { alert('Please select a reason.'); return; }
+    
+    const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+    const profile = JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+    const studentName = (profile.firstName || user.firstName || 'Jerome') + ' ' + (profile.lastName || user.lastName || 'Brown');
+    const reasonLabel = selected.parentElement.textContent.trim();
+    
+    const scores = {
+      scam: 0.91,
+      inappropriate: 0.45,
+      misleading: 0.65,
+      payment: 0.98,
+      other: 0.32
+    };
+    const scoreVal = scores[selected.value] || 0.5;
+    
+    const newReport = {
+      id: Date.now(),
+      type: 'JOB REPORT',
+      time: 'Just now',
+      subject: 'Reported listing: "' + currentReportedJob.title + '"',
+      reportedBy: studentName + ' (student)',
+      reason: reasonLabel + ' - ' + currentReportedJob.company,
+      score: scoreVal
+    };
+    
+    const reports = JSON.parse(localStorage.getItem('jstp_reports') || '[]');
+    reports.unshift(newReport);
+    localStorage.setItem('jstp_reports', JSON.stringify(reports));
+
+    closeReportModal();
+    alert('Report submitted. The JSTP admin team will review this listing.');
+  }
+  document.getElementById('reportModal').addEventListener('click', function(e) {
+    if (e.target === this) closeReportModal();
+  });
+</script>
+
+</body>
+</html>

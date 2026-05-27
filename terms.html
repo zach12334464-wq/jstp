@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service — JSTP</title>
+  <meta name="description" content="JSTP Terms of Service — the rules governing use of the Jamaica Student Talent Pipeline platform." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: #f5f5f5; color: #0a0a0a; }
+
+    /* NAVBAR */
+    .tos-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: #ffffff;
+      border-bottom: 2px solid #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 100;
+    }
+    .tos-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .tos-brand-name {
+      font-size: 15px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #0a0a0a;
+    }
+    .tos-back {
+      font-size: 12px;
+      font-weight: 600;
+      color: #888;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .tos-back:hover { color: #0a0a0a; }
+
+    /* PAGE LAYOUT */
+    .tos-page {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 96px 24px 80px;
+    }
+
+    /* HERO */
+    .tos-hero {
+      background: #0a0a0a;
+      border-radius: 8px;
+      padding: 40px 48px;
+      margin-bottom: 40px;
+    }
+    .tos-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .tos-headline {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .tos-meta {
+      font-size: 13px;
+      color: #888;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .tos-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .tos-meta span::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #555;
+    }
+    .tos-meta span:first-child::before { display: none; }
+
+    /* TABLE OF CONTENTS */
+    .tos-toc {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 24px 28px;
+      margin-bottom: 32px;
+    }
+    .tos-toc-title {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tos-toc ol {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 24px;
+    }
+    .tos-toc ol li a {
+      font-size: 13px;
+      font-weight: 500;
+      color: #444;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .tos-toc ol li a:hover { color: #0a0a0a; text-decoration: underline; }
+    .tos-toc ol li {
+      counter-increment: toc-item;
+    }
+    .tos-toc ol li a::before {
+      content: counter(toc-item) ". ";
+      font-weight: 700;
+      color: #bbb;
+      margin-right: 2px;
+    }
+    .tos-toc ol { counter-reset: toc-item; }
+
+    /* SECTIONS */
+    .tos-body {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .tos-section {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-bottom: none;
+      padding: 32px 36px;
+    }
+    .tos-section:first-child { border-radius: 6px 6px 0 0; }
+    .tos-section:last-child { border-bottom: 1px solid #e0e0e0; border-radius: 0 0 6px 6px; }
+
+    .tos-section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+    .tos-section-num {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      background: #0a0a0a;
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .tos-section-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: #0a0a0a;
+    }
+
+    .tos-clauses {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .tos-clause {
+      display: flex;
+      gap: 14px;
+    }
+    .tos-clause-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #bbb;
+      min-width: 32px;
+      padding-top: 2px;
+      flex-shrink: 0;
+    }
+    .tos-clause-text {
+      font-size: 14px;
+      color: #444;
+      line-height: 1.75;
+    }
+    .tos-clause-text strong {
+      color: #0a0a0a;
+      font-weight: 700;
+    }
+
+    /* ACCEPTANCE FOOTER */
+    .tos-acceptance {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      border-radius: 6px;
+      padding: 36px 40px;
+      margin-top: 32px;
+      text-align: center;
+    }
+    .tos-acceptance-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+    .tos-acceptance-text {
+      font-size: 13px;
+      color: #888;
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 24px;
+    }
+    .tos-acceptance-btns {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .tos-btn-primary {
+      padding: 12px 28px;
+      background: #fff;
+      color: #0a0a0a;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      transition: opacity 0.15s;
+    }
+    .tos-btn-primary:hover { opacity: 0.9; }
+    .tos-btn-outline {
+      padding: 12px 28px;
+      background: transparent;
+      color: #888;
+      border: 1px solid #333;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .tos-btn-outline:hover { border-color: #666; color: #ccc; }
+
+    /* Contact highlight */
+    .tos-contact-link {
+      color: #0a0a0a;
+      font-weight: 700;
+    }
+
+    @media (max-width: 600px) {
+      .tos-nav { padding: 0 20px; }
+      .tos-page { padding: 88px 16px 60px; }
+      .tos-hero { padding: 28px 24px; }
+      .tos-headline { font-size: 24px; }
+      .tos-section { padding: 24px 20px; }
+      .tos-toc ol { grid-template-columns: 1fr; }
+      .tos-acceptance { padding: 28px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="tos-nav">
+    <a href="index.html" class="tos-brand">
+      <div style="width:28px;height:28px;background:#0a0a0a;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border-radius:4px;">J</div>
+      <span class="tos-brand-name">JSTP</span>
+    </a>
+    <a href="javascript:history.back()" class="tos-back">← Back</a>
+  </header>
+
+  <div class="tos-page">
+
+    <!-- HERO HEADER -->
+    <div class="tos-hero">
+      <div class="tos-eyebrow">Legal</div>
+      <h1 class="tos-headline">Terms of Service</h1>
+      <div class="tos-meta">
+        <span>Last updated: May 2026</span>
+        <span>Effective immediately upon registration</span>
+        <span>Jamaica Student Talent Pipeline</span>
+      </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="tos-toc">
+      <div class="tos-toc-title">Contents</div>
+      <ol>
+        <li><a href="#s1">About JSTP</a></li>
+        <li><a href="#s2">Eligibility</a></li>
+        <li><a href="#s3">Account Registration</a></li>
+        <li><a href="#s4">Platform Use &amp; Integrity</a></li>
+        <li><a href="#s5">Employment Relationships</a></li>
+        <li><a href="#s6">Business Listings &amp; Verification</a></li>
+        <li><a href="#s7">International &amp; Remote Jobs</a></li>
+        <li><a href="#s8">Student Responsibilities</a></li>
+        <li><a href="#s9">WhatsApp Notifications</a></li>
+        <li><a href="#s10">Data &amp; Privacy</a></li>
+        <li><a href="#s11">Liability &amp; Indemnification</a></li>
+      </ol>
+    </div>
+
+    <!-- SECTIONS -->
+    <div class="tos-body">
+
+      <!-- 1 -->
+      <div class="tos-section" id="s1">
+        <div class="tos-section-header">
+          <div class="tos-section-num">1</div>
+          <div class="tos-section-title">About JSTP</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">1.1</div>
+            <div class="tos-clause-text">JSTP (Jamaica Student Talent Pipeline) is an online platform that connects Jamaican students with internship, part-time, summer, and remote employment opportunities. JSTP operates as a <strong>connection and discovery platform only</strong>.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">1.2</div>
+            <div class="tos-clause-text">JSTP is <strong>not an employer, staffing agency, or recruitment firm</strong>. We do not employ students, issue contracts of employment, or manage payroll on behalf of any party.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">1.3</div>
+            <div class="tos-clause-text">JSTP is operated independently and is not affiliated with any government agency, educational institution, or employer listed on the platform unless explicitly stated.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">1.4</div>
+            <div class="tos-clause-text">These Terms apply to all users of the platform including students, businesses, and visitors. By accessing JSTP you confirm you have read and agree to these Terms.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="tos-section" id="s2">
+        <div class="tos-section-header">
+          <div class="tos-section-num">2</div>
+          <div class="tos-section-title">Eligibility</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">2.1</div>
+            <div class="tos-clause-text">Student accounts are open to individuals who are currently enrolled in or have recently completed a recognised educational programme in Jamaica, including Sixth Form, undergraduate, and postgraduate studies.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">2.2</div>
+            <div class="tos-clause-text">Business accounts are open to legally registered companies, sole traders, and organisations operating within Jamaica or seeking to hire Jamaican-based remote talent internationally.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">2.3</div>
+            <div class="tos-clause-text">You must be at least <strong>16 years of age</strong> to create a student account on JSTP. Users under 18 should have parental or guardian awareness of their use of the platform.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">2.4</div>
+            <div class="tos-clause-text">JSTP reserves the right to refuse, suspend, or terminate any account that does not meet eligibility requirements or that violates these Terms at any time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="tos-section" id="s3">
+        <div class="tos-section-header">
+          <div class="tos-section-num">3</div>
+          <div class="tos-section-title">Account Registration</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">3.1</div>
+            <div class="tos-clause-text">You are responsible for providing <strong>accurate, truthful, and up-to-date information</strong> when creating your account. Providing false information is grounds for immediate account termination.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">3.2</div>
+            <div class="tos-clause-text">You are responsible for maintaining the confidentiality of your login credentials. JSTP is not liable for any unauthorised access to your account resulting from your failure to protect your password.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">3.3</div>
+            <div class="tos-clause-text">Each individual or business may maintain <strong>only one active account</strong> on JSTP. Creating duplicate accounts is prohibited and may result in all associated accounts being suspended.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">3.4</div>
+            <div class="tos-clause-text">You must notify JSTP immediately if you become aware of any unauthorised use of your account or any other security breach at <a href="mailto:support@jstp.com" class="tos-contact-link">support@jstp.com</a>.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="tos-section" id="s4">
+        <div class="tos-section-header">
+          <div class="tos-section-num">4</div>
+          <div class="tos-section-title">Platform Use &amp; Integrity</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">4.1</div>
+            <div class="tos-clause-text">JSTP is to be used solely for legitimate job seeking and talent acquisition purposes. Any use of the platform for <strong>spam, harassment, solicitation, or fraudulent activity</strong> is strictly prohibited.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">4.2</div>
+            <div class="tos-clause-text">You may not use JSTP to collect personal data about other users for purposes outside of legitimate hiring or job application activity.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">4.3</div>
+            <div class="tos-clause-text">You may not attempt to reverse engineer, scrape, copy, or replicate any part of the JSTP platform, its design, database, or content without prior written permission from JSTP.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">4.4</div>
+            <div class="tos-clause-text">JSTP's AI-powered matching and ranking are tools for convenience only and do not constitute a guarantee of a candidate's suitability or a job's quality.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">4.5</div>
+            <div class="tos-clause-text">Users are prohibited from using JSTP to build a competing product, including the prohibition of using JSTP's database to "train" other AI models or scrapers.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="tos-section" id="s5">
+        <div class="tos-section-header">
+          <div class="tos-section-num">5</div>
+          <div class="tos-section-title">Employment Relationships</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">5.1</div>
+            <div class="tos-clause-text">Any employment, internship, or work arrangement entered into as a result of a connection made through JSTP is <strong>solely between the student and the employer</strong>. JSTP is not a party to that arrangement.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">5.2</div>
+            <div class="tos-clause-text">Employers are solely responsible for all employment-related obligations including but not limited to contracts, wages, statutory deductions, NIS contributions, TRN registration, and bank payment arrangements.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">5.3</div>
+            <div class="tos-clause-text">Students are responsible for ensuring they meet any legal or administrative requirements for employment in Jamaica including obtaining a TRN, registering for NIS, and providing required identification documents to their employer.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">5.4</div>
+            <div class="tos-clause-text">JSTP <strong>does not guarantee employment outcomes</strong>. Being listed on JSTP or applying through the platform does not guarantee an offer of employment, interview, or placement.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">5.5</div>
+            <div class="tos-clause-text">Any disputes arising from an employment arrangement facilitated through JSTP are to be resolved directly between the student and the employer. JSTP accepts no liability for such disputes and will not act as a mediator.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6 -->
+      <div class="tos-section" id="s6">
+        <div class="tos-section-header">
+          <div class="tos-section-num">6</div>
+          <div class="tos-section-title">Business Listings &amp; Verification</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.1</div>
+            <div class="tos-clause-text">Businesses posting listings on JSTP are required to provide <strong>accurate and complete information</strong> about the role, company, and compensation. Misleading listings are strictly prohibited.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.2</div>
+            <div class="tos-clause-text">JSTP operates a multi-layered business verification system including email domain verification, company registration number checks, and website presence review. Verification reduces but does not eliminate risk.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.3</div>
+            <div class="tos-clause-text">A <strong>Verified Business badge</strong> on JSTP indicates that a business has passed our standard verification process at the time of verification. It does not constitute an endorsement of the business or guarantee of its conduct. Verification is a snapshot in time and JSTP is not liable for any actions taken by a business after they have been verified.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.4</div>
+            <div class="tos-clause-text">JSTP reserves the right to remove, suspend, or delist any business listing that is reported as suspicious, fraudulent, or in violation of these Terms without prior notice.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.5</div>
+            <div class="tos-clause-text">Businesses must not request any <strong>upfront payment, personal financial information, or sensitive documents</strong> from students as part of the application or onboarding process through JSTP.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">6.6</div>
+            <div class="tos-clause-text">JSTP may aggregate publicly available job listings from third-party sources. JSTP does not claim ownership of these descriptions and will remove them immediately upon a valid "Take-Down Request" from the original source.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="tos-section" id="s7">
+        <div class="tos-section-header">
+          <div class="tos-section-num">7</div>
+          <div class="tos-section-title">International &amp; Remote Jobs</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">7.1</div>
+            <div class="tos-clause-text">JSTP features international remote job listings curated from third-party platforms. These listings are filtered to identify roles open to Work from Anywhere applicants.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">7.2</div>
+            <div class="tos-clause-text">Students applying for international remote roles are responsible for ensuring they have the necessary equipment (laptop, headset, etc.), stable internet connectivity, and legal eligibility to work for a foreign entity from Jamaica.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">7.3</div>
+            <div class="tos-clause-text">JSTP recommends Payoneer, PayPal, and Wise as payment solutions for receiving international earnings. These are independent third-party services. <strong>JSTP is not affiliated with, responsible for, or liable for any transactions, fees, errors, or losses associated with these platforms.</strong></div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">7.4</div>
+            <div class="tos-clause-text">Students earning income from international sources are solely responsible for understanding and complying with any Jamaican tax obligations. JSTP does not provide tax advice.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="tos-section" id="s8">
+        <div class="tos-section-header">
+          <div class="tos-section-num">8</div>
+          <div class="tos-section-title">Student Responsibilities</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">8.1</div>
+            <div class="tos-clause-text">Students are responsible for the accuracy of all information provided in their profile. Misrepresentation may result in account suspension.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">8.2</div>
+            <div class="tos-clause-text">Students must only apply to roles they are genuinely interested in and qualified for. Bulk applying or submitting fraudulent applications is prohibited.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">8.3</div>
+            <div class="tos-clause-text"><strong>Students should never pay any fee to apply for a job on JSTP.</strong> Legitimate employers do not charge application fees. Any listing or employer requesting payment should be reported immediately.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">8.4</div>
+            <div class="tos-clause-text">Students must report any suspicious listing, employer behaviour, or potential scam through the JSTP reporting mechanism.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9 -->
+      <div class="tos-section" id="s9">
+        <div class="tos-section-header">
+          <div class="tos-section-num">9</div>
+          <div class="tos-section-title">WhatsApp Notifications</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">9.1</div>
+            <div class="tos-clause-text">By providing your WhatsApp number, you consent to receiving job alert notifications from JSTP via WhatsApp.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">9.2</div>
+            <div class="tos-clause-text">JSTP WhatsApp notifications will only contain job alerts and platform updates and will typically be sent during standard business hours <strong>(8 AM – 6 PM)</strong>.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">9.3</div>
+            <div class="tos-clause-text">You may opt out of WhatsApp notifications at any time by updating your profile settings.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10 -->
+      <div class="tos-section" id="s10">
+        <div class="tos-section-header">
+          <div class="tos-section-num">10</div>
+          <div class="tos-section-title">Data &amp; Privacy</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">10.1</div>
+            <div class="tos-clause-text">JSTP <strong>does not sell your personal data to third parties</strong>. Your data is used solely for the purpose of connecting you with employment opportunities and improving the platform.</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">10.2</div>
+            <div class="tos-clause-text">By using JSTP, you consent to the collection and use of your data as outlined in our Privacy Policy.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11 -->
+      <div class="tos-section" id="s11">
+        <div class="tos-section-header">
+          <div class="tos-section-num">11</div>
+          <div class="tos-section-title">Liability &amp; Indemnification</div>
+        </div>
+        <div class="tos-clauses">
+          <div class="tos-clause">
+            <div class="tos-clause-num">11.1</div>
+            <div class="tos-clause-text">JSTP is not liable for platform outages caused by events beyond our control, including natural disasters (hurricanes), power grid failures, and internet service provider outages (<strong>Force Majeure</strong>).</div>
+          </div>
+          <div class="tos-clause">
+            <div class="tos-clause-num">11.2</div>
+            <div class="tos-clause-text">Users agree to indemnify and hold harmless JSTP from any legal claims arising from their interactions with other users on the platform.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ACCEPTANCE FOOTER -->
+    <div class="tos-acceptance">
+      <div class="tos-acceptance-title">Your Agreement</div>
+      <p class="tos-acceptance-text">By using JSTP, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. Questions? Contact us at <strong style="color:#fff;">support@jstp.com</strong></p>
+      <div class="tos-acceptance-btns">
+        <a href="register.html" class="tos-btn-primary">Create Account</a>
+        <a href="index.html" class="tos-btn-outline">Back to Home</a>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

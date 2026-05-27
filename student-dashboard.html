@@ -1,0 +1,519 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/student-dashboard.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="dash-nav">
+    <a href="index.html" class="dash-brand">
+      <img src="assets/images/logo.png" class="logo-img" alt="JSTP logo">
+      <span class="dash-name">JSTP</span>
+    </a>
+    <div class="dash-search">
+      <input type="text" id="searchInput" placeholder="Search jobs, companies, locations..." />
+    </div>
+    <div class="dash-nav-right">
+      <a href="profile.html" class="dash-avatar" title="My Profile" id="navAvatar">JB</a>
+    </div>
+  </header>
+
+  <div class="dash-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar">JB</div>
+        <div class="sidebar-name" id="sidebarName">Jerome Brown</div>
+        <div class="sidebar-school" id="sidebarSchool">University of the West Indies</div>
+        <a href="profile.html" class="sidebar-edit">Edit Profile</a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="student-dashboard.html" class="sidebar-link active">📋 Job Feed</a>
+        <a href="profile.html" class="sidebar-link">👤 My Profile</a>
+        <a href="#" class="sidebar-link">📩 Applications</a>
+        <a href="#" class="sidebar-link">🔔 Alerts</a>
+      </nav>
+
+      <div class="sidebar-filters">
+        <div class="filter-title">FILTER JOBS</div>
+
+        <div class="filter-group">
+          <div class="filter-label">JOB TYPE</div>
+          <label class="cb"><input type="checkbox" value="Internship"> Internship</label>
+          <label class="cb"><input type="checkbox" value="Part-time"> Part-time</label>
+          <label class="cb"><input type="checkbox" value="Summer Job"> Summer Job</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">PARISH</div>
+          <label class="cb"><input type="checkbox" value="Kingston"> Kingston</label>
+          <label class="cb"><input type="checkbox" value="St Andrew"> St Andrew</label>
+          <label class="cb"><input type="checkbox" value="St Catherine"> St Catherine</label>
+          <label class="cb"><input type="checkbox" value="St James"> St James</label>
+          <label class="cb"><input type="checkbox" value="Manchester"> Manchester</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">INDUSTRY</div>
+          <label class="cb"><input type="checkbox" value="Business"> Business</label>
+          <label class="cb"><input type="checkbox" value="Technology"> Technology</label>
+          <label class="cb"><input type="checkbox" value="Healthcare"> Healthcare</label>
+          <label class="cb"><input type="checkbox" value="Media"> Media</label>
+          <label class="cb"><input type="checkbox" value="Government"> Government</label>
+        </div>
+
+        <button class="clear-filters">Clear Filters</button>
+      </div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="dash-feed">
+
+      <div class="feed-header">
+  <div class="feed-tabs">
+    <button class="feed-tab active" data-feed="local">Jamaica Jobs</button>
+    <button class="feed-tab" data-feed="global">Global Remote</button>
+  </div>
+  <span class="feed-count" id="feedCount">24 opportunities</span>
+</div>
+
+      <div class="feed-panel" id="feed-local">
+        <div class="job-feed" id="jobFeed">
+
+
+        <!-- JOB CARD 1 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">IC</div>
+            <div class="job-card-meta">
+              <div class="job-company">Island Co.</div>
+              <div class="job-time">Posted 2 days ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Marketing Intern</div>
+          <div class="job-desc">Support our marketing team with campaigns, content creation, and social media management. Great opportunity to build real-world marketing skills.</div>
+          <div class="job-tags">
+            <span class="job-tag">Kingston</span>
+            <span class="job-tag">Internship</span>
+            <span class="job-tag">Business</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+        <!-- JOB CARD 2 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">CF</div>
+            <div class="job-card-meta">
+              <div class="job-company">Caribbean Foods</div>
+              <div class="job-time">Posted 3 days ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Retail Assistant</div>
+          <div class="job-desc">Assist customers on the floor, manage inventory, and support daily retail operations. Flexible hours available for students.</div>
+          <div class="job-tags">
+            <span class="job-tag">Montego Bay</span>
+            <span class="job-tag">Part-time</span>
+            <span class="job-tag">Retail</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+        <!-- JOB CARD 3 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">TW</div>
+            <div class="job-card-meta">
+              <div class="job-company">Tech Wave</div>
+              <div class="job-time">Posted 4 days ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Junior Web Developer</div>
+          <div class="job-desc">Build and maintain web features for local clients. You will work with HTML, CSS, and JavaScript on real client projects from day one.</div>
+          <div class="job-tags">
+            <span class="job-tag">Kingston</span>
+            <span class="job-tag">Internship</span>
+            <span class="job-tag">Technology</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+        <!-- JOB CARD 4 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">GK</div>
+            <div class="job-card-meta">
+              <div class="job-company">GraceKennedy</div>
+              <div class="job-time">Posted 5 days ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Finance Intern</div>
+          <div class="job-desc">Assist the finance team with reporting, data entry, and reconciliation. Ideal for accounting or finance students looking for hands-on experience.</div>
+          <div class="job-tags">
+            <span class="job-tag">Kingston</span>
+            <span class="job-tag">Internship</span>
+            <span class="job-tag">Finance</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+        <!-- JOB CARD 5 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">DJ</div>
+            <div class="job-card-meta">
+              <div class="job-company">Digicel Jamaica</div>
+              <div class="job-time">Posted 1 week ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Customer Service Rep</div>
+          <div class="job-desc">Handle customer inquiries, resolve account issues, and provide excellent service. Part-time shifts available on weekends and evenings.</div>
+          <div class="job-tags">
+            <span class="job-tag">Spanish Town</span>
+            <span class="job-tag">Part-time</span>
+            <span class="job-tag">Business</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+        <!-- JOB CARD 6 -->
+        <article class="job-card">
+          <div class="job-card-top">
+            <div class="job-company-mark">ME</div>
+            <div class="job-card-meta">
+              <div class="job-company">Ministry of Education</div>
+              <div class="job-time">Posted 1 week ago</div>
+            </div>
+            <button class="job-save" title="Save job">♡</button>
+          </div>
+          <div class="job-title">Admin Assistant</div>
+          <div class="job-desc">Support administrative operations during the summer term. Filing, data entry, scheduling, and general office support in a government environment.</div>
+          <div class="job-tags">
+            <span class="job-tag">Kingston</span>
+            <span class="job-tag">Summer Job</span>
+            <span class="job-tag">Government</span>
+          </div>
+          <div class="job-card-actions">
+            <button class="btn-apply">Apply Now</button>
+            <button class="btn-save-text">Save</button>
+            <button class="btn-report" onclick="openReportModal(this)">Report</button>
+          </div>
+        </article>
+
+      </div>
+      </div>
+
+      <div class="feed-panel hidden" id="feed-global">
+
+  <div class="global-info-banner">
+    <div class="global-info-title">Work from anywhere in Jamaica. Get paid in USD.</div>
+    <div class="global-info-sub">These roles are fully remote and open to Jamaican students. Set up Payoneer or PayPal to receive international payments.</div>
+    <div class="global-payment-chips">
+      <span class="global-chip">Payoneer</span>
+      <span class="global-chip">PayPal</span>
+      <span class="global-chip">Wise</span>
+    </div>
+  </div>
+
+  <article class="job-card">
+    <div class="job-card-top">
+      <div class="job-company-mark">ND</div>
+      <div class="job-card-meta">
+        <div class="job-company">NoDesk Inc.</div>
+        <div class="job-time">Rolling applications</div>
+      </div>
+      <span class="global-tag-badge">GLOBAL REMOTE</span>
+    </div>
+    <div class="job-title">Content Writer</div>
+    <div class="job-desc">Write blog posts, articles and web copy for international clients. Fully remote, set your own hours, paid per article in USD.</div>
+    <div class="job-tags">
+      <span class="job-tag">Remote</span>
+      <span class="job-tag">Part-time</span>
+      <span class="job-tag">USD Pay</span>
+      <span class="job-tag">Media</span>
+    </div>
+    <div class="job-card-actions">
+      <button class="btn-apply">Apply Now</button>
+      <button class="btn-save-text">Save</button>
+      <button class="btn-report" onclick="openReportModal(this)">Report</button>
+    </div>
+  </article>
+
+  <article class="job-card">
+    <div class="job-card-top">
+      <div class="job-company-mark">AP</div>
+      <div class="job-card-meta">
+        <div class="job-company">Appen</div>
+        <div class="job-time">Rolling applications</div>
+      </div>
+      <span class="global-tag-badge">GLOBAL REMOTE</span>
+    </div>
+    <div class="job-title">Data Entry Specialist</div>
+    <div class="job-desc">Complete micro-tasks including data labelling and AI training datasets. Flexible hours, work when you want, paid in USD.</div>
+    <div class="job-tags">
+      <span class="job-tag">Remote</span>
+      <span class="job-tag">Part-time</span>
+      <span class="job-tag">USD Pay</span>
+      <span class="job-tag">Technology</span>
+    </div>
+    <div class="job-card-actions">
+      <button class="btn-apply">Apply Now</button>
+      <button class="btn-save-text">Save</button>
+      <button class="btn-report" onclick="openReportModal(this)">Report</button>
+    </div>
+  </article>
+
+  <article class="job-card">
+    <div class="job-card-top">
+      <div class="job-company-mark">WR</div>
+      <div class="job-card-meta">
+        <div class="job-company">We Work Remotely</div>
+        <div class="job-time">Rolling applications</div>
+      </div>
+      <span class="global-tag-badge">GLOBAL REMOTE</span>
+    </div>
+    <div class="job-title">Virtual Assistant</div>
+    <div class="job-desc">Administrative support for international clients. Scheduling, email management, and research tasks. USD $12-18 per hour.</div>
+    <div class="job-tags">
+      <span class="job-tag">Remote</span>
+      <span class="job-tag">Part-time</span>
+      <span class="job-tag">USD Pay</span>
+      <span class="job-tag">Business</span>
+    </div>
+    <div class="job-card-actions">
+      <button class="btn-apply">Apply Now</button>
+      <button class="btn-save-text">Save</button>
+      <button class="btn-report" onclick="openReportModal(this)">Report</button>
+    </div>
+  </article>
+
+</div>
+    </main>
+
+
+    <!-- RIGHT PANEL -->
+    <aside class="dash-right">
+      <div class="right-card">
+        <div class="right-card-title">YOUR PROFILE</div>
+        <div class="profile-completion">
+          <div class="completion-bar">
+            <div class="completion-fill" style="width: 60%"></div>
+          </div>
+          <div class="completion-label">60% complete</div>
+        </div>
+        <a href="profile-setup.html" class="right-link">Complete your profile →</a>
+      </div>
+
+      <div class="right-card">
+        <div class="right-card-title">WHATSAPP ALERTS</div>
+        <p class="right-card-desc">Get notified on WhatsApp when new jobs match your profile.</p>
+        <a href="profile-setup.html" class="right-link">Set up alerts →</a>
+      </div>
+
+      <div class="right-card">
+        <div class="right-card-title">RECENTLY VIEWED</div>
+        <div class="recent-item">Marketing Intern — Island Co.</div>
+        <div class="recent-item">Junior Web Developer — Tech Wave</div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    // Search filter
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.job-card').forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    });
+
+    // Save toggle
+    document.querySelectorAll('.job-save').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.textContent = this.textContent === '♡' ? '♥' : '♡';
+        this.classList.toggle('saved');
+      });
+    });
+
+    document.querySelectorAll('.btn-save-text').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.textContent = this.textContent === 'Save' ? 'Saved ✓' : 'Save';
+        this.classList.toggle('saved');
+      });
+    });
+
+    // Apply button
+    document.querySelectorAll('.btn-apply').forEach(btn => {
+      btn.addEventListener('click', function() {
+        this.textContent = 'Applied ✓';
+        this.disabled = true;
+        this.style.background = '#444';
+      });
+    });
+
+    // Clear filters
+    document.querySelector('.clear-filters').addEventListener('click', function() {
+      document.querySelectorAll('.dash-sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('.job-card').forEach(card => card.style.display = 'flex');
+    });
+
+    const feedTabs = document.querySelectorAll('.feed-tab');
+    feedTabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        feedTabs.forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.feed-panel').forEach(p => p.classList.add('hidden'));
+        tab.classList.add('active');
+        document.getElementById('feed-' + tab.dataset.feed).classList.remove('hidden');
+        document.getElementById('feedCount').textContent =
+          tab.dataset.feed === 'local' ? '24 opportunities' : '3 global remote roles';
+      });
+    });
+
+    // Load student profile & user info dynamically
+    (function() {
+      const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+      const profile = JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+
+      const firstName = profile.firstName || user.firstName || 'Jerome';
+      const lastName = profile.lastName || user.lastName || 'Brown';
+      const school = profile.eduSchool || 'University of the West Indies';
+      const initials = ((firstName[0] || '') + (lastName[0] || '')).toUpperCase() || 'JB';
+
+      document.getElementById('sidebarName').textContent = firstName + ' ' + lastName;
+      document.getElementById('sidebarSchool').textContent = school;
+
+      const navAvatar = document.getElementById('navAvatar');
+      const sidebarAvatar = document.getElementById('sidebarAvatar');
+
+      if (profile.photoDataUrl) {
+        navAvatar.style.backgroundImage = 'url(' + profile.photoDataUrl + ')';
+        navAvatar.style.backgroundSize = 'cover';
+        navAvatar.style.backgroundPosition = 'center';
+        navAvatar.textContent = '';
+
+        sidebarAvatar.style.backgroundImage = 'url(' + profile.photoDataUrl + ')';
+        sidebarAvatar.style.backgroundSize = 'cover';
+        sidebarAvatar.style.backgroundPosition = 'center';
+        sidebarAvatar.textContent = '';
+      } else {
+        navAvatar.style.backgroundImage = 'none';
+        navAvatar.textContent = initials;
+        sidebarAvatar.style.backgroundImage = 'none';
+        sidebarAvatar.textContent = initials;
+      }
+    })();
+  </script>
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="reportModal" style="display:none">
+  <div class="report-modal">
+    <h3>Report This Listing</h3>
+    <p>Select a reason for your report. All reports are reviewed by the JSTP admin team.</p>
+    <div class="report-reasons">
+      <label class="report-reason"><input type="radio" name="reportReason" value="scam"> Possible scam or fraud</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="inappropriate"> Inappropriate content</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="misleading"> Misleading job description</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="payment"> Requested upfront payment</label>
+      <label class="report-reason"><input type="radio" name="reportReason" value="other"> Other</label>
+    </div>
+    <button class="report-submit" onclick="submitReport()">Submit Report</button>
+    <button class="report-cancel" onclick="closeReportModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+  let currentReportedJob = null;
+  function openReportModal(btn) {
+    const card = btn.closest('.job-card');
+    const title = card.querySelector('.job-title').textContent.trim();
+    const companyDiv = card.querySelector('.job-company');
+    let company = companyDiv.textContent.trim();
+    if (companyDiv.querySelector('.biz-badge')) {
+      const clone = companyDiv.cloneNode(true);
+      const span = clone.querySelector('.biz-badge');
+      if (span) span.remove();
+      company = clone.textContent.trim();
+    }
+    currentReportedJob = { title, company };
+    document.getElementById('reportModal').style.display = 'flex';
+  }
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+    document.querySelectorAll('input[name="reportReason"]').forEach(r => r.checked = false);
+  }
+  function submitReport() {
+    const selected = document.querySelector('input[name="reportReason"]:checked');
+    if (!selected) { alert('Please select a reason.'); return; }
+    
+    const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+    const profile = JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+    const studentName = (profile.firstName || user.firstName || 'Jerome') + ' ' + (profile.lastName || user.lastName || 'Brown');
+    const reasonLabel = selected.parentElement.textContent.trim();
+    
+    const scores = {
+      scam: 0.91,
+      inappropriate: 0.45,
+      misleading: 0.65,
+      payment: 0.98,
+      other: 0.32
+    };
+    const scoreVal = scores[selected.value] || 0.5;
+    
+    const newReport = {
+      id: Date.now(),
+      type: 'JOB REPORT',
+      time: 'Just now',
+      subject: 'Reported listing: "' + currentReportedJob.title + '"',
+      reportedBy: studentName + ' (student)',
+      reason: reasonLabel + ' - ' + currentReportedJob.company,
+      score: scoreVal
+    };
+    
+    const reports = JSON.parse(localStorage.getItem('jstp_reports') || '[]');
+    reports.unshift(newReport);
+    localStorage.setItem('jstp_reports', JSON.stringify(reports));
+
+    closeReportModal();
+    alert('Report submitted. The JSTP admin team will review this listing.');
+  }
+  document.getElementById('reportModal').addEventListener('click', function(e) {
+    if (e.target === this) closeReportModal();
+  });
+</script>
+
+</body>
+</html>

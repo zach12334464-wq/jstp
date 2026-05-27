@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set Up Your Profile — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/profile-setup.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="reg-nav">
+    <a href="index.html" class="reg-brand">
+      <img src="assets/images/logo.png" class="logo-img" alt="JSTP logo">
+      <span class="reg-name">JSTP</span>
+    </a>
+    <span class="reg-step-label">Step 2 of 2 — Profile Setup</span>
+  </header>
+
+  <main class="setup-main">
+
+    <!-- STUDENT PROFILE SETUP -->
+    <div class="setup-step" id="studentSetup">
+      <p class="reg-eyebrow">STUDENT PROFILE</p>
+      <h1 class="reg-headline">Tell us about yourself</h1>
+      <p class="setup-sub">This is what businesses will see when you apply to a job.</p>
+
+      <form class="reg-form" id="studentSetupForm" novalidate>
+
+        <!-- Avatar -->
+        <div class="avatar-row">
+          <div class="avatar-circle" id="avatarPreview">JB</div>
+          <div class="avatar-info">
+            <div class="avatar-label">Profile Initials</div>
+            <div class="avatar-hint">Your initials will appear as your avatar</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sBio">About You</label>
+          <textarea id="sBio" rows="4" placeholder="Tell businesses a little about yourself — your interests, goals, and what you bring to the table."></textarea>
+        </div>
+
+        <div class="field">
+          <label for="sWhatsApp">WhatsApp Number</label>
+          <input type="tel" id="sWhatsApp" placeholder="+1 (876) 555-0123">
+          <span class="field-hint">We'll send job alerts here</span>
+        </div>
+
+        <div class="field">
+          <label for="sAvailability">Availability</label>
+          <select id="sAvailability">
+            <option>Immediately</option>
+            <option>Within 2 weeks</option>
+            <option>Within a month</option>
+            <option>Not sure yet</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Skills / Interests</label>
+          <div class="skills-grid">
+            <label class="cb"><input type="checkbox" value="Marketing"> Marketing</label>
+            <label class="cb"><input type="checkbox" value="Technology"> Technology</label>
+            <label class="cb"><input type="checkbox" value="Finance"> Finance</label>
+            <label class="cb"><input type="checkbox" value="Design"> Design</label>
+            <label class="cb"><input type="checkbox" value="Healthcare"> Healthcare</label>
+            <label class="cb"><input type="checkbox" value="Education"> Education</label>
+            <label class="cb"><input type="checkbox" value="Media"> Media</label>
+            <label class="cb"><input type="checkbox" value="Government"> Government</label>
+            <label class="cb"><input type="checkbox" value="Retail"> Retail</label>
+            <label class="cb"><input type="checkbox" value="Agriculture"> Agriculture</label>
+          </div>
+        </div>
+
+        <div class="setup-actions">
+          <button type="submit" class="btn-submit">Save and Continue →</button>
+          <a href="student-dashboard.html" class="btn-skip">Skip for now</a>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script>
+    document.getElementById('studentSetupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // TODO: save profile to Supabase
+      window.location.href = 'student-dashboard.html';
+    });
+  </script>
+
+</body>
+</html>

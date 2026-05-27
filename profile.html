@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>My Profile — JSTP</title>
+    <meta name="description" content="Manage your JSTP student profile, job preferences, and contact details." />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/profile.css" />
+  </head>
+
+  <body>
+    <!-- NAVBAR -->
+    <header class="navbar" role="banner">
+      <div class="nav-inner">
+        <a href="index.html" class="brand" aria-label="JSTP Home">
+          <div class="logo-mark-nav">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect width="28" height="28" rx="4" fill="#0a0a0a"/>
+              <text x="14" y="20" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="800" font-size="16">J</text>
+            </svg>
+          </div>
+          <span class="brand-name">JSTP</span>
+        </a>
+
+        <nav class="nav-center" role="navigation" aria-label="Main">
+          <a href="jobs.html" id="navJobs">Jobs</a>
+          <a href="profile.html" class="nav-active" id="navProfile">My Profile</a>
+        </nav>
+
+        <div class="nav-actions">
+          <div class="nav-avatar" id="navAvatar" title="Account" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">?</div>
+          <div class="nav-dropdown" id="navDropdown" aria-hidden="true">
+            <a href="#basic-info" id="editProfileLink">Edit Profile</a>
+            <a href="jobs.html">Browse Jobs</a>
+            <a href="index.html" id="signOutLink">Sign Out</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="profile-page" aria-label="Profile">
+      <div class="dash-layout">
+
+        <!-- LEFT SIDEBAR — Preview card -->
+        <aside class="profile-sidebar" aria-label="Profile preview">
+          <div class="sidebar-avatar" id="previewAvatar" aria-hidden="true">?</div>
+          <div class="sidebar-name" id="previewName">Your Name</div>
+          <div class="sidebar-school" id="previewSchool">Your School</div>
+          <div class="sidebar-parish" id="previewParish">Your Parish</div>
+          <div class="sidebar-level" id="previewLevel">Level</div>
+
+          <hr class="sidebar-divider" />
+
+          <div class="detail-row">
+            <div class="detail-label">LOOKING FOR</div>
+            <div class="detail-value" id="previewLooking">—</div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-label">WHATSAPP</div>
+            <div class="detail-value" id="previewWhatsapp">—</div>
+          </div>
+
+          <hr class="sidebar-divider" />
+
+          <a href="jobs.html" class="sidebar-browse-btn">Browse Jobs →</a>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <section class="profile-main" aria-label="Profile editor">
+
+          <!-- ── VIEW MODE ── -->
+          <div id="viewMode">
+            <div class="profile-section view-section-header">
+              <div class="section-header-row">
+                <div class="section-label" style="border:none; padding:0; margin:0;">YOUR PROFILE</div>
+                <button class="btn-edit" onclick="switchToEdit()" id="editProfileBtn">Edit Profile</button>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">BASIC INFO</div>
+              <div class="view-row"><span class="view-label">Name</span><span class="view-val" id="viewName">—</span></div>
+              <div class="view-row"><span class="view-label">WhatsApp</span><span class="view-val" id="viewWhatsapp">—</span></div>
+              <div class="view-row"><span class="view-label">Parish</span><span class="view-val" id="viewParish">—</span></div>
+              <div class="view-row"><span class="view-label">Academic Level</span><span class="view-val" id="viewLevel">—</span></div>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">ABOUT YOU</div>
+              <p class="view-about" id="viewAbout">—</p>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">EDUCATION</div>
+              <div class="view-row"><span class="view-label">School</span><span class="view-val" id="viewSchool">—</span></div>
+              <div class="view-row"><span class="view-label">Programme</span><span class="view-val" id="viewProgramme">—</span></div>
+              <div class="view-row"><span class="view-label">Years</span><span class="view-val" id="viewYears">—</span></div>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">SKILLS</div>
+              <div class="skills-display" id="viewSkills">
+                <span class="skills-empty">No skills added yet — edit profile to add some</span>
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">JOB PREFERENCES</div>
+              <div class="view-row"><span class="view-label">Job Type</span><span class="view-val" id="viewJobType">—</span></div>
+              <div class="view-row"><span class="view-label">Industry</span><span class="view-val" id="viewIndustry">—</span></div>
+            </div>
+          </div>
+
+          <!-- ── EDIT MODE ── -->
+          <div id="editMode" style="display:none;">
+            <div class="profile-section">
+              <div class="section-label">Profile Photo</div>
+              <div class="photo-upload-area" style="display: flex; align-items: center; gap: 20px;">
+                <div class="form-photo-box" id="formPhotoBox" style="width: 72px; height: 72px; border-radius: 50%; background: #0a0a0a; color: white; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; overflow: hidden; border: 2px solid #e0e0e0; flex-shrink: 0; position: relative;">
+                  <span id="formPhotoInitials">?</span>
+                  <img id="formPhotoImg" style="display: none; width: 100%; height: 100%; object-fit: cover;" alt="Profile preview">
+                </div>
+                <div class="photo-upload-controls">
+                  <div style="font-size: 13px; font-weight: 700; color: #0a0a0a; margin-bottom: 4px;">Upload your profile photo</div>
+                  <div style="font-size: 11px; color: #888; margin-bottom: 10px; text-transform: none; letter-spacing: 0;">PNG, JPG or WEBP. Max 2MB.</div>
+                  <div style="display: flex; gap: 8px; align-items: center;">
+                    <label class="btn-upload" for="photoFileInput" style="display: inline-flex; align-items: center; gap: 6px; background: #f5f5f5; border: 1.5px solid #e0e0e0; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 700; color: #0a0a0a; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.15s; margin-top: 0; user-select: none;">Upload Photo</label>
+                    <input type="file" id="photoFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+                    <button type="button" id="btnRemovePhoto" style="display: none; background: white; border: 1.5px solid #fca5a5; color: #b91c1c; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.15s;">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-section" id="basic-info">
+              <div class="section-label">BASIC INFO</div>
+              <div class="edit-field-row">
+                <label>First Name<input type="text" id="firstName" placeholder="First name" autocomplete="given-name"></label>
+                <label>Last Name<input type="text" id="lastName" placeholder="Last name" autocomplete="family-name"></label>
+              </div>
+              <label>Phone Number (WhatsApp)<input type="text" id="whatsapp" placeholder="+1 (876) 555-0123" autocomplete="tel"></label>
+              <label>Parish
+                <select id="parishSelect">
+                  <option value="">Select parish</option>
+                  <option>Kingston</option><option>St Andrew</option><option>St Catherine</option>
+                  <option>Clarendon</option><option>Manchester</option><option>St Elizabeth</option>
+                  <option>Westmoreland</option><option>Hanover</option><option>St James</option>
+                  <option>Trelawny</option><option>St Ann</option><option>St Mary</option>
+                  <option>Portland</option><option>St Thomas</option>
+                </select>
+              </label>
+              <label>Academic Level
+                <select id="levelSelect">
+                  <option value="">Select level</option>
+                  <option>High School Graduate</option><option>Sixth Form</option>
+                  <option>Undergraduate</option><option>Postgraduate</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">ABOUT YOU</div>
+              <textarea id="about" rows="5" placeholder="Tell employers a bit about yourself — your goals, strengths, and what you're looking for..."></textarea>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">EDUCATION</div>
+              <label>School or University<input type="text" id="eduSchool" placeholder="e.g. UWI, UTech, Campion College"></label>
+              <label>Programme or Course<input type="text" id="eduProgramme" placeholder="e.g. BSc Computer Science"></label>
+              <label>Years<input type="text" id="eduYears" placeholder="e.g. 2023 — Present"></label>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">SKILLS</div>
+              <p class="field-hint-block">Add skills that employers care about (press Enter or comma to add)</p>
+              <div class="skills-input-wrap" id="skillsInputWrap">
+                <div class="skills-chips" id="skillsChips"></div>
+                <input type="text" id="skillsInput" placeholder="e.g. Microsoft Word, Customer Service..." class="skills-input">
+              </div>
+            </div>
+
+            <div class="profile-section">
+              <div class="section-label">JOB PREFERENCES</div>
+              <label style="margin-top:0;">Job Type</label>
+              <div class="checkbox-row">
+                <label class="cb"><input type="checkbox" id="job_intern"> Internship</label>
+                <label class="cb"><input type="checkbox" id="job_part"> Part-time</label>
+                <label class="cb"><input type="checkbox" id="job_summer"> Summer Job</label>
+              </div>
+              <label style="margin-top:16px;">Industry</label>
+              <div class="checkbox-row">
+                <label class="cb"><input type="checkbox" id="ind_business"> Business</label>
+                <label class="cb"><input type="checkbox" id="ind_tech"> Technology</label>
+                <label class="cb"><input type="checkbox" id="ind_health"> Healthcare</label>
+                <label class="cb"><input type="checkbox" id="ind_edu"> Education</label>
+                <label class="cb"><input type="checkbox" id="ind_media"> Media</label>
+                <label class="cb"><input type="checkbox" id="ind_gov"> Government</label>
+              </div>
+            </div>
+
+            <div class="edit-actions">
+              <button class="btn-save" id="saveBtn">Save Profile →</button>
+              <button class="btn-cancel" onclick="switchToView()">Cancel</button>
+            </div>
+            <div class="tiny-muted" style="margin-top:10px;">Your profile is only visible to businesses after you apply to a listing</div>
+          </div>
+
+        </section>
+
+        <!-- RIGHT PANEL -->
+        <aside class="profile-right-panel" aria-label="Profile tips">
+
+          <div class="right-card">
+            <div class="right-card-title">PROFILE STRENGTH</div>
+            <div class="strength-bar-wrap">
+              <div class="strength-bar-track">
+                <div class="strength-bar-fill" id="strengthBarFill"></div>
+              </div>
+              <span class="strength-pct" id="strengthPct">0%</span>
+            </div>
+            <div class="checklist-item" id="strengthBasic">
+              <span class="check-icon check-empty" id="strengthBasicIcon">○</span>
+              <span>Basic info filled</span>
+            </div>
+            <div class="checklist-item" id="strengthAbout">
+              <span class="check-icon check-empty" id="strengthAboutIcon">○</span>
+              <span>About you written</span>
+            </div>
+            <div class="checklist-item" id="strengthEdu">
+              <span class="check-icon check-empty" id="strengthEduIcon">○</span>
+              <span>Education added</span>
+            </div>
+            <div class="checklist-item" id="strengthSkills">
+              <span class="check-icon check-empty" id="strengthSkillsIcon">○</span>
+              <span>Skills listed</span>
+            </div>
+            <div class="checklist-item" id="strengthJob">
+              <span class="check-icon check-empty" id="strengthJobIcon">○</span>
+              <span>Job preferences set</span>
+            </div>
+          </div>
+
+          <div class="right-card">
+            <div class="right-card-title">NEXT STEPS</div>
+            <div class="next-step-item">Browse open listings</div>
+            <div class="next-step-item">Apply to a job to become visible to businesses</div>
+            <div class="next-step-item">Keep your WhatsApp number updated for alerts</div>
+            <a class="btn-browse" href="jobs.html" id="browseJobsBtn">Browse Jobs</a>
+          </div>
+
+          <div class="right-card">
+            <div class="right-card-title">JOB ALERTS</div>
+            <div class="right-card-desc">Get notified on WhatsApp when new jobs match your profile</div>
+            <button class="btn-alert-setup" onclick="switchToEdit(); setTimeout(()=>document.getElementById('whatsapp').focus(),100)">Update WhatsApp Number</button>
+          </div>
+
+        </aside>
+      </div>
+    </main>
+
+    <script>
+(function(){
+  // ── Nav dropdown ──────────────────────────────────────────────────────────
+  const navAvatar = document.getElementById('navAvatar');
+  const navDropdown = document.getElementById('navDropdown');
+
+  navAvatar.addEventListener('click', function(){
+    const isOpen = navDropdown.classList.toggle('open');
+    navAvatar.setAttribute('aria-expanded', isOpen);
+    navDropdown.setAttribute('aria-hidden', !isOpen);
+  });
+  navAvatar.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navAvatar.click(); }
+  });
+  document.addEventListener('click', function(e){
+    if (!navAvatar.contains(e.target) && !navDropdown.contains(e.target)){
+      navDropdown.classList.remove('open');
+      navAvatar.setAttribute('aria-expanded', 'false');
+      navDropdown.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // Load user name into avatar
+  const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+  if (user.firstName) {
+    navAvatar.textContent = (user.firstName[0] + (user.lastName ? user.lastName[0] : '')).toUpperCase();
+  }
+
+  // Sign out
+  const signOutLink = document.getElementById('signOutLink');
+  if (signOutLink) {
+    signOutLink.addEventListener('click', function(e){
+      e.preventDefault();
+      localStorage.removeItem('jstp_user');
+      window.location.href = 'index.html';
+    });
+  }
+
+  // ── Removed toast logic as requested ──
+
+  // ── Skills chip input ─────────────────────────────────────────────────────
+  let skills = [];
+  let uploadedPhotoUrl = '';
+
+  function renderChips(){
+    const wrap = document.getElementById('skillsChips');
+    wrap.innerHTML = '';
+    skills.forEach((skill, i) => {
+      const chip = document.createElement('span');
+      chip.className = 'skill-chip';
+      chip.innerHTML = skill + ' <button type="button" class="chip-remove" data-idx="' + i + '" aria-label="Remove ' + skill + '">×</button>';
+      wrap.appendChild(chip);
+    });
+    wrap.querySelectorAll('.chip-remove').forEach(btn => {
+      btn.addEventListener('click', function(){
+        skills.splice(parseInt(this.dataset.idx), 1);
+        renderChips();
+      });
+    });
+  }
+
+  const skillsInput = document.getElementById('skillsInput');
+  if (skillsInput) {
+    skillsInput.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ','){
+        e.preventDefault();
+        const val = this.value.trim().replace(/,$/, '');
+        if (val && !skills.includes(val)) {
+          skills.push(val);
+          renderChips();
+        }
+        this.value = '';
+      }
+    });
+    document.getElementById('skillsInputWrap').addEventListener('click', function(){
+      skillsInput.focus();
+    });
+  }
+
+  // ── Data persistence ──────────────────────────────────────────────────────
+  function loadData(){
+    return JSON.parse(localStorage.getItem('jstp_profile') || '{}');
+  }
+  function saveData(data){
+    localStorage.setItem('jstp_profile', JSON.stringify(data));
+  }
+
+  // ── Fill edit form ────────────────────────────────────────────────────────
+  function fillForm(data){
+    document.getElementById('firstName').value = data.firstName || '';
+    document.getElementById('lastName').value = data.lastName || '';
+    document.getElementById('whatsapp').value = data.whatsapp || '';
+    document.getElementById('parishSelect').value = data.parish || '';
+    document.getElementById('levelSelect').value = data.level || '';
+    document.getElementById('about').value = data.about || '';
+    document.getElementById('eduSchool').value = data.eduSchool || '';
+    document.getElementById('eduProgramme').value = data.eduProgramme || '';
+    document.getElementById('eduYears').value = data.eduYears || '';
+    document.getElementById('job_intern').checked = !!data.job_intern;
+    document.getElementById('job_part').checked = !!data.job_part;
+    document.getElementById('job_summer').checked = !!data.job_summer;
+    document.getElementById('ind_business').checked = !!data.ind_business;
+    document.getElementById('ind_tech').checked = !!data.ind_tech;
+    document.getElementById('ind_health').checked = !!data.ind_health;
+    document.getElementById('ind_edu').checked = !!data.ind_edu;
+    document.getElementById('ind_media').checked = !!data.ind_media;
+    document.getElementById('ind_gov').checked = !!data.ind_gov;
+    skills = Array.isArray(data.skills) ? [...data.skills] : [];
+    renderChips();
+
+    // Populate photo
+    uploadedPhotoUrl = data.photoDataUrl || '';
+    const formPhotoImg = document.getElementById('formPhotoImg');
+    const formPhotoInitials = document.getElementById('formPhotoInitials');
+    const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+
+    if (uploadedPhotoUrl) {
+      formPhotoImg.src = uploadedPhotoUrl;
+      formPhotoImg.style.display = 'block';
+      formPhotoInitials.style.display = 'none';
+      btnRemovePhoto.style.display = 'inline-block';
+    } else {
+      formPhotoImg.style.display = 'none';
+      formPhotoInitials.style.display = 'block';
+      const first = data.firstName || '';
+      const last = data.lastName || '';
+      formPhotoInitials.textContent = ((first[0]||'') + (last[0]||'')).toUpperCase() || '?';
+      btnRemovePhoto.style.display = 'none';
+    }
+  }
+
+  // File upload listener
+  const photoFileInput = document.getElementById('photoFileInput');
+  if (photoFileInput) {
+    photoFileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      if (!file) return;
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Photo must be under 2MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedPhotoUrl = e.target.result;
+        const formPhotoImg = document.getElementById('formPhotoImg');
+        const formPhotoInitials = document.getElementById('formPhotoInitials');
+        const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+        formPhotoImg.src = uploadedPhotoUrl;
+        formPhotoImg.style.display = 'block';
+        formPhotoInitials.style.display = 'none';
+        btnRemovePhoto.style.display = 'inline-block';
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Remove photo listener
+  const btnRemovePhoto = document.getElementById('btnRemovePhoto');
+  if (btnRemovePhoto) {
+    btnRemovePhoto.addEventListener('click', function() {
+      uploadedPhotoUrl = '';
+      const formPhotoImg = document.getElementById('formPhotoImg');
+      const formPhotoInitials = document.getElementById('formPhotoInitials');
+      formPhotoImg.style.display = 'none';
+      formPhotoInitials.style.display = 'block';
+      formPhotoInitials.textContent = '?';
+      this.style.display = 'none';
+      document.getElementById('photoFileInput').value = '';
+    });
+  }
+
+  // ── Render view mode ──────────────────────────────────────────────────────
+  function renderView(data){
+    const first = data.firstName || '';
+    const last = data.lastName || '';
+    const full = (first + ' ' + last).trim();
+    const initials = ((first[0]||'') + (last[0]||'')).toUpperCase() || '?';
+
+    // Sidebar
+    const previewAvatar = document.getElementById('previewAvatar');
+    const navAvatar = document.getElementById('navAvatar');
+
+    if (data.photoDataUrl) {
+      previewAvatar.style.backgroundImage = 'url(' + data.photoDataUrl + ')';
+      previewAvatar.style.backgroundSize = 'cover';
+      previewAvatar.style.backgroundPosition = 'center';
+      previewAvatar.textContent = '';
+      
+      navAvatar.style.backgroundImage = 'url(' + data.photoDataUrl + ')';
+      navAvatar.style.backgroundSize = 'cover';
+      navAvatar.style.backgroundPosition = 'center';
+      navAvatar.textContent = '';
+    } else {
+      previewAvatar.style.backgroundImage = 'none';
+      previewAvatar.textContent = initials;
+      
+      navAvatar.style.backgroundImage = 'none';
+      navAvatar.textContent = initials;
+    }
+
+    const nameEl = document.getElementById('previewName');
+    nameEl.textContent = full || 'Your Name';
+    nameEl.classList.toggle('empty', !full);
+    document.getElementById('previewSchool').textContent = data.eduSchool || 'Your School';
+    document.getElementById('previewParish').textContent = data.parish || 'Your Parish';
+    document.getElementById('previewLevel').textContent = data.level || 'Level';
+    document.getElementById('previewWhatsapp').textContent = data.whatsapp || '—';
+
+    const jobTypes = [];
+    if(data.job_intern) jobTypes.push('Internship');
+    if(data.job_part) jobTypes.push('Part-time');
+    if(data.job_summer) jobTypes.push('Summer Job');
+    document.getElementById('previewLooking').textContent = jobTypes.join(', ') || '—';
+
+    // View fields
+    document.getElementById('viewName').textContent = full || '—';
+    document.getElementById('viewWhatsapp').textContent = data.whatsapp || '—';
+    document.getElementById('viewParish').textContent = data.parish || '—';
+    document.getElementById('viewLevel').textContent = data.level || '—';
+    document.getElementById('viewAbout').textContent = data.about || '—';
+    document.getElementById('viewSchool').textContent = data.eduSchool || '—';
+    document.getElementById('viewProgramme').textContent = data.eduProgramme || '—';
+    document.getElementById('viewYears').textContent = data.eduYears || '—';
+    document.getElementById('viewJobType').textContent = jobTypes.join(', ') || '—';
+
+    const industries = [];
+    if(data.ind_business) industries.push('Business');
+    if(data.ind_tech) industries.push('Technology');
+    if(data.ind_health) industries.push('Healthcare');
+    if(data.ind_edu) industries.push('Education');
+    if(data.ind_media) industries.push('Media');
+    if(data.ind_gov) industries.push('Government');
+    document.getElementById('viewIndustry').textContent = industries.join(', ') || '—';
+
+    // Skills
+    const skillsEl = document.getElementById('viewSkills');
+    const savedSkills = Array.isArray(data.skills) ? data.skills : [];
+    if (savedSkills.length > 0) {
+      skillsEl.innerHTML = savedSkills.map(s => '<span class="skill-chip-view">' + s + '</span>').join('');
+    } else {
+      skillsEl.innerHTML = '<span class="skills-empty">No skills added yet — edit profile to add some</span>';
+    }
+
+    // Profile strength
+    const checks = {
+      basic: Boolean(full && data.whatsapp),
+      about: Boolean(data.about),
+      edu: Boolean(data.eduSchool),
+      skills: savedSkills.length > 0,
+      job: jobTypes.length > 0,
+    };
+    const score = Object.values(checks).filter(Boolean).length;
+    const pct = Math.round((score / 5) * 100);
+
+    document.getElementById('strengthBarFill').style.width = pct + '%';
+    document.getElementById('strengthPct').textContent = pct + '%';
+
+    const setCheck = (id, done) => {
+      const icon = document.getElementById(id + 'Icon');
+      if (icon) {
+        icon.textContent = done ? '✓' : '○';
+        icon.className = 'check-icon ' + (done ? 'check-done' : 'check-empty');
+      }
+    };
+    setCheck('strengthBasic', checks.basic);
+    setCheck('strengthAbout', checks.about);
+    setCheck('strengthEdu', checks.edu);
+    setCheck('strengthSkills', checks.skills);
+    setCheck('strengthJob', checks.job);
+  }
+
+  // ── Mode switching ────────────────────────────────────────────────────────
+  window.switchToEdit = function(){
+    fillForm(loadData());
+    document.getElementById('viewMode').style.display = 'none';
+    document.getElementById('editMode').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.switchToView = function(){
+    document.getElementById('editMode').style.display = 'none';
+    document.getElementById('viewMode').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // ── Save ──────────────────────────────────────────────────────────────────
+  document.getElementById('saveBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    const data = {
+      firstName: document.getElementById('firstName').value.trim(),
+      lastName: document.getElementById('lastName').value.trim(),
+      whatsapp: document.getElementById('whatsapp').value.trim(),
+      parish: document.getElementById('parishSelect').value,
+      level: document.getElementById('levelSelect').value,
+      about: document.getElementById('about').value.trim(),
+      eduSchool: document.getElementById('eduSchool').value.trim(),
+      eduProgramme: document.getElementById('eduProgramme').value.trim(),
+      eduYears: document.getElementById('eduYears').value.trim(),
+      skills: [...skills],
+      photoDataUrl: uploadedPhotoUrl,
+      job_intern: document.getElementById('job_intern').checked,
+      job_part: document.getElementById('job_part').checked,
+      job_summer: document.getElementById('job_summer').checked,
+      ind_business: document.getElementById('ind_business').checked,
+      ind_tech: document.getElementById('ind_tech').checked,
+      ind_health: document.getElementById('ind_health').checked,
+      ind_edu: document.getElementById('ind_edu').checked,
+      ind_media: document.getElementById('ind_media').checked,
+      ind_gov: document.getElementById('ind_gov').checked,
+    };
+    saveData(data);
+    renderView(data);
+    switchToView();
+
+    // TODO: sync to Supabase
+    // const user = supabase.auth.getUser()
+    // await supabase.from('profiles').upsert({ user_id: user.id, ...data })
+  });
+
+  // ── Initial load ──────────────────────────────────────────────────────────
+  const saved = loadData();
+  fillForm(saved);
+  renderView(saved);
+
+  // If profile is mostly empty, start in edit mode
+  const isEmpty = !saved.firstName && !saved.lastName && !saved.about;
+  if (isEmpty) switchToEdit();
+
+})();
+    </script>
+  </body>
+</html>

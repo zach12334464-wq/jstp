@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Profile — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/student-view.css" />
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="logo-square">J</span>
+      <span class="brand-name">JSTP</span>
+    </a>
+    <nav class="nav-center">
+      <a href="business-dashboard.html" class="nav-tab">Student Pool</a>
+      <a href="business-dashboard.html" class="nav-tab">My Listings</a>
+      <a href="business-dashboard.html" class="nav-tab">Applications</a>
+      <a href="business-dashboard.html" class="nav-tab">Alerts</a>
+    </nav>
+    <div class="nav-right">
+      <div class="nav-avatar" id="bizAvatar">IC</div>
+      <div class="nav-dropdown" id="bizDropdown">
+        <a href="business-setup.html">Edit Company Profile</a>
+        <a href="index.html">Sign Out</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="view-main">
+  <div class="view-back">
+    <a href="business-dashboard.html" class="back-link">← Back to Student Pool</a>
+  </div>
+
+  <div class="view-layout">
+
+    <aside class="view-left">
+      <div class="view-card">
+        <div class="view-avatar">JB</div>
+        <div class="view-name">Jerome Brown</div>
+        <div class="view-school">University of the West Indies</div>
+        <div class="view-location">Kingston, Jamaica</div>
+        <div class="view-level-tag">Undergraduate</div>
+      </div>
+
+      <div class="view-details">
+        <div class="detail-row">
+          <div class="detail-label">LOOKING FOR</div>
+          <div class="detail-value">
+            <span class="mini-tag">Internship</span>
+            <span class="mini-tag">Part-time</span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">INDUSTRY</div>
+          <div class="detail-value">
+            <span class="mini-tag">Technology</span>
+            <span class="mini-tag">Business</span>
+          </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">AVAILABLE</div>
+          <div class="detail-value">Immediately</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">WHATSAPP</div>
+          <div class="detail-value">+1 (876) 555-0123</div>
+        </div>
+      </div>
+
+      <div class="view-actions">
+        <button class="btn-contact" onclick="alert('Messaging coming soon.')">Contact Student</button>
+        <button class="btn-shortlist" onclick="alert('Shortlisted!')">Shortlist</button>
+      </div>
+    </aside>
+
+    <section class="view-right">
+      <div class="view-section">
+        <div class="section-label">ABOUT</div>
+        <p class="view-about">Second-year Business Administration student at UWI with a strong interest in marketing and technology. Hardworking, punctual, and eager to gain real-world experience in a professional environment.</p>
+      </div>
+
+      <div class="view-section">
+        <div class="section-label">EDUCATION</div>
+        <div class="edu-card">
+          <div class="edu-school">University of the West Indies</div>
+          <div class="edu-programme">BSc Business Administration</div>
+          <div class="edu-years">2023 — Present</div>
+        </div>
+      </div>
+
+      <div class="view-section">
+        <div class="section-label">SKILLS & INTERESTS</div>
+        <div class="tags-row">
+          <span class="skill-tag">Marketing</span>
+          <span class="skill-tag">Technology</span>
+          <span class="skill-tag">Business Development</span>
+          <span class="skill-tag">Social Media</span>
+          <span class="skill-tag">Data Entry</span>
+        </div>
+      </div>
+
+      <div class="view-section">
+        <div class="section-label">RECENT APPLICATIONS</div>
+        <div class="app-row">
+          <div class="app-left">
+            <div class="app-company">Island Co.</div>
+            <div class="app-title">Marketing Intern</div>
+          </div>
+          <div class="app-right">
+            <span class="status-applied">Applied</span>
+            <div class="app-date">3 days ago</div>
+          </div>
+        </div>
+        <div class="app-row">
+          <div class="app-left">
+            <div class="app-company">Tech Wave</div>
+            <div class="app-title">Junior Web Developer</div>
+          </div>
+          <div class="app-right">
+            <span class="status-viewed">Viewed</span>
+            <div class="app-date">1 week ago</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  const avatar = document.getElementById('bizAvatar');
+  const dropdown = document.getElementById('bizDropdown');
+  avatar.addEventListener('click', function(){
+    dropdown.classList.toggle('open');
+  });
+  document.addEventListener('click', function(e){
+    if(!avatar.contains(e.target) && !dropdown.contains(e.target)){
+      dropdown.classList.remove('open');
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
+

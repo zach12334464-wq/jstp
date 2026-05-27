@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company Profile — JSTP</title>
+  <meta name="description" content="Edit your company profile on JSTP — Jamaica's Student Talent Pipeline." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Inter, sans-serif; background: #f5f5f5; color: #0a0a0a; min-height: 100vh; }
+
+    /* ── Navbar ── */
+    .navbar {
+      background: white;
+      border-bottom: 1px solid #e8e8e8;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; }
+    .logo-square {
+      width: 28px; height: 28px;
+      background: #0a0a0a; color: white;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 14px;
+    }
+    .brand-name { font-weight: 800; font-size: 16px; color: #0a0a0a; }
+    .nav-back {
+      display: flex; align-items: center; gap: 6px;
+      color: #555; font-size: 13px; font-weight: 600;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-back:hover { color: #0a0a0a; }
+
+    /* ── Layout ── */
+    .profile-layout {
+      max-width: 1060px;
+      margin: 32px auto;
+      padding: 0 24px 60px;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+    }
+    @media (max-width: 800px) {
+      .profile-layout { grid-template-columns: 1fr; }
+      .preview-col { order: -1; }
+    }
+
+    /* ── Page heading ── */
+    .page-eyebrow {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #888; margin-bottom: 6px;
+    }
+    .page-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
+    .page-sub { font-size: 13px; color: #666; margin-bottom: 28px; }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .section-label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #888; margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* ── Logo area ── */
+    .logo-area {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 24px;
+    }
+    .logo-box {
+      width: 72px; height: 72px;
+      border-radius: 10px;
+      background: #0a0a0a; color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; font-weight: 800;
+      overflow: hidden; flex-shrink: 0;
+      border: 2px solid #e0e0e0;
+      position: relative;
+    }
+    .logo-box img { width: 100%; height: 100%; object-fit: cover; }
+    .logo-info { flex: 1; }
+    .logo-info .logo-label { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .logo-info .logo-hint { font-size: 12px; color: #888; margin-bottom: 10px; line-height: 1.4; }
+    .btn-upload {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #f5f5f5; border: 1.5px solid #e0e0e0;
+      border-radius: 4px; padding: 7px 14px;
+      font-size: 12px; font-weight: 700; color: #0a0a0a;
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em;
+      transition: background 0.15s;
+    }
+    .btn-upload:hover { background: #ebebeb; border-color: #bbb; }
+    #logoFileInput { display: none; }
+
+    /* ── Form fields ── */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 700;
+      color: #444; margin-bottom: 6px;
+    }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 10px 12px;
+      border: 1.5px solid #e0e0e0; border-radius: 4px;
+      font-size: 13px; font-family: Inter, sans-serif;
+      color: #0a0a0a; background: white;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: #0a0a0a;
+    }
+    .field textarea { resize: vertical; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 500px) { .field-row { grid-template-columns: 1fr; } }
+
+    /* ── Save button ── */
+    .btn-save {
+      width: 100%; padding: 14px;
+      background: #0a0a0a; color: white;
+      border: none; border-radius: 4px;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      cursor: pointer; font-family: Inter, sans-serif;
+      transition: background 0.15s;
+    }
+    .btn-save:hover { background: #2a2a2a; }
+    .btn-save:disabled { background: #888; cursor: default; }
+
+    /* ── Save success ── */
+    .save-notice {
+      display: none;
+      background: #e8f5e9; border: 1.5px solid #66bb6a;
+      border-radius: 4px; padding: 12px 16px;
+      font-size: 13px; color: #2e7d32; font-weight: 600;
+      margin-top: 12px; align-items: center; gap: 8px;
+    }
+    .save-notice.show { display: flex; }
+
+    /* ── Preview column ── */
+    .preview-sticky { position: sticky; top: 76px; }
+    .preview-label {
+      font-size: 10px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #888; margin-bottom: 12px;
+    }
+
+    /* ── Company preview card ── */
+    .company-card {
+      background: white;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      padding: 24px 20px 20px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .card-logo {
+      width: 56px; height: 56px;
+      border-radius: 8px;
+      background: white; color: #0a0a0a;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 800;
+      overflow: hidden; flex-shrink: 0;
+    }
+    .card-logo img { width: 100%; height: 100%; object-fit: cover; }
+    .card-company-name {
+      font-size: 18px; font-weight: 800; color: white;
+      margin-bottom: 4px; line-height: 1.2;
+    }
+    .card-location { font-size: 12px; color: rgba(255,255,255,0.6); }
+    .card-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 20px; padding: 3px 10px;
+      font-size: 10px; font-weight: 700; color: white;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-top: 6px;
+    }
+    .card-badge.verified { background: rgba(26,122,74,0.3); border-color: #66bb6a; color: #a7f3d0; }
+    .card-body { padding: 20px; }
+    .card-row {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .card-tag {
+      background: #f0f0f0; color: #555;
+      border-radius: 20px; padding: 4px 10px;
+      font-size: 11px; font-weight: 600;
+    }
+    .card-bio {
+      font-size: 13px; color: #444; line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .card-contact {
+      font-size: 12px; color: #777;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .card-contact span { display: flex; align-items: center; gap: 6px; }
+    .card-divider { border: none; border-top: 1px solid #f0f0f0; margin: 14px 0; }
+    .card-footer {
+      padding: 14px 20px;
+      border-top: 1px solid #f0f0f0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-footer-label { font-size: 11px; color: #999; }
+    .btn-preview-jobs {
+      font-size: 12px; font-weight: 700;
+      color: #0a0a0a; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-preview-jobs:hover { text-decoration: underline; }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="logo-square">J</span>
+      <span class="brand-name">JSTP</span>
+    </a>
+    <a href="business-dashboard.html" class="nav-back">← Back to Dashboard</a>
+  </div>
+</header>
+
+<div class="profile-layout">
+
+  <!-- ── LEFT: Edit Form ── -->
+  <div class="edit-col">
+    <p class="page-eyebrow">Company Profile</p>
+    <h1 class="page-title" id="pageTitle">Edit Your Profile</h1>
+    <p class="page-sub">Changes are saved to your account and appear on your public company card.</p>
+
+    <form id="profileForm" novalidate>
+
+      <!-- Logo -->
+      <div class="card">
+        <div class="section-label">Company Logo</div>
+        <div class="logo-area">
+          <div class="logo-box" id="formLogoBox">
+            <span id="formLogoInitials">IC</span>
+            <img id="formLogoImg" style="display:none;" alt="Company logo">
+          </div>
+          <div class="logo-info">
+            <div class="logo-label">Upload your company logo</div>
+            <div class="logo-hint">PNG or JPG, at least 200×200px. Shows on your profile card and job listings.</div>
+            <label class="btn-upload" for="logoFileInput">Upload Logo</label>
+            <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/webp">
+          </div>
+        </div>
+      </div>
+
+      <!-- Company Info -->
+      <div class="card">
+        <div class="section-label">Company Information</div>
+
+        <div class="field">
+          <label for="cName">Company Name *</label>
+          <input type="text" id="cName" placeholder="e.g. Island Co." required>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cIndustry">Industry</label>
+            <select id="cIndustry">
+              <option value="">Select industry</option>
+              <option>Business</option>
+              <option>Technology</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Media</option>
+              <option>Government</option>
+              <option>Retail</option>
+              <option>Finance</option>
+              <option>Hospitality &amp; Tourism</option>
+              <option>Agriculture</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cSize">Company Size</label>
+            <select id="cSize">
+              <option value="">Select size</option>
+              <option>1–10 employees</option>
+              <option>11–50 employees</option>
+              <option>51–200 employees</option>
+              <option>200+ employees</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cParish">Parish</label>
+          <select id="cParish">
+            <option value="">Select parish</option>
+            <option>Kingston</option>
+            <option>St Andrew</option>
+            <option>St Catherine</option>
+            <option>Clarendon</option>
+            <option>Manchester</option>
+            <option>St Elizabeth</option>
+            <option>Westmoreland</option>
+            <option>Hanover</option>
+            <option>St James</option>
+            <option>Trelawny</option>
+            <option>St Ann</option>
+            <option>St Mary</option>
+            <option>Portland</option>
+            <option>St Thomas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="card">
+        <div class="section-label">Contact Details</div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cFirstName">Contact First Name</label>
+            <input type="text" id="cFirstName" placeholder="John" autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="cLastName">Contact Last Name</label>
+            <input type="text" id="cLastName" placeholder="Brown" autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cWebsite">Website</label>
+            <input type="url" id="cWebsite" placeholder="https://yourcompany.com">
+          </div>
+          <div class="field">
+            <label for="cPhone">Contact Phone</label>
+            <input type="tel" id="cPhone" placeholder="+1 (876) 555-0123">
+          </div>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="card">
+        <div class="section-label">About Your Company</div>
+        <div class="field">
+          <label for="cBio">Company Description</label>
+          <textarea id="cBio" rows="5" placeholder="Describe your company, culture, what you do, and the kinds of students you're looking to hire."></textarea>
+        </div>
+      </div>
+
+      <!-- Save -->
+      <button type="submit" class="btn-save" id="saveBtn">Save Changes</button>
+      <div class="save-notice" id="saveNotice">✓ Profile saved successfully!</div>
+
+    </form>
+  </div>
+
+  <!-- ── RIGHT: Preview ── -->
+  <div class="preview-col">
+    <div class="preview-sticky">
+      <div class="preview-label">Live Preview</div>
+
+      <div class="company-card">
+        <div class="card-header">
+          <div class="card-logo" id="previewLogo">
+            <span id="previewInitials">IC</span>
+            <img id="previewLogoImg" style="display:none;" alt="">
+          </div>
+          <div>
+            <div class="card-company-name" id="previewName">Your Company</div>
+            <div class="card-location" id="previewLocation">Jamaica</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="card-row" id="previewTags">
+            <!-- tags injected by JS -->
+          </div>
+          <div class="card-bio" id="previewBio" style="color:#aaa; font-style: italic;">
+            Your company description will appear here...
+          </div>
+          <div class="card-contact" id="previewContact">
+            <!-- contact injected by JS -->
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <span class="card-footer-label">Active on JSTP</span>
+          <a href="jobs.html" class="btn-preview-jobs">View Listings →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function() {
+  // Load data
+  const biz = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+  const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+  const setup = JSON.parse(localStorage.getItem('jstp_business_setup') || '{}');
+
+  // Merge all sources
+  const data = Object.assign({}, user, biz, setup);
+
+  // Helper to set field
+  function setField(id, value) {
+    if (!value) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.tagName === 'SELECT') {
+      const match = Array.from(el.options).find(o => o.text === value || o.value === value);
+      if (match) el.value = match.value || match.text;
+    } else {
+      el.value = value;
+    }
+  }
+
+  // Populate form fields
+  setField('cName', data.company);
+  setField('cIndustry', data.industry);
+  setField('cSize', data.size);
+  setField('cParish', data.parish);
+  setField('cFirstName', data.firstName);
+  setField('cLastName', data.lastName);
+  setField('cWebsite', data.website);
+  setField('cPhone', data.phone);
+  if (data.bio) document.getElementById('cBio').value = data.bio;
+
+  // Update page heading
+  if (data.company) {
+    document.getElementById('pageTitle').textContent = data.company;
+  }
+
+  // Logo
+  if (biz.logoDataUrl || data.logoDataUrl) {
+    const src = biz.logoDataUrl || data.logoDataUrl;
+    document.getElementById('formLogoImg').src = src;
+    document.getElementById('formLogoImg').style.display = 'block';
+    document.getElementById('formLogoInitials').style.display = 'none';
+    document.getElementById('previewLogoImg').src = src;
+    document.getElementById('previewLogoImg').style.display = 'block';
+    document.getElementById('previewInitials').style.display = 'none';
+  }
+
+  // Initials
+  function getInitials(name) {
+    if (!name) return 'IC';
+    const words = name.trim().split(/\s+/).filter(Boolean);
+    return words.length >= 2
+      ? (words[0][0] + words[words.length - 1][0]).toUpperCase()
+      : name.substring(0, 2).toUpperCase();
+  }
+
+  function updatePreview() {
+    const name = document.getElementById('cName').value.trim() || 'Your Company';
+    const industry = document.getElementById('cIndustry').value;
+    const size = document.getElementById('cSize').value;
+    const parish = document.getElementById('cParish').value;
+    const website = document.getElementById('cWebsite').value.trim();
+    const phone = document.getElementById('cPhone').value.trim();
+    const bio = document.getElementById('cBio').value.trim();
+    const firstName = document.getElementById('cFirstName').value.trim();
+    const lastName = document.getElementById('cLastName').value.trim();
+
+    // Name & initials
+    document.getElementById('previewName').textContent = name;
+    const initials = getInitials(name);
+    document.getElementById('previewInitials').textContent = initials;
+    document.getElementById('formLogoInitials').textContent = initials;
+
+    // Location
+    document.getElementById('previewLocation').textContent = parish ? parish + ', Jamaica' : 'Jamaica';
+
+    // Tags
+    const tagEl = document.getElementById('previewTags');
+    tagEl.innerHTML = '';
+    if (industry) tagEl.innerHTML += `<span class="card-tag">${industry}</span>`;
+    if (size) tagEl.innerHTML += `<span class="card-tag">${size}</span>`;
+    if (parish) tagEl.innerHTML += `<span class="card-tag">${parish}</span>`;
+
+    // Bio
+    const bioEl = document.getElementById('previewBio');
+    if (bio) {
+      bioEl.textContent = bio;
+      bioEl.style.color = '#444';
+      bioEl.style.fontStyle = 'normal';
+    } else {
+      bioEl.textContent = 'Your company description will appear here...';
+      bioEl.style.color = '#aaa';
+      bioEl.style.fontStyle = 'italic';
+    }
+
+    // Contact
+    const contactEl = document.getElementById('previewContact');
+    contactEl.innerHTML = '';
+    if (firstName || lastName) {
+      contactEl.innerHTML += `<span>👤 ${[firstName, lastName].filter(Boolean).join(' ')}</span>`;
+    }
+    if (website) {
+      const displayUrl = website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      contactEl.innerHTML += `<span>🌐 ${displayUrl}</span>`;
+    }
+    if (phone) {
+      contactEl.innerHTML += `<span>📞 ${phone}</span>`;
+    }
+  }
+
+
+  // Run initial preview
+  updatePreview();
+
+  // Live preview on input
+  ['cName','cIndustry','cSize','cParish','cFirstName','cLastName','cWebsite','cPhone','cBio'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', updatePreview);
+  });
+
+  // Logo upload
+  document.getElementById('logoFileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert('Logo must be under 5MB.'); return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const src = e.target.result;
+      // Form preview
+      document.getElementById('formLogoImg').src = src;
+      document.getElementById('formLogoImg').style.display = 'block';
+      document.getElementById('formLogoInitials').style.display = 'none';
+      // Card preview
+      document.getElementById('previewLogoImg').src = src;
+      document.getElementById('previewLogoImg').style.display = 'block';
+      document.getElementById('previewInitials').style.display = 'none';
+      // Save to localStorage
+      const b = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+      b.logoDataUrl = src;
+      localStorage.setItem('jstp_business', JSON.stringify(b));
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Form submit
+  document.getElementById('profileForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('saveBtn');
+    const company = document.getElementById('cName').value.trim();
+    if (!company) {
+      alert('Please enter your company name.');
+      document.getElementById('cName').focus();
+      return;
+    }
+
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const updated = {
+      company,
+      industry: document.getElementById('cIndustry').value,
+      size: document.getElementById('cSize').value,
+      parish: document.getElementById('cParish').value,
+      firstName: document.getElementById('cFirstName').value.trim(),
+      lastName: document.getElementById('cLastName').value.trim(),
+      website: document.getElementById('cWebsite').value.trim(),
+      phone: document.getElementById('cPhone').value.trim(),
+      bio: document.getElementById('cBio').value.trim(),
+    };
+
+    // Merge into business record
+    const existing = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+    localStorage.setItem('jstp_business', JSON.stringify(Object.assign({}, existing, updated)));
+    localStorage.setItem('jstp_business_setup', JSON.stringify(updated));
+
+    // Update user record
+    const u = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+    u.company = company;
+    u.firstName = updated.firstName || u.firstName;
+    u.lastName = updated.lastName || u.lastName;
+    u.profileComplete = true;
+    localStorage.setItem('jstp_user', JSON.stringify(u));
+
+    setTimeout(() => {
+      btn.textContent = 'Save Changes';
+      btn.disabled = false;
+      const notice = document.getElementById('saveNotice');
+      notice.classList.add('show');
+      document.getElementById('pageTitle').textContent = company;
+      setTimeout(() => notice.classList.remove('show'), 3000);
+    }, 500);
+  });
+})();
+</script>
+
+</body>
+</html>

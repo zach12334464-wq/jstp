@@ -1,0 +1,11 @@
+.env
+scraper/.env
+scraper/logs/
+__pycache__/
+*.pyc
+*.pyo
+node_modules/
+.DS_Store
+Thumbs.db
+fix_paths.ps1
+

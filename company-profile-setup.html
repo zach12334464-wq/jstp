@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Set Up Company Profile — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/profile-setup.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="reg-nav">
+    <a href="index.html" class="reg-brand">
+      <img src="assets/images/logo.png" class="logo-img" alt="JSTP logo">
+      <span class="reg-name">JSTP</span>
+    </a>
+    <span class="reg-step-label">Step 2 of 2 — Company Profile</span>
+  </header>
+
+  <main class="setup-main">
+
+    <!-- COMPANY PROFILE SETUP -->
+    <div class="setup-step" id="companySetup">
+      <p class="reg-eyebrow">COMPANY PROFILE</p>
+      <h1 class="reg-headline">Tell students about your company</h1>
+      <p class="setup-sub">This information appears on your public company card and listings.</p>
+
+      <form class="reg-form" id="companySetupForm" novalidate>
+
+        <div class="avatar-row">
+          <div class="avatar-circle" id="companyLogoPreview">IC</div>
+          <div class="avatar-info">
+            <div class="avatar-label">Company Initials / Logo</div>
+            <div class="avatar-hint">Upload a square logo or enter initials (e.g. IC)</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cName">Company Name</label>
+          <input type="text" id="cName" placeholder="e.g. Island Co." required>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cIndustry">Industry</label>
+            <select id="cIndustry">
+              <option>Business</option>
+              <option>Technology</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Media</option>
+              <option>Government</option>
+              <option>Retail</option>
+              <option>Finance</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cSize">Company Size</label>
+            <select id="cSize">
+              <option>1-10 employees</option>
+              <option>11-50 employees</option>
+              <option>51-200 employees</option>
+              <option>200+ employees</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="cWebsite">Website</label>
+            <input type="url" id="cWebsite" placeholder="https://yourcompany.com">
+          </div>
+          <div class="field">
+            <label for="cPhone">Contact Phone</label>
+            <input type="tel" id="cPhone" placeholder="+1 (876) 555-0123">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="cEmail">Contact Email</label>
+          <input type="email" id="cEmail" placeholder="hr@yourcompany.com" required>
+        </div>
+
+        <div class="field">
+          <label for="cParish">Parish / Location</label>
+          <select id="cParish">
+            <option>Kingston</option>
+            <option>St Andrew</option>
+            <option>St Catherine</option>
+            <option>Clarendon</option>
+            <option>Manchester</option>
+            <option>St Elizabeth</option>
+            <option>Westmoreland</option>
+            <option>Hanover</option>
+            <option>St James</option>
+            <option>Trelawny</option>
+            <option>St Ann</option>
+            <option>St Mary</option>
+            <option>Portland</option>
+            <option>St Thomas</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="cBio">About Your Company</label>
+          <textarea id="cBio" rows="5" placeholder="Describe your company, culture, and the kinds of students you want to hire."></textarea>
+        </div>
+
+        <div class="setup-actions">
+          <button type="submit" class="btn-submit">Save Company Profile →</button>
+          <a href="business.html" class="btn-skip">Go to Dashboard</a>
+        </div>
+
+      </form>
+    </div>
+
+  </main>
+
+  <script>
+    document.getElementById('companySetupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      // TODO: save company profile to Supabase
+      window.location.href = 'business.html';
+    });
+  </script>
+
+</body>
+</html>

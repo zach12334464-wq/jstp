@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Company Profile Setup — JSTP</title>
+  <meta name="description" content="Complete your business profile on JSTP — Jamaica's Student Talent Pipeline." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css" />
+  <link rel="stylesheet" href="css/business-setup.css" />
+  <style>
+    /* ── Verification Banner ── */
+    .verify-banner {
+      background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+      border: 1.5px solid #fca5a5;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      position: relative;
+    }
+    .verify-banner.hidden { display: none; }
+    .verify-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .verify-content { flex: 1; }
+    .verify-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #991b1b;
+      margin-bottom: 4px;
+    }
+    .verify-text {
+      font-size: 12px;
+      color: #b91c1c;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+    .verify-email-display {
+      font-weight: 700;
+      color: #991b1b;
+    }
+    .verify-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .btn-verify {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background 0.15s;
+    }
+    .btn-verify:hover { background: #dc2626; }
+    .btn-skip-verify {
+      background: none;
+      border: none;
+      font-size: 12px;
+      color: #b91c1c;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 8px 4px;
+    }
+
+    /* ── Unverified Badge ── */
+    .unverified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #fee2e2;
+      border: 1.5px solid #fca5a5;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #991b1b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-left: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .unverified-badge:hover { background: #fca5a5; }
+    .unverified-badge.hidden { display: none; }
+
+    /* ── Verified Badge ── */
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e8f5e9;
+      border: 1.5px solid #81c784;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #2e7d32;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-left: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .verified-badge:hover { background: #c8e6c9; }
+    .verified-badge.hidden { display: none; }
+
+    /* ── Verified State ── */
+    .verified-notice {
+      background: #e8f5e9;
+      border: 1.5px solid #66bb6a;
+      border-radius: 8px;
+      padding: 14px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2e7d32;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .verified-notice.hidden { display: none; }
+
+    /* ── Logo upload ── */
+    .logo-upload-area {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px;
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 24px;
+    }
+    .logo-preview-wrap { position: relative; flex-shrink: 0; }
+    .logo-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: #0a0a0a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      overflow: hidden;
+      border: 2px solid #e0e0e0;
+    }
+    .logo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .logo-upload-info { flex: 1; }
+    .logo-upload-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: #0a0a0a;
+      margin-bottom: 4px;
+    }
+    .logo-upload-hint {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+    .btn-upload-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f5f5f5;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 8px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #0a0a0a;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-upload-logo:hover { background: #ebebeb; border-color: #bbb; }
+    #logoFileInput { display: none; }
+
+    /* ── Section heading ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      margin-bottom: 16px;
+      margin-top: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* ── Pre-filled notice ── */
+    .prefill-notice {
+      background: #f0f7ff;
+      border: 1.5px solid #90caf9;
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-size: 12px;
+      color: #1565c0;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .prefill-notice.hidden { display: none; }
+
+    /* ── Verified sent state ── */
+    .verify-sent {
+      background: #e8f5e9;
+      border: 1.5px solid #66bb6a;
+      border-radius: 8px;
+      padding: 18px 20px;
+      margin-bottom: 28px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #2e7d32;
+      display: none;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Step indicator update */
+    .setup-step { font-size: 12px; color: #888; font-weight: 500; }
+
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+
+    /* ── Verification Modal Styling ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.hidden { display: none !important; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 36px;
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      animation: slideUp 0.25s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #0a0a0a; }
+    .modal-eyebrow {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0a0a0a;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+    .modal-submit {
+      width: 100%;
+      padding: 14px;
+      background: #0a0a0a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      transition: background 0.15s;
+      margin-bottom: 10px;
+    }
+    .modal-submit:hover { background: #2a2a2a; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<header class="navbar">
+  <div class="nav-inner">
+    <a href="index.html" class="brand">
+      <span class="logo-square">J</span>
+      <span class="brand-name">JSTP</span>
+    </a>
+    <div class="nav-right">
+      <span class="setup-step" id="stepLabel">Step 2 of 2 — Company Profile</span>
+      <span class="unverified-badge hidden" id="navUnverifiedBadge">⚠ Unverified</span>
+      <span class="verified-badge hidden" id="navVerifiedBadge">✓ Verified</span>
+    </div>
+  </div>
+</header>
+
+<main class="setup-main">
+  <div class="setup-wrap">
+    <p class="setup-eyebrow">COMPANY PROFILE</p>
+    <h1 class="setup-headline" id="setupHeadline">Complete your profile</h1>
+    <p class="setup-sub" id="setupSub">This appears on your public company card and listings.</p>
+
+    <!-- ── Email sent confirmation (kept for JS compatibility) ── -->
+    <div class="verify-sent" id="verifySentMsg" style="display:none;">
+      Verification email resent — check your inbox at <strong id="verifySentEmail"></strong>.
+    </div>
+
+    <!-- ── Already verified ── -->
+    <div class="verified-notice hidden" id="verifiedNotice">
+      Your email is verified. Your profile is fully active.
+    </div>
+
+    <!-- ── Pre-fill notice ── -->
+    <div class="prefill-notice hidden" id="prefillNotice">
+      Fields pre-filled from your registration — review and add any missing details.
+    </div>
+
+    <form id="setupForm" class="setup-form" novalidate>
+
+      <!-- ── Logo / Photo Upload ── -->
+      <div class="section-label">Company Logo</div>
+      <div class="logo-upload-area">
+        <div class="logo-preview-wrap">
+          <div class="logo-preview" id="logoPreview">
+            <span id="logoInitials">IC</span>
+            <img id="logoImg" style="display:none;" alt="Company logo">
+          </div>
+        </div>
+        <div class="logo-upload-info">
+          <div class="logo-upload-label">Upload your company logo</div>
+          <div class="logo-upload-hint">PNG or JPG, at least 200×200px. This shows on your profile card and job listings. If no logo is uploaded, your initials will be shown.</div>
+          <label class="btn-upload-logo" for="logoFileInput">
+            Upload Logo
+          </label>
+          <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/webp">
+        </div>
+      </div>
+
+      <!-- ── Basic Info ── -->
+      <div class="section-label">Company Information</div>
+
+      <div class="field">
+        <label for="cName">Company Name *</label>
+        <input type="text" id="cName" placeholder="e.g. Island Co." required>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cIndustry">Industry</label>
+          <select id="cIndustry">
+            <option value="">Select industry</option>
+            <option>Business</option>
+            <option>Technology</option>
+            <option>Healthcare</option>
+            <option>Education</option>
+            <option>Media</option>
+            <option>Government</option>
+            <option>Retail</option>
+            <option>Finance</option>
+            <option>Hospitality & Tourism</option>
+            <option>Agriculture</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="cSize">Company Size</label>
+          <select id="cSize">
+            <option value="">Select size</option>
+            <option>1–10 employees</option>
+            <option>11–50 employees</option>
+            <option>51–200 employees</option>
+            <option>200+ employees</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="cParish">Parish</label>
+        <select id="cParish">
+          <option value="">Select parish</option>
+          <option>Kingston</option>
+          <option>St Andrew</option>
+          <option>St Catherine</option>
+          <option>Clarendon</option>
+          <option>Manchester</option>
+          <option>St Elizabeth</option>
+          <option>Westmoreland</option>
+          <option>Hanover</option>
+          <option>St James</option>
+          <option>Trelawny</option>
+          <option>St Ann</option>
+          <option>St Mary</option>
+          <option>Portland</option>
+          <option>St Thomas</option>
+        </select>
+      </div>
+
+      <!-- ── Contact Info ── -->
+      <div class="section-label">Contact Details</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cFirstName">Contact First Name</label>
+          <input type="text" id="cFirstName" placeholder="John" autocomplete="given-name">
+        </div>
+        <div class="field">
+          <label for="cLastName">Contact Last Name</label>
+          <input type="text" id="cLastName" placeholder="Brown" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="cWebsite">Website</label>
+          <input type="url" id="cWebsite" placeholder="https://yourcompany.com">
+        </div>
+        <div class="field">
+          <label for="cPhone">Contact Phone</label>
+          <input type="tel" id="cPhone" placeholder="+1 (876) 555-0123">
+        </div>
+      </div>
+
+      <!-- ── About ── -->
+      <div class="section-label">About Your Company</div>
+
+      <div class="field">
+        <label for="cBio">Company Description</label>
+        <textarea id="cBio" rows="5" placeholder="Describe your company, culture, what you do, and the kinds of students you're looking to hire."></textarea>
+      </div>
+
+      <!-- ── Actions ── -->
+      <div class="setup-actions">
+        <button type="submit" class="btn-submit" id="saveProfileBtn">Save Profile &amp; Go to Dashboard</button>
+      </div>
+
+    </form>
+  </div>
+</main>
+
+<script>
+  // ── Load data from localStorage ──────────────────────────────────────────
+  const businessData = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+  const userData = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+
+  // Pre-fill greeting
+  if (businessData.company || userData.company) {
+    const name = businessData.company || userData.company;
+    document.getElementById('setupHeadline').textContent = `Welcome, ${businessData.firstName || userData.firstName || name}!`;
+    document.getElementById('setupSub').textContent = `Complete your company profile for ${name}. It appears on your public card and job listings.`;
+  }
+
+  // Pre-fill fields from registration data
+  let prefilled = false;
+  function setVal(id, value) {
+    if (!value) return;
+    const el = document.getElementById(id);
+    if (!el) return;
+    // For selects, match option
+    if (el.tagName === 'SELECT') {
+      const opts = Array.from(el.options);
+      const match = opts.find(o => o.value === value || o.text === value);
+      if (match) { el.value = match.value || match.text; prefilled = true; }
+    } else {
+      el.value = value;
+      prefilled = true;
+    }
+  }
+
+  setVal('cName', businessData.company || userData.company);
+  setVal('cIndustry', businessData.industry);
+  setVal('cParish', businessData.parish);
+  setVal('cFirstName', businessData.firstName || userData.firstName);
+  setVal('cLastName', businessData.lastName || userData.lastName);
+
+  // Load saved setup data if returning to page
+  const savedSetup = JSON.parse(localStorage.getItem('jstp_business_setup') || '{}');
+  if (savedSetup.size) setVal('cSize', savedSetup.size);
+  if (savedSetup.website) setVal('cWebsite', savedSetup.website);
+  if (savedSetup.phone) setVal('cPhone', savedSetup.phone);
+  if (savedSetup.bio) document.getElementById('cBio').value = savedSetup.bio;
+
+  // Show pre-fill notice
+  if (prefilled) {
+    document.getElementById('prefillNotice').classList.remove('hidden');
+  }
+
+  // Update initials preview
+  function updateInitials() {
+    const name = document.getElementById('cName').value.trim();
+    if (!name) return;
+    const words = name.split(/\s+/).filter(Boolean);
+    let initials = words.length >= 2
+      ? (words[0][0] + words[words.length - 1][0]).toUpperCase()
+      : name.substring(0, 2).toUpperCase();
+    document.getElementById('logoInitials').textContent = initials;
+  }
+  updateInitials();
+  document.getElementById('cName').addEventListener('input', updateInitials);
+
+  // ── Email Verification ───────────────────────────────────────────────────
+  const email = businessData.email || userData.email || '';
+  const isVerified = businessData.emailVerified === true || userData.emailVerified === true;
+
+  if (email) {
+    document.getElementById('verifySentEmail').textContent = email;
+    // Populate modal email display
+    const modalEmailEl = document.getElementById('modalVerifyEmailValue');
+    if (modalEmailEl) modalEmailEl.textContent = email || 'verify@jstp.com';
+  }
+
+  const verifiedNotice = document.getElementById('verifiedNotice');
+  const navBadge = document.getElementById('navUnverifiedBadge');
+  const navVerifiedBadge = document.getElementById('navVerifiedBadge');
+  const verifyCtaBlock = document.getElementById('verifyCtaBlock');
+
+  if (isVerified) {
+    verifiedNotice.classList.remove('hidden');
+    if (navBadge) navBadge.classList.add('hidden');
+    if (navVerifiedBadge) navVerifiedBadge.classList.remove('hidden');
+    if (verifyCtaBlock) verifyCtaBlock.style.display = 'none';
+  } else {
+    verifiedNotice.classList.add('hidden');
+    if (navVerifiedBadge) navVerifiedBadge.classList.add('hidden');
+    if (navBadge) navBadge.classList.remove('hidden');
+    if (verifyCtaBlock) verifyCtaBlock.style.display = 'block';
+  }
+
+  // "Verify Domain Email Now" CTA button
+  const btnOpenVerifyModal = document.getElementById('btnOpenVerifyModal');
+  if (btnOpenVerifyModal) {
+    btnOpenVerifyModal.addEventListener('click', function() {
+      openVerificationModal(false);
+    });
+  }
+
+  // Verification modal triggers
+  function openVerificationModal(isVerifiedStatus) {
+    const verificationModal = document.getElementById('verificationModal');
+    const unverifiedContent = document.getElementById('verifyModalUnverifiedContent');
+    const verifiedContent = document.getElementById('verifyModalVerifiedContent');
+    
+    if (!verificationModal || !unverifiedContent || !verifiedContent) return;
+
+    if (isVerifiedStatus) {
+      unverifiedContent.classList.add('hidden');
+      verifiedContent.classList.remove('hidden');
+    } else {
+      unverifiedContent.classList.remove('hidden');
+      verifiedContent.classList.add('hidden');
+    }
+    verificationModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeVerificationModal() {
+    const verificationModal = document.getElementById('verificationModal');
+    if (verificationModal) {
+      verificationModal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (navBadge) {
+    navBadge.addEventListener('click', function(e) {
+      e.preventDefault();
+      openVerificationModal(false);
+    });
+  }
+  if (navVerifiedBadge) {
+    navVerifiedBadge.addEventListener('click', function(e) {
+      e.preventDefault();
+      openVerificationModal(true);
+    });
+  }
+
+  // Event delegation for verification modal close
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#verifyModalClose') || e.target.closest('#verifyModalOk') || e.target.closest('#verifyModalVerifiedOk')) {
+      closeVerificationModal();
+    }
+    const verificationModal = document.getElementById('verificationModal');
+    if (verificationModal && e.target === verificationModal) {
+      closeVerificationModal();
+    }
+  });
+
+  // Copy email button in modal
+  document.addEventListener('click', function(e) {
+    if (e.target.closest('#btnCopyVerifyEmail')) {
+      const btn = e.target.closest('#btnCopyVerifyEmail');
+      const emailText = 'verify@jstp.com';
+      navigator.clipboard.writeText(emailText).then(() => {
+        const orig = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.style.background = '#16a34a';
+        setTimeout(() => { btn.textContent = orig; btn.style.background = '#0a0a0a'; }, 1800);
+      }).catch(() => {
+        btn.textContent = 'Copy failed';
+        setTimeout(() => { btn.textContent = 'Copy Email'; }, 1800);
+      });
+    }
+  });
+
+  // ── Logo / Photo Upload ──────────────────────────────────────────────────
+  document.getElementById('logoFileInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Logo file must be under 5MB.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = document.getElementById('logoImg');
+      img.src = e.target.result;
+      img.style.display = 'block';
+      document.getElementById('logoInitials').style.display = 'none';
+      // Save logo to localStorage (base64 — swap with Supabase Storage upload in production)
+      const b = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+      b.logoDataUrl = e.target.result;
+      localStorage.setItem('jstp_business', JSON.stringify(b));
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Restore uploaded logo if returning
+  if (businessData.logoDataUrl) {
+    const img = document.getElementById('logoImg');
+    img.src = businessData.logoDataUrl;
+    img.style.display = 'block';
+    document.getElementById('logoInitials').style.display = 'none';
+  }
+
+  // ── Form Submit ──────────────────────────────────────────────────────────
+  document.getElementById('setupForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = document.getElementById('saveProfileBtn');
+
+    const company = document.getElementById('cName').value.trim();
+    if (!company) {
+      alert('Please enter your company name.');
+      document.getElementById('cName').focus();
+      return;
+    }
+
+    btn.textContent = 'Saving...';
+    btn.disabled = true;
+
+    const setupData = {
+      company,
+      industry: document.getElementById('cIndustry').value,
+      size: document.getElementById('cSize').value,
+      parish: document.getElementById('cParish').value,
+      firstName: document.getElementById('cFirstName').value.trim(),
+      lastName: document.getElementById('cLastName').value.trim(),
+      website: document.getElementById('cWebsite').value.trim(),
+      phone: document.getElementById('cPhone').value.trim(),
+      bio: document.getElementById('cBio').value.trim(),
+    };
+
+    // Merge into existing business record
+    const existing = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+    const merged = Object.assign({}, existing, setupData);
+    localStorage.setItem('jstp_business', JSON.stringify(merged));
+    localStorage.setItem('jstp_business_setup', JSON.stringify(setupData));
+
+    // Update user record
+    const u = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+    u.company = company;
+    u.firstName = setupData.firstName || u.firstName;
+    u.lastName = setupData.lastName || u.lastName;
+    u.profileComplete = true;
+    localStorage.setItem('jstp_user', JSON.stringify(u));
+
+    // Brief delay for UX
+    setTimeout(() => {
+      window.location.href = 'business-dashboard.html';
+    }, 400);
+  });
+
+  // ── Skip link ────────────────────────────────────────────────────────────
+  document.getElementById('skipSetupLink').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Mark verify as skipped if not verified
+    if (!isVerified) {
+      localStorage.setItem('jstp_verify_skipped', 'true');
+      const u = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+      u.emailVerified = false;
+      u.verificationSkipped = true;
+      localStorage.setItem('jstp_user', JSON.stringify(u));
+    }
+    window.location.href = 'business-dashboard.html';
+  });
+</script>
+
+  <!-- VERIFICATION MODAL -->
+  <div class="modal-overlay hidden" id="verificationModal" role="dialog" aria-modal="true" aria-labelledby="verifyModalTitle" style="z-index: 600;">
+    <div class="modal" style="max-width: 480px; padding: 36px; border-radius: 8px;">
+      <button class="modal-close" id="verifyModalClose" aria-label="Close" style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 22px; cursor: pointer; color: #888;">&times;</button>
+      <div id="verifyModalUnverifiedContent">
+        <div class="modal-eyebrow" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #b91c1c; font-weight: 800; margin-bottom: 6px;">BUSINESS TRUST &amp; SAFETY</div>
+        <h2 class="modal-title" id="verifyModalTitle" style="font-size: 22px; font-weight: 800; color: #0a0a0a; margin-bottom: 8px; line-height: 1.3;">Verify Your Business</h2>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: left;">Unverified accounts have limited public trust on JSTP. Get verified for <strong>free</strong> to stand out to top student talent and show that you are an official, vetted business.</p>
+
+        <div style="background: #fdf2f2; border-left: 4px solid #ef4444; padding: 16px 18px; border-radius: 4px; margin-bottom: 20px; text-align: left;">
+          <strong style="display: block; font-size: 12px; color: #991b1b; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px;">3 Simple Steps to Get Verified:</strong>
+          <div style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="min-width: 24px; height: 24px; background: #ef4444; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">1</div>
+              <div style="font-size: 13px; color: #444; line-height: 1.5;">
+                Send an email from your <strong>official company domain</strong> (e.g. <em style="color:#666">yourname@company.com</em>) to the address below:
+                <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px; background: white; border: 1.5px solid #fca5a5; border-radius: 4px; padding: 8px 12px;">
+                  <span style="font-size: 14px; font-weight: 700; color: #0a0a0a; letter-spacing: 0.01em; flex: 1;" id="modalVerifyEmailValue">verify@jstp.com</span>
+                  <button id="btnCopyVerifyEmail" style="background: #0a0a0a; color: white; border: none; border-radius: 4px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: background 0.15s; white-space: nowrap;">Copy Email</button>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="min-width: 24px; height: 24px; background: #ef4444; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">2</div>
+              <div style="font-size: 13px; color: #444; line-height: 1.5;">Attach a <strong>PDF copy</strong> of your <strong>Business Registration Certificate</strong> or <strong>Tax Registration Number (TRN)</strong>.</div>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start;">
+              <div style="min-width: 24px; height: 24px; background: #1a7a4a; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800;">✓</div>
+              <div style="font-size: 13px; color: #444; line-height: 1.5;">Our team reviews your documents within <strong>24 hours</strong> and issues your official <strong style="color: #1a7a4a;">✓ Verified Badge</strong> — visible to all students.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 4px; padding: 10px 14px; margin-bottom: 20px; font-size: 12px; color: #166534; text-align: left;">💡 <strong>Tip:</strong> Verification is completely free and typically takes less than 24 hours.</div>
+
+        <button class="modal-submit" id="verifyModalOk" style="width: 100%; padding: 14px; background: #0a0a0a; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;">Got It — I'll Send the Email</button>
+      </div>
+      <div id="verifyModalVerifiedContent" class="hidden">
+        <div class="modal-eyebrow" style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: #1a7a4a; font-weight: 800; margin-bottom: 6px;">VETTED &amp; TRUSTED</div>
+        <h2 class="modal-title" style="font-size: 22px; font-weight: 800; color: #0a0a0a; margin-bottom: 16px; line-height: 1.3;">Verified Account Status</h2>
+        <div style="text-align: center; margin-bottom: 20px; padding: 12px;">
+          <div style="display: inline-flex; align-items: center; justify-content: center; width: 60px; height: 60px; background: #e8f5e9; color: #1a7a4a; border-radius: 50%; font-size: 28px; font-weight: bold; margin-bottom: 12px; border: 2px solid #81c784;">✓</div>
+          <p style="font-size: 14px; color: #1a7a4a; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">This Business is Fully Verified</p>
+        </div>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 16px; text-align: left;">This company has completed our rigorous verification process, including company domain confirmation and official business registry validation.</p>
+        <p style="font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; text-align: left;">By hiring from verified employers, students are guaranteed legitimate contracts, professional work environments, and secure payment processing.</p>
+        <button class="modal-submit" id="verifyModalVerifiedOk" style="width: 100%; padding: 14px; background: #0a0a0a; color: white; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; cursor: pointer;">Great</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

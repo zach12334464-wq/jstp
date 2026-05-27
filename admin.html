@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JSTP Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div class="admin-login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-brand">
+      <span class="login-mark">J</span>
+      <span class="login-name">JSTP</span>
+      <span class="login-badge">ADMIN</span>
+    </div>
+    <h1 class="login-title">Restricted Access</h1>
+    <p class="login-sub">This page is not publicly linked. Admin credentials required.</p>
+    <div class="login-field">
+      <label>Admin Password</label>
+      <input type="password" id="adminPassword" placeholder="Enter admin password" />
+    </div>
+    <div class="login-error hidden" id="loginError">Incorrect password. Access denied.</div>
+    <button class="login-btn" id="loginBtn">Access Admin Panel &rarr;</button>
+    <p class="login-footer">Unauthorized access attempts are logged.</p>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="admin-wrap hidden" id="adminDashboard">
+
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-top">
+      <div class="sidebar-brand">
+        <span class="sb-mark">J</span>
+        <span class="sb-name">JSTP</span>
+        <span class="sb-badge">ADMIN</span>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="sb-link active" data-tab="overview">Overview</a>
+      <a href="#" class="sb-link" data-tab="students">Students</a>
+      <a href="#" class="sb-link" data-tab="businesses">Businesses</a>
+      <a href="#" class="sb-link" data-tab="jobs">Job Posts</a>
+      <a href="#" class="sb-link" data-tab="reports">
+        Reports
+        <span class="sb-badge-count" id="reportBadge">3</span>
+      </a>
+      <a href="#" class="sb-link" data-tab="breaches">Data Breach</a>
+      <a href="#" class="sb-link" data-tab="history">History</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="sb-logout" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="admin-main">
+
+    <!-- TOPBAR -->
+    <header class="admin-topbar">
+      <div class="topbar-title" id="topbarTitle">Overview</div>
+      <div class="topbar-right">
+        <div class="topbar-status">
+          <span class="status-dot"></span>
+          System Online
+        </div>
+        <div class="topbar-admin">Admin</div>
+      </div>
+    </header>
+
+    <!-- ── TAB: OVERVIEW ── -->
+    <section class="tab-content active" id="tab-overview">
+      <div class="metrics-grid">
+        <div class="metric-card">
+          <div class="metric-label">TOTAL STUDENTS</div>
+          <div class="metric-value">247</div>
+          <div class="metric-sub">+12 this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">TOTAL BUSINESSES</div>
+          <div class="metric-value">34</div>
+          <div class="metric-sub">+2 this week</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-label">ACTIVE JOB POSTS</div>
+          <div class="metric-value">89</div>
+          <div class="metric-sub">61 scraper &middot; 28 direct</div>
+        </div>
+        <div class="metric-card alert">
+          <div class="metric-label">OPEN REPORTS</div>
+          <div class="metric-value">3</div>
+          <div class="metric-sub">Needs review</div>
+        </div>
+      </div>
+
+      <div class="section-title">Recent Activity</div>
+      <div class="activity-log">
+        <div class="activity-row">
+          <span class="activity-type student">STUDENT</span>
+          <span class="activity-text">Jerome Brown registered &mdash; Kingston, Undergraduate</span>
+          <span class="activity-time">2 min ago</span>
+        </div>
+        <div class="activity-row">
+          <span class="activity-type job">JOB</span>
+          <span class="activity-text">System added: Marketing Intern at Island Co. via Gleaner scraper</span>
+          <span class="activity-time">14 min ago</span>
+        </div>
+        <div class="activity-row">
+          <span class="activity-type report">REPORT</span>
+          <span class="activity-text">Student reported listing: "Work from home $50k/week" &mdash; possible scam</span>
+          <span class="activity-time">1 hr ago</span>
+        </div>
+        <div class="activity-row">
+          <span class="activity-type business">BUSINESS</span>
+          <span class="activity-text">Tech Wave registered &mdash; Kingston, Technology</span>
+          <span class="activity-time">3 hr ago</span>
+        </div>
+        <div class="activity-row">
+          <span class="activity-type job">JOB</span>
+          <span class="activity-text">System added: Data Entry Specialist at Appen via remote scraper</span>
+          <span class="activity-time">6 hr ago</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── TAB: STUDENTS ── -->
+    <section class="tab-content hidden" id="tab-students">
+      <div class="tab-header">
+        <input type="text" class="admin-search" placeholder="Search students..." id="studentSearch" />
+      </div>
+      <table class="admin-table" id="studentTable">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>School</th>
+            <th>Parish</th>
+            <th>Level</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="studentTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── TAB: BUSINESSES ── -->
+    <section class="tab-content hidden" id="tab-businesses">
+      <div class="tab-header">
+        <input type="text" class="admin-search" placeholder="Search businesses..." id="businessSearch" />
+      </div>
+      <table class="admin-table" id="businessTable">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Industry</th>
+            <th>Parish</th>
+            <th>Verified</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="businessTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── TAB: JOBS ── -->
+    <section class="tab-content hidden" id="tab-jobs">
+      <div class="tab-header">
+        <input type="text" class="admin-search" placeholder="Search job posts..." id="jobSearch" />
+        <div class="tab-filter-row">
+          <button class="filter-chip active" data-filter="all">All</button>
+          <button class="filter-chip" data-filter="direct">Direct Posts</button>
+          <button class="filter-chip" data-filter="scraper">Scraper Posts</button>
+          <button class="filter-chip" data-filter="flagged">Flagged</button>
+        </div>
+      </div>
+      <table class="admin-table" id="jobTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Company</th>
+            <th>Source</th>
+            <th>Posted</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="jobTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ── TAB: REPORTS ── -->
+    <section class="tab-content hidden" id="tab-reports">
+      <div class="section-title">Open Reports</div>
+      <div class="report-list" id="reportList">
+
+        <div class="report-card" id="report-1">
+          <div class="report-card-top">
+            <span class="report-type job">JOB REPORT</span>
+            <span class="report-time">1 hour ago</span>
+          </div>
+          <div class="report-subject">Reported listing: &ldquo;Work from Home $50k/week&rdquo;</div>
+          <div class="report-body">
+            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Alicia Morgan (student)</span></div>
+            <div class="report-row"><span class="report-label">REASON</span><span>Possible scam &mdash; unrealistic salary promise and vague company</span></div>
+            <div class="report-row"><span class="report-label">AI SCAM SCORE</span><span class="score-high">0.91 &mdash; High Risk</span></div>
+          </div>
+          <div class="report-actions">
+            <button class="action-btn remove" onclick="resolveReport(1, 'remove')">Remove Listing</button>
+            <button class="action-btn warn" onclick="resolveReport(1, 'warn')">Warn Business</button>
+            <button class="action-btn view" onclick="resolveReport(1, 'dismiss')">Dismiss</button>
+          </div>
+        </div>
+
+        <div class="report-card" id="report-2">
+          <div class="report-card-top">
+            <span class="report-type business">BUSINESS REPORT</span>
+            <span class="report-time">3 hours ago</span>
+          </div>
+          <div class="report-subject">Reported business: &ldquo;QuickCash Jobs JA&rdquo;</div>
+          <div class="report-body">
+            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Kemar Thompson (student)</span></div>
+            <div class="report-row"><span class="report-label">REASON</span><span>Asked for bank account info during application &mdash; suspicious behaviour</span></div>
+            <div class="report-row"><span class="report-label">AI SCAM SCORE</span><span class="score-high">0.87 &mdash; High Risk</span></div>
+          </div>
+          <div class="report-actions">
+            <button class="action-btn remove" onclick="resolveReport(2, 'remove')">Remove Business</button>
+            <button class="action-btn warn" onclick="resolveReport(2, 'warn')">Send Warning</button>
+            <button class="action-btn view" onclick="resolveReport(2, 'dismiss')">Dismiss</button>
+          </div>
+        </div>
+
+        <div class="report-card" id="report-3">
+          <div class="report-card-top">
+            <span class="report-type student">STUDENT REPORT</span>
+            <span class="report-time">5 hours ago</span>
+          </div>
+          <div class="report-subject">Reported student: &ldquo;testuser123@mail.com&rdquo;</div>
+          <div class="report-body">
+            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Island Co. (business)</span></div>
+            <div class="report-row"><span class="report-label">REASON</span><span>Submitted 40 applications in 2 minutes &mdash; bulk spam behaviour</span></div>
+            <div class="report-row"><span class="report-label">AI FLAG</span><span class="score-medium">Anomaly detected &mdash; unusual activity pattern</span></div>
+          </div>
+          <div class="report-actions">
+            <button class="action-btn remove" onclick="resolveReport(3, 'remove')">Suspend Account</button>
+            <button class="action-btn warn" onclick="resolveReport(3, 'warn')">Send Warning</button>
+            <button class="action-btn view" onclick="resolveReport(3, 'dismiss')">Dismiss</button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ── TAB: DATA BREACH ── -->
+    <section class="tab-content hidden" id="tab-breaches">
+      <div class="breach-header">
+        <div class="breach-status safe" id="breachStatus">
+          <div class="breach-status-dot"></div>
+          <div>
+            <div class="breach-status-title">System Status &mdash; No Active Breach</div>
+            <div class="breach-status-sub">Last security scan: May 25, 2026 at 03:00 AM</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">Breach Response Protocol</div>
+      <div class="breach-steps">
+        <div class="breach-step" id="step-card-1">
+          <div class="breach-step-num">01</div>
+          <div>
+            <div class="breach-step-title">Detect and Confirm</div>
+            <p>Identify the breach scope &mdash; which tables, which users, what data was exposed. Check Supabase logs and scraper run logs in /logs/.</p>
+            <button class="breach-btn disabled hidden" id="step-btn-1" onclick="executeBreachStep(1)">Run Security Scan &amp; Audit</button>
+          </div>
+        </div>
+        <div class="breach-step" id="step-card-2">
+          <div class="breach-step-num">02</div>
+          <div>
+            <div class="breach-step-title">Contain Immediately</div>
+            <p>Rotate Supabase anon key and service key. Revoke all active sessions. Take the platform offline temporarily if needed.</p>
+            <button class="breach-btn disabled hidden" id="step-btn-2" onclick="executeBreachStep(2)">Rotate Keys &amp; Revoke Sessions</button>
+          </div>
+        </div>
+        <div class="breach-step" id="step-card-3">
+          <div class="breach-step-num">03</div>
+          <div>
+            <div class="breach-step-title">Notify Affected Users</div>
+            <p>Send breach notification emails to all affected accounts within 72 hours. Describe what data was exposed and what action to take.</p>
+            <button class="breach-btn disabled hidden" id="step-btn-3" onclick="executeBreachStep(3)">Send User Notifications</button>
+          </div>
+        </div>
+        <div class="breach-step" id="step-card-4">
+          <div class="breach-step-num">04</div>
+          <div>
+            <div class="breach-step-title">Patch and Harden</div>
+            <p>Fix the vulnerability. Review all RLS policies in Supabase. Update API key exposure rules. Force all users to reset passwords.</p>
+            <button class="breach-btn disabled hidden" id="step-btn-4" onclick="executeBreachStep(4)">Apply Security Patches</button>
+          </div>
+        </div>
+        <div class="breach-step" id="step-card-5">
+          <div class="breach-step-num">05</div>
+          <div>
+            <div class="breach-step-title">Document and Report</div>
+            <p>Log the full incident timeline. If student personal data was exposed, report to relevant Jamaican data protection authority within required timeframe.</p>
+            <button class="breach-btn disabled hidden" id="step-btn-5" onclick="executeBreachStep(5)">File Regulator Report</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:32px;">Breach Simulation</div>
+      <div class="breach-sim-card">
+        <p>Use this to test your incident response. Triggering a simulation will log a mock breach event &mdash; no real data is affected.</p>
+        <button class="breach-sim-btn" id="breachSimBtn">Run Breach Simulation</button>
+      </div>
+
+      <div class="breach-log">
+        <div class="breach-log-title">INCIDENT LOG</div>
+        <div class="breach-log-empty" id="breachLogEmpty">No incidents recorded.</div>
+        <div id="breachLogList"></div>
+      </div>
+    </section>
+
+    <!-- ── TAB: HISTORY ── -->
+    <section class="tab-content hidden" id="tab-history">
+      <div class="section-title">Admin Action History</div>
+      <div class="tab-header" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <input type="text" class="admin-search" placeholder="Search history..." id="historySearch" style="margin-bottom: 0;" />
+        <button class="filter-chip" onclick="clearHistory()" style="border-color: #c62828; color: #c62828; margin-bottom: 0;">Clear History</button>
+      </div>
+      <div class="activity-log" id="historyLogList">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay hidden" id="confirmModal">
+  <div class="modal-card">
+    <div class="modal-title" id="modalTitle">Confirm Removal</div>
+    <div class="modal-body" id="modalBody">Are you sure you want to remove this item?</div>
+    <div class="modal-actions">
+      <button class="modal-confirm" id="modalConfirm">Confirm Remove</button>
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW DETAILS MODAL -->
+<div class="modal-overlay hidden" id="viewModal">
+  <div class="modal-card large">
+    <div class="modal-title" id="viewModalTitle">Record Details</div>
+    <div class="modal-body" id="viewModalBody" style="margin-top: 16px; margin-bottom: 24px;">
+      <!-- RENDERED DYNAMICALLY -->
+    </div>
+    <div class="modal-actions">
+      <button class="modal-cancel" onclick="closeViewModal()" style="flex: 1; padding: 12px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- WARN MODAL -->
+<div class="modal-overlay hidden" id="warnModal">
+  <div class="modal-card">
+    <div class="modal-title" id="warnModalTitle">Send Warning</div>
+    <div class="modal-body">
+      <p id="warnModalSubtitle" style="font-size:12px;color:#666;margin-bottom:16px;line-height:1.5;"></p>
+      <textarea class="warn-textarea" id="warnMessage" placeholder="Type the warning message here..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-confirm" id="warnModalConfirm" style="background:#f5a623; color:#fff; border:none; border-radius:4px; padding:12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer; flex: 1;">Send Warning</button>
+      <button class="modal-cancel" onclick="closeWarnModal()" style="flex: 1;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUSPEND MODAL -->
+<div class="modal-overlay hidden" id="suspendModal">
+  <div class="modal-card">
+    <div class="modal-title" id="suspendModalTitle">Suspend Account</div>
+    <div class="modal-body">
+      <p id="suspendModalSubtitle" style="font-size:12px;color:#666;margin-bottom:16px;line-height:1.5;"></p>
+      <textarea class="warn-textarea" id="suspendReason" placeholder="Enter reason for suspension..."></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-confirm" id="suspendModalConfirm" style="background:#333; color:#fff; border:none; border-radius:4px; padding:12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer; flex: 1;">Suspend Account</button>
+      <button class="modal-cancel" onclick="closeSuspendModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

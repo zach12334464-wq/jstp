@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join JSTP — Jamaica's Student Talent Pipeline</title>
+  <meta name="description" content="Create your free JSTP account as a student or business and connect with Jamaica's top student talent." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="reg-nav">
+    <a href="index.html" class="reg-brand" aria-label="JSTP Home">
+      <div class="reg-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="4" fill="#0a0a0a"/>
+          <text x="14" y="20" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="800" font-size="16">J</text>
+        </svg>
+      </div>
+      <span class="reg-name">JSTP</span>
+    </a>
+    <a href="index.html" class="reg-back">← Back to Home</a>
+  </header>
+
+  <main class="reg-main">
+
+    <!-- STEP 1: CHOICE (shown when arriving fresh or via Get Started) -->
+    <div class="reg-step" id="stepChoice">
+      <p class="reg-eyebrow">GET STARTED</p>
+      <h1 class="reg-headline">I am a...</h1>
+      <div class="choice-cards">
+        <div class="choice-card" id="cardStudent">
+          <div class="choice-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+          </div>
+          <div class="card-title">I am a Student</div>
+          <div class="card-sub">Find Jamaica jobs and global remote opportunities — get paid in USD</div>
+          <button class="card-btn solid" id="chooseStudent">Continue as Student</button>
+        </div>
+
+        <div class="choice-card" id="cardBusiness">
+          <div class="choice-card-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+              <path d="M9 22v-4h6v4"></path>
+              <path d="M8 6h.01"></path>
+              <path d="M16 6h.01"></path>
+              <path d="M12 6h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M16 10h.01"></path>
+              <path d="M16 14h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M8 14h.01"></path>
+            </svg>
+          </div>
+          <div class="card-title">I am a Business</div>
+          <div class="card-sub">Find local and remote-ready Jamaican student talent</div>
+          <button class="card-btn outline" id="chooseBusiness">Continue as Business</button>
+        </div>
+      </div>
+      <p class="reg-signin">Already have an account? <a href="#" id="goToSignIn">Sign In</a></p>
+    </div>
+
+    <!-- SIGN IN FORM -->
+    <div class="reg-step hidden" id="stepSignIn">
+      <p class="reg-eyebrow">WELCOME BACK</p>
+      <h1 class="reg-headline">Sign In</h1>
+
+      <form class="reg-form" id="signInForm" novalidate>
+        <div class="field">
+          <label for="siEmail">Email</label>
+          <input type="email" id="siEmail" placeholder="your@email.com" required autocomplete="email">
+        </div>
+
+        <div class="field" style="position:relative;">
+          <label for="siPassword">Password</label>
+          <input type="password" id="siPassword" placeholder="Your password" required autocomplete="current-password">
+          <button type="button" class="toggle-pw" id="toggleSiPw" aria-label="Show/hide password" style="font-size:11px; font-weight:600; text-transform:uppercase;">Show</button>
+        </div>
+
+        <div class="form-extras">
+          <label class="cb remember-me"><input type="checkbox" id="rememberMe"> Remember me</label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <div class="form-error hidden" id="signInError">Invalid email or password. Please try again.</div>
+
+        <button type="submit" class="btn-submit" id="signInSubmit">Sign In →</button>
+        <p class="tiny-muted">By signing in you agree to our <a href="terms.html">Terms of Service</a></p>
+      </form>
+
+      <p class="reg-signin">Don't have an account? <a href="#" id="goToRegisterFromSignIn">Sign Up</a></p>
+    </div>
+
+    <!-- STEP 2A: STUDENT FORM -->
+    <div class="reg-step hidden" id="stepStudent">
+      <p class="reg-eyebrow">STUDENT ACCOUNT</p>
+      <h1 class="reg-headline">Create your profile</h1>
+
+      <!-- Progress bar -->
+      <div class="reg-progress">
+        <div class="reg-progress-bar" id="studentProgressBar" style="width: 0%"></div>
+      </div>
+
+      <form class="reg-form" id="studentForm" novalidate>
+        <div class="field-row">
+          <div class="field">
+            <label for="sFirstName">First Name</label>
+            <input type="text" id="sFirstName" placeholder="Jerome" required autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="sLastName">Last Name</label>
+            <input type="text" id="sLastName" placeholder="Brown" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="sEmail">Email</label>
+          <input type="email" id="sEmail" placeholder="jerome@email.com" required autocomplete="email">
+        </div>
+
+        <div class="field" style="position:relative;">
+          <label for="sPassword">Password</label>
+          <input type="password" id="sPassword" placeholder="Create a strong password" required autocomplete="new-password">
+          <button type="button" class="toggle-pw" id="toggleSPw" aria-label="Show/hide password" style="font-size:11px; font-weight:600; text-transform:uppercase;">Show</button>
+        </div>
+
+        <div class="field">
+          <label for="sPhone">WhatsApp Number</label>
+          <input type="tel" id="sPhone" placeholder="+1 (876) 555-0123" autocomplete="tel">
+          <span class="field-hint">For job alerts — we'll only text when there's a match</span>
+        </div>
+
+        <div class="field">
+          <label for="sSchool">School or University</label>
+          <input type="text" id="sSchool" placeholder="e.g. UWI, UTech, Campion College">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="sLevel">Academic Level</label>
+            <select id="sLevel">
+              <option value="">Select level</option>
+              <option>High School Graduate</option>
+              <option>Sixth Form</option>
+              <option>Undergraduate</option>
+              <option>Postgraduate</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="sParish">Parish</label>
+            <select id="sParish">
+              <option value="">Select parish</option>
+              <option>Kingston</option>
+              <option>St Andrew</option>
+              <option>St Catherine</option>
+              <option>Clarendon</option>
+              <option>Manchester</option>
+              <option>St Elizabeth</option>
+              <option>Westmoreland</option>
+              <option>Hanover</option>
+              <option>St James</option>
+              <option>Trelawny</option>
+              <option>St Ann</option>
+              <option>St Mary</option>
+              <option>Portland</option>
+              <option>St Thomas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Job Type Preference</label>
+          <div class="checkbox-row">
+            <label class="cb"><input type="checkbox" value="Internship"> Internship</label>
+            <label class="cb"><input type="checkbox" value="Part-time"> Part-time</label>
+            <label class="cb"><input type="checkbox" value="Summer Job"> Summer Job</label>
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="studentFormError">Please fill in all required fields.</div>
+
+        <div class="terms-check">
+          <label class="cb terms-cb">
+            <input type="checkbox" id="studentTerms" required>
+            I have read and agree to the <a href="terms.html" target="_blank">Terms of Service</a>. I confirm I am at least 16 years old.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="studentSubmit" disabled>Create Student Profile →</button>
+      </form>
+
+      <p class="reg-signin"><a href="#" id="backToChoice">← Change account type</a></p>
+    </div>
+
+    <!-- STEP 2B: BUSINESS FORM -->
+    <div class="reg-step hidden" id="stepBusiness">
+      <p class="reg-eyebrow">BUSINESS ACCOUNT</p>
+      <h1 class="reg-headline">Find student talent</h1>
+
+      <div class="reg-progress">
+        <div class="reg-progress-bar" id="businessProgressBar" style="width: 0%"></div>
+      </div>
+
+      <form class="reg-form" id="businessForm" novalidate>
+        <div class="field">
+          <label for="bCompany">Company Name</label>
+          <input type="text" id="bCompany" placeholder="e.g. Island Co." required autocomplete="organization">
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="bFirstName">Contact First Name</label>
+            <input type="text" id="bFirstName" placeholder="John" required autocomplete="given-name">
+          </div>
+          <div class="field">
+            <label for="bLastName">Contact Last Name</label>
+            <input type="text" id="bLastName" placeholder="Brown" required autocomplete="family-name">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="bEmail">Work Email</label>
+          <input type="email" id="bEmail" placeholder="john@islandco.com" required autocomplete="email">
+        </div>
+
+        <div class="field" style="position:relative;">
+          <label for="bPassword">Password</label>
+          <input type="password" id="bPassword" placeholder="Create a strong password" required autocomplete="new-password">
+          <button type="button" class="toggle-pw" id="toggleBPw" aria-label="Show/hide password" style="font-size:11px; font-weight:600; text-transform:uppercase;">Show</button>
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="bIndustry">Industry</label>
+            <select id="bIndustry">
+              <option value="">Select industry</option>
+              <option>Business</option>
+              <option>Technology</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Media</option>
+              <option>Government</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="bParish">Parish</label>
+            <select id="bParish">
+              <option value="">Select parish</option>
+              <option>Kingston</option>
+              <option>St Andrew</option>
+              <option>St Catherine</option>
+              <option>Clarendon</option>
+              <option>Manchester</option>
+              <option>St Elizabeth</option>
+              <option>Westmoreland</option>
+              <option>Hanover</option>
+              <option>St James</option>
+              <option>Trelawny</option>
+              <option>St Ann</option>
+              <option>St Mary</option>
+              <option>Portland</option>
+              <option>St Thomas</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-error hidden" id="businessFormError">Please fill in all required fields.</div>
+
+        <div class="terms-check">
+          <label class="cb terms-cb">
+            <input type="checkbox" id="businessTerms" required>
+            I have read and agree to the <a href="terms.html" target="_blank">Terms of Service</a>. I confirm this is a legally registered business or organisation.
+          </label>
+        </div>
+
+        <button type="submit" class="btn-submit" id="businessSubmit" disabled>Create Business Account →</button>
+      </form>
+
+      <p class="reg-signin"><a href="#" id="backToChoiceBusiness">← Change account type</a></p>
+    </div>
+
+  </main>
+
+  <script>
+    // ─── Supabase stub (swap in real client when ready) ───────────────────────
+    // import { createClient } from '@supabase/supabase-js'
+    // const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    const supabase = {
+      auth: {
+        signUp: async (opts) => ({ data: { user: { id: 'demo' } }, error: null }),
+        signInWithPassword: async (opts) => ({ data: { user: { id: 'demo' } }, error: null }),
+      },
+      from: (table) => ({
+        insert: async (data) => ({ error: null }),
+      }),
+    };
+    // ─────────────────────────────────────────────────────────────────────────
+
+    const steps = {
+      choice: document.getElementById('stepChoice'),
+      signIn: document.getElementById('stepSignIn'),
+      student: document.getElementById('stepStudent'),
+      business: document.getElementById('stepBusiness'),
+    };
+
+    function showStep(key) {
+      Object.values(steps).forEach(s => s.classList.add('hidden'));
+      steps[key].classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Check URL param to jump directly to sign-in
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('mode') === 'signin') showStep('signIn');
+    if (params.get('mode') === 'business') {
+      // jump straight to business form
+      showStep('business');
+    }
+
+    // Navigation
+    document.getElementById('chooseStudent').addEventListener('click', () => showStep('student'));
+    document.getElementById('chooseBusiness').addEventListener('click', () => showStep('business'));
+    document.getElementById('goToSignIn').addEventListener('click', (e) => { e.preventDefault(); showStep('signIn'); });
+    document.getElementById('goToRegisterFromSignIn').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
+    document.getElementById('backToChoice').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
+    document.getElementById('backToChoiceBusiness').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
+
+    // Password toggles
+    function setupPasswordToggle(inputId, btnId) {
+      const input = document.getElementById(inputId);
+      const btn = document.getElementById(btnId);
+      if (!input || !btn) return;
+      btn.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? 'Show' : 'Hide';
+      });
+    }
+    setupPasswordToggle('siPassword', 'toggleSiPw');
+    setupPasswordToggle('sPassword', 'toggleSPw');
+    setupPasswordToggle('bPassword', 'toggleBPw');
+
+    // Terms checkbox — enable/disable submit buttons
+    const studentTerms = document.getElementById('studentTerms');
+    const studentSubmit = document.getElementById('studentSubmit');
+    if (studentTerms && studentSubmit) {
+      studentTerms.addEventListener('change', () => {
+        studentSubmit.disabled = !studentTerms.checked;
+      });
+    }
+    const businessTerms = document.getElementById('businessTerms');
+    const businessSubmit = document.getElementById('businessSubmit');
+    if (businessTerms && businessSubmit) {
+      businessTerms.addEventListener('change', () => {
+        businessSubmit.disabled = !businessTerms.checked;
+      });
+    }
+
+    // Progress bar update for student form
+    const studentFields = ['sFirstName', 'sLastName', 'sEmail', 'sPassword', 'sSchool', 'sLevel', 'sParish'];
+    function updateStudentProgress() {
+      const filled = studentFields.filter(id => {
+        const el = document.getElementById(id);
+        return el && el.value.trim() !== '' && el.value !== '';
+      }).length;
+      document.getElementById('studentProgressBar').style.width = Math.round((filled / studentFields.length) * 100) + '%';
+    }
+    studentFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateStudentProgress);
+    });
+
+    // Progress bar update for business form
+    const businessFields = ['bCompany', 'bFirstName', 'bLastName', 'bEmail', 'bPassword', 'bIndustry', 'bParish'];
+    function updateBusinessProgress() {
+      const filled = businessFields.filter(id => {
+        const el = document.getElementById(id);
+        return el && el.value.trim() !== '' && el.value !== '';
+      }).length;
+      document.getElementById('businessProgressBar').style.width = Math.round((filled / businessFields.length) * 100) + '%';
+    }
+    businessFields.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateBusinessProgress);
+    });
+
+    // Sign In submit
+    document.getElementById('signInForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('signInSubmit');
+      const errEl = document.getElementById('signInError');
+      errEl.classList.add('hidden');
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+
+      const email = document.getElementById('siEmail').value.trim();
+      const password = document.getElementById('siPassword').value;
+
+      // TODO: connect Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errEl.classList.remove('hidden');
+        btn.textContent = 'Sign In →';
+        btn.disabled = false;
+        return;
+      }
+
+      // Save session stub
+      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'student' }));
+      window.location.href = 'jobs.html';
+    });
+
+    // Student sign up
+    document.getElementById('studentForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('studentSubmit');
+      const errEl = document.getElementById('studentFormError');
+      errEl.classList.add('hidden');
+
+      const firstName = document.getElementById('sFirstName').value.trim();
+      const lastName = document.getElementById('sLastName').value.trim();
+      const email = document.getElementById('sEmail').value.trim();
+      const password = document.getElementById('sPassword').value;
+      const school = document.getElementById('sSchool').value.trim();
+      const level = document.getElementById('sLevel').value;
+      const parish = document.getElementById('sParish').value;
+      const phone = document.getElementById('sPhone').value.trim();
+
+      if (!firstName || !lastName || !email || !password) {
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.textContent = 'Creating your profile...';
+      btn.disabled = true;
+
+      // TODO: Supabase auth.signUp + insert profile row
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        errEl.textContent = error.message || 'Something went wrong. Please try again.';
+        errEl.classList.remove('hidden');
+        btn.textContent = 'Create Student Profile →';
+        btn.disabled = false;
+        return;
+      }
+
+      // Persist profile data for profile.html
+      const profile = { firstName, lastName, email, phone, school, level, parish };
+      localStorage.setItem('jstp_profile', JSON.stringify(profile));
+      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'student', firstName, lastName }));
+
+      window.location.href = 'profile.html';
+    });
+
+    // Business sign up
+    document.getElementById('businessForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('businessSubmit');
+      const errEl = document.getElementById('businessFormError');
+      errEl.classList.add('hidden');
+
+      const company = document.getElementById('bCompany').value.trim();
+      const firstName = document.getElementById('bFirstName').value.trim();
+      const lastName = document.getElementById('bLastName').value.trim();
+      const email = document.getElementById('bEmail').value.trim();
+      const password = document.getElementById('bPassword').value;
+      const industry = document.getElementById('bIndustry').value;
+      const parish = document.getElementById('bParish').value;
+
+      if (!company || !firstName || !lastName || !email || !password) {
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      // Basic email validation
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.textContent = 'Please enter a valid work email address.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      // Basic password strength
+      if (password.length < 8) {
+        errEl.textContent = 'Password must be at least 8 characters.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+
+      btn.textContent = 'Creating your account...';
+      btn.disabled = true;
+
+      // TODO: Supabase
+      const { data, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        errEl.textContent = error.message || 'Something went wrong. Please try again.';
+        errEl.classList.remove('hidden');
+        btn.textContent = 'Create Business Account →';
+        btn.disabled = false;
+        return;
+      }
+
+      // Save full registration data so business-setup.html can pre-populate fields
+      const businessData = {
+        company,
+        firstName,
+        lastName,
+        email,
+        industry,
+        parish,
+        emailVerified: false,
+        createdAt: new Date().toISOString()
+      };
+      localStorage.setItem('jstp_business', JSON.stringify(businessData));
+      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'business', company, firstName, lastName, emailVerified: false }));
+      window.location.href = 'business-setup.html';
+    });
+  </script>
+
+</body>
+</html>

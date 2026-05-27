@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Dashboard — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/business-dashboard.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="dash-nav">
+    <a href="index.html" class="dash-brand">
+      <img src="assets/images/logo.png" class="logo-img" alt="JSTP logo">
+      <span class="dash-name">JSTP</span>
+    </a>
+    <div class="dash-search">
+      <input type="text" id="searchInput" placeholder="Search students by name, school, skills..." />
+    </div>
+    <div class="dash-nav-right">
+      <a href="#" class="dash-post-btn">+ Post a Job</a>
+      <div class="dash-avatar" title="Company Profile">IC</div>
+    </div>
+  </header>
+
+  <div class="dash-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar">IC</div>
+        <div class="sidebar-name">Island Co.</div>
+        <div class="sidebar-location">Kingston, Jamaica</div>
+        <a href="#" class="sidebar-edit">Edit Company Profile</a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="business.html" class="sidebar-link active">Student Pool</a>
+        <a href="#" class="sidebar-link">My Listings</a>
+        <a href="#" class="sidebar-link">Applications</a>
+        <a href="#" class="sidebar-link">Alerts</a>
+      </nav>
+
+      <div class="sidebar-filters">
+        <div class="filter-title">FILTER STUDENTS</div>
+
+        <div class="filter-group">
+          <div class="filter-label">LOOKING FOR</div>
+          <label class="cb"><input type="checkbox" value="Internship"> Internship</label>
+          <label class="cb"><input type="checkbox" value="Part-time"> Part-time</label>
+          <label class="cb"><input type="checkbox" value="Summer Job"> Summer Job</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">PARISH</div>
+          <label class="cb"><input type="checkbox" value="Kingston"> Kingston</label>
+          <label class="cb"><input type="checkbox" value="St Andrew"> St Andrew</label>
+          <label class="cb"><input type="checkbox" value="St Catherine"> St Catherine</label>
+          <label class="cb"><input type="checkbox" value="St James"> St James</label>
+          <label class="cb"><input type="checkbox" value="Manchester"> Manchester</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">ACADEMIC LEVEL</div>
+          <label class="cb"><input type="checkbox" value="Sixth Form"> Sixth Form</label>
+          <label class="cb"><input type="checkbox" value="Undergraduate"> Undergraduate</label>
+          <label class="cb"><input type="checkbox" value="Postgraduate"> Postgraduate</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">INDUSTRY INTEREST</div>
+          <label class="cb"><input type="checkbox" value="Business"> Business</label>
+          <label class="cb"><input type="checkbox" value="Technology"> Technology</label>
+          <label class="cb"><input type="checkbox" value="Healthcare"> Healthcare</label>
+          <label class="cb"><input type="checkbox" value="Media"> Media</label>
+        </div>
+
+        <button class="clear-filters">Clear Filters</button>
+      </div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="dash-feed">
+
+      <div class="feed-header">
+        <h2 class="feed-title">Student Pool</h2>
+        <span class="feed-count">48 students available</span>
+      </div>
+
+      <div class="student-feed" id="studentFeed">
+
+        <!-- STUDENT CARDS (example) -->
+        <article class="student-card">
+          <div class="student-card-top">
+            <div class="student-avatar">JB</div>
+            <div class="student-info">
+              <div class="student-name">Jerome Brown</div>
+              <div class="student-school">University of the West Indies</div>
+              <div class="student-location">Kingston · Undergraduate</div>
+            </div>
+            <div class="student-availability available">Available Now</div>
+          </div>
+          <p class="student-bio">Second-year Business Administration student with a strong interest in marketing and technology.</p>
+          <div class="student-tags">
+            <span class="student-tag">Marketing</span>
+            <span class="student-tag">Technology</span>
+            <span class="student-tag">Internship</span>
+          </div>
+          <div class="student-card-actions">
+            <button class="btn-contact">Contact Student</button>
+            <button class="btn-view">View Profile</button>
+          </div>
+        </article>
+
+        <!-- more cards... -->
+
+      </div>
+    </main>
+
+    <!-- RIGHT PANEL -->
+    <aside class="dash-right">
+      <div class="right-card">
+        <div class="right-card-title">YOUR LISTINGS</div>
+        <div class="listing-item">
+          <div class="listing-title">Marketing Intern</div>
+          <div class="listing-apps">3 applications</div>
+        </div>
+        <div class="listing-item">
+          <div class="listing-title">Junior Developer</div>
+          <div class="listing-apps">7 applications</div>
+        </div>
+        <a href="#" class="right-link">View all listings →</a>
+      </div>
+
+      <div class="right-card">
+        <div class="right-card-title">POST A JOB</div>
+        <p class="right-card-desc">Reach hundreds of Jamaican students looking for opportunities like yours.</p>
+        <a href="#" class="btn-post-job">Post a Listing →</a>
+      </div>
+
+      <div class="right-card">
+        <div class="right-card-title">RECENT ACTIVITY</div>
+        <div class="activity-item">Jerome B. applied to Marketing Intern</div>
+        <div class="activity-item">Alicia M. viewed your listing</div>
+        <div class="activity-item">2 new students match your criteria</div>
+      </div>
+    </aside>
+
+  </div>
+
+  <script>
+    document.getElementById('searchInput')?.addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.student-card').forEach(card => {
+        const text = card.innerText.toLowerCase();
+        card.style.display = text.includes(q) ? 'flex' : 'none';
+      });
+    });
+
+    document.querySelectorAll('.btn-contact').forEach(btn => {
+      btn.addEventListener('click', function() {
+        alert('Contact feature coming soon.');
+      });
+    });
+  </script>
+
+</body>
+</html>

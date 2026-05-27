@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Business Dashboard — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/business-dashboard.css">
+  <style>
+    /* Unverified badge */
+    .unverified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fee2e2;
+      border: 1.5px solid #fca5a5;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #991b1b;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 6px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .unverified-badge:hover { background: #fca5a5; }
+    .unverified-badge.hidden { display: none; }
+
+    /* Verified badge */
+    .verified-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #e8f5e9;
+      border: 1.5px solid #81c784;
+      border-radius: 20px;
+      padding: 3px 10px;
+      font-size: 10px;
+      font-weight: 700;
+      color: #2e7d32;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 6px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .verified-badge:hover { background: #c8e6c9; }
+    .verified-badge.hidden { display: none; }
+
+    /* Verification alert banner in dashboard */
+    .dash-verify-bar {
+      background: linear-gradient(90deg, #fff5f5, #ffe3e3);
+      border-bottom: 1.5px solid #fca5a5;
+      padding: 10px 24px;
+      font-size: 12px;
+      color: #991b1b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .dash-verify-bar.hidden { display: none; }
+    .dash-verify-bar strong { font-weight: 700; }
+    .dash-verify-bar a {
+      color: #b91c1c;
+      font-weight: 700;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .dash-verify-bar .close-bar {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      color: #991b1b;
+      padding: 0 4px;
+    }
+
+    /* Profile complete prompt */
+    .dash-complete-bar {
+      background: #f0f7ff;
+      border-bottom: 1.5px solid #90caf9;
+      padding: 10px 24px;
+      font-size: 12px;
+      color: #1565c0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dash-complete-bar.hidden { display: none; }
+    .dash-complete-bar a { color: #1565c0; font-weight: 700; text-decoration: underline; }
+
+    /* ── Verification Modal Styling ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fadeIn 0.2s ease;
+    }
+    .modal-overlay.hidden { display: none !important; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .modal {
+      background: white;
+      border-radius: 8px;
+      padding: 36px;
+      width: 100%;
+      max-width: 480px;
+      position: relative;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+      animation: slideUp 0.25s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: #888;
+      line-height: 1;
+      padding: 4px;
+      transition: color 0.15s;
+    }
+    .modal-close:hover { color: #0a0a0a; }
+    .modal-eyebrow {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #888;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0a0a0a;
+      margin-bottom: 24px;
+      line-height: 1.3;
+    }
+    .modal-submit {
+      width: 100%;
+      padding: 14px;
+      background: #0a0a0a;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      font-family: Inter, sans-serif;
+      transition: background 0.15s;
+      margin-bottom: 10px;
+    }
+    .modal-submit:hover { background: #2a2a2a; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="dash-nav">
+    <a href="index.html" class="dash-brand">
+      <span style="width:28px;height:28px;background:#0a0a0a;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border-radius:4px;flex-shrink:0;">J</span>
+      <span class="dash-name">JSTP</span>
+    </a>
+    <div class="dash-search">
+      <input type="text" id="searchInput" placeholder="Search students by name, school, skills..." />
+    </div>
+    <div class="dash-nav-right">
+      <div class="dash-avatar" id="navAvatar" title="Company Profile">IC</div>
+    </div>
+  </header>
+
+  <!-- Profile incomplete bar -->
+  <div class="dash-complete-bar hidden" id="dashCompleteBar">
+    Your company profile is incomplete.
+    <a href="business-profile.html">Complete your profile</a>
+    <button style="margin-left:auto;background:none;border:none;cursor:pointer;font-size:14px;color:#1565c0;" onclick="document.getElementById('dashCompleteBar').classList.add('hidden')">&times;</button>
+  </div>
+
+  <div class="dash-layout">
+
+    <!-- LEFT SIDEBAR -->
+    <aside class="dash-sidebar">
+      <div class="sidebar-profile">
+        <div class="sidebar-avatar" id="sidebarAvatar" style="overflow:hidden;position:relative;">
+          <span id="sidebarInitials">IC</span>
+          <img id="sidebarLogoImg" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:none;" alt="Company logo">
+        </div>
+        <div class="sidebar-name" id="sidebarCompanyName">Island Co.</div>
+        <div class="sidebar-location" id="sidebarLocation">Kingston, Jamaica</div>
+        <a href="business-profile.html" class="sidebar-edit">Edit Company Profile</a>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="sidebar-link active" data-panel="students">Student Pool</a>
+        <a href="#" class="sidebar-link" data-panel="listings">My Listings</a>
+        <a href="#" class="sidebar-link" data-panel="applications">Applications</a>
+        <a href="#" class="sidebar-link" data-panel="alerts">Alerts</a>
+      </nav>
+
+      <div class="sidebar-filters">
+        <div class="filter-title">FILTER STUDENTS</div>
+
+        <div class="filter-group">
+          <div class="filter-label">LOOKING FOR</div>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Internship"> Internship</label>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Part-time"> Part-time</label>
+          <label class="cb"><input type="checkbox" data-filter="type" value="Summer Job"> Summer Job</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">PARISH</div>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Kingston"> Kingston</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St Andrew"> St Andrew</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St Catherine"> St Catherine</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="St James"> St James</label>
+          <label class="cb"><input type="checkbox" data-filter="parish" value="Manchester"> Manchester</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">ACADEMIC LEVEL</div>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Sixth Form"> Sixth Form</label>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Undergraduate"> Undergraduate</label>
+          <label class="cb"><input type="checkbox" data-filter="level" value="Postgraduate"> Postgraduate</label>
+        </div>
+
+        <div class="filter-group">
+          <div class="filter-label">INDUSTRY INTEREST</div>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Business"> Business</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Technology"> Technology</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Healthcare"> Healthcare</label>
+          <label class="cb"><input type="checkbox" data-filter="industry" value="Media"> Media</label>
+        </div>
+
+        <button class="clear-filters">Clear Filters</button>
+      </div>
+    </aside>
+
+    <!-- MAIN FEED -->
+    <main class="dash-feed">
+
+      <div class="panel" id="panel-students">
+        <div class="feed-header">
+          <h2 class="feed-title">Student Pool</h2>
+          <span class="feed-count">15 students available</span>
+        </div>
+
+        <div class="student-feed" id="studentFeed">
+
+          <!-- STUDENT CARD 1 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-level="Undergraduate"
+            data-industry="Business,Technology">
+            <div class="student-card-top">
+              <div class="student-avatar">JB</div>
+              <div class="student-info">
+                <div class="student-name">Jerome Brown</div>
+                <div class="student-school">University of the West Indies</div>
+                <div class="student-location">Kingston · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Second-year Business Administration student with a strong interest in marketing and technology. Hardworking, punctual, and eager to gain real-world experience.</p>
+            <div class="student-tags">
+              <span class="student-tag">Marketing</span>
+              <span class="student-tag">Technology</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 2 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="St Andrew"
+            data-level="Undergraduate"
+            data-industry="Technology,Media">
+            <div class="student-card-top">
+              <div class="student-avatar">AM</div>
+              <div class="student-info">
+                <div class="student-name">Alicia Morgan</div>
+                <div class="student-school">University of Technology</div>
+                <div class="student-location">St Andrew · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Final year Computer Science student skilled in web development and UI design. Looking for an internship to apply my technical skills in a real environment.</p>
+            <div class="student-tags">
+              <span class="student-tag">Technology</span>
+              <span class="student-tag">Design</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 3 -->
+          <article class="student-card"
+            data-type="Summer Job"
+            data-parish="Kingston"
+            data-level="Sixth Form"
+            data-industry="Business">
+            <div class="student-card-top">
+              <div class="student-avatar">KT</div>
+              <div class="student-info">
+                <div class="student-name">Kemar Thompson</div>
+                <div class="student-school">Campion College</div>
+                <div class="student-location">Kingston · Sixth Form</div>
+              </div>
+              <div class="student-availability soon">Available in 2 weeks</div>
+            </div>
+            <p class="student-bio">Sixth Form student completing CAPE with units in Economics and Management of Business. Seeking a summer placement in finance or business operations.</p>
+            <div class="student-tags">
+              <span class="student-tag">Finance</span>
+              <span class="student-tag">Business</span>
+              <span class="student-tag">Summer Job</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 4 -->
+          <article class="student-card"
+            data-type="Part-time"
+            data-parish="Manchester"
+            data-level="Undergraduate"
+            data-industry="Healthcare,Business">
+            <div class="student-card-top">
+              <div class="student-avatar">SR</div>
+              <div class="student-info">
+                <div class="student-name">Shana Reid</div>
+                <div class="student-school">Northern Caribbean University</div>
+                <div class="student-location">Manchester · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Third-year Nursing student looking for part-time work to support studies. Experienced in patient care, data entry, and healthcare administration.</p>
+            <div class="student-tags">
+              <span class="student-tag">Healthcare</span>
+              <span class="student-tag">Part-time</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 5 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="Clarendon"
+            data-level="Sixth Form"
+            data-industry="Media">
+            <div class="student-card-top">
+              <div class="student-avatar">DW</div>
+              <div class="student-info">
+                <div class="student-name">Damion Wright</div>
+                <div class="student-school">Knox College</div>
+                <div class="student-location">Clarendon · Sixth Form</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Aspiring journalist and media student with experience in school newspaper editing and video production. Seeking media or communications internship.</p>
+            <div class="student-tags">
+              <span class="student-tag">Media</span>
+              <span class="student-tag">Communications</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 6 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="Kingston"
+            data-level="Undergraduate"
+            data-industry="Media">
+            <div class="student-card-top">
+              <div class="student-avatar">NB</div>
+              <div class="student-info">
+                <div class="student-name">Nadine Burke</div>
+                <div class="student-school">Edna Manley College</div>
+                <div class="student-location">Kingston · Undergraduate</div>
+              </div>
+              <div class="student-availability soon">Available in 1 month</div>
+            </div>
+            <p class="student-bio">Visual arts and graphic design student with strong portfolio in branding and illustration. Looking for creative internship in design or advertising.</p>
+            <div class="student-tags">
+              <span class="student-tag">Design</span>
+              <span class="student-tag">Media</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 7 -->
+          <article class="student-card"
+            data-type="Part-time"
+            data-parish="St Catherine"
+            data-level="Undergraduate"
+            data-industry="Technology">
+            <div class="student-card-top">
+              <div class="student-avatar">JV</div>
+              <div class="student-info">
+                <div class="student-name">Jordon Vance</div>
+                <div class="student-school">Northern Caribbean University</div>
+                <div class="student-location">St Catherine · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">IT major with hands-on experience in database management and SQL scripting. Looking for a part-time junior tech role.</p>
+            <div class="student-tags">
+              <span class="student-tag">Database</span>
+              <span class="student-tag">Technology</span>
+              <span class="student-tag">Part-time</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 8 -->
+          <article class="student-card"
+            data-type="Summer Job"
+            data-parish="St James"
+            data-level="Undergraduate"
+            data-industry="Healthcare">
+            <div class="student-card-top">
+              <div class="student-avatar">KC</div>
+              <div class="student-info">
+                <div class="student-name">Kimberly Campbell</div>
+                <div class="student-school">University of the West Indies</div>
+                <div class="student-location">St James · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Nursing student at UWI Western Jamaica Campus. Eager to assist in clinic operations, research, or patient care support this summer.</p>
+            <div class="student-tags">
+              <span class="student-tag">Healthcare</span>
+              <span class="student-tag">Nursing</span>
+              <span class="student-tag">Summer Job</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 9 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="Manchester"
+            data-level="Sixth Form"
+            data-industry="Technology">
+            <div class="student-card-top">
+              <div class="student-avatar">ST</div>
+              <div class="student-info">
+                <div class="student-name">Sean Thompson</div>
+                <div class="student-school">DeCarteret College</div>
+                <div class="student-location">Manchester · Sixth Form</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Sixth former completing CAPE Computer Science and Information Technology. Passionate about software engineering, Java, and Python coding.</p>
+            <div class="student-tags">
+              <span class="student-tag">Coding</span>
+              <span class="student-tag">Technology</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 10 -->
+          <article class="student-card"
+            data-type="Part-time"
+            data-parish="St Andrew"
+            data-level="Postgraduate"
+            data-industry="Business">
+            <div class="student-card-top">
+              <div class="student-avatar">TE</div>
+              <div class="student-info">
+                <div class="student-name">Tashana Ellis</div>
+                <div class="student-school">University of the West Indies</div>
+                <div class="student-location">St Andrew · Postgraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">MBA student with 2 years of prior sales experience. Seeking part-time research, administration, or consulting work.</p>
+            <div class="student-tags">
+              <span class="student-tag">Consulting</span>
+              <span class="student-tag">Business</span>
+              <span class="student-tag">Part-time</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 11 -->
+          <article class="student-card"
+            data-type="Summer Job"
+            data-parish="St Catherine"
+            data-level="Sixth Form"
+            data-industry="Business">
+            <div class="student-avatar-row">
+            <div class="student-card-top">
+              <div class="student-avatar">RG</div>
+              <div class="student-info">
+                <div class="student-name">Rohan Gayle</div>
+                <div class="student-school">St Jago High School</div>
+                <div class="student-location">St Catherine · Sixth Form</div>
+              </div>
+              <div class="student-availability soon">Available in 1 week</div>
+            </div>
+            </div>
+            <p class="student-bio">High school graduate eager to work in retail, hospitality, or office administration during the summer holiday.</p>
+            <div class="student-tags">
+              <span class="student-tag">Admin</span>
+              <span class="student-tag">Business</span>
+              <span class="student-tag">Summer Job</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 12 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="St James"
+            data-level="Undergraduate"
+            data-industry="Media">
+            <div class="student-card-top">
+              <div class="student-avatar">MW</div>
+              <div class="student-info">
+                <div class="student-name">Makeda Williams</div>
+                <div class="student-school">University of Technology</div>
+                <div class="student-location">St James · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">UTech media student specializing in digital animation and graphic layouts. Eager to work with a local agency.</p>
+            <div class="student-tags">
+              <span class="student-tag">Animation</span>
+              <span class="student-tag">Media</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 13 -->
+          <article class="student-card"
+            data-type="Part-time"
+            data-parish="Kingston"
+            data-level="Undergraduate"
+            data-industry="Technology">
+            <div class="student-card-top">
+              <div class="student-avatar">DF</div>
+              <div class="student-info">
+                <div class="student-name">Daniel Fletcher</div>
+                <div class="student-school">University of the West Indies</div>
+                <div class="student-location">Kingston · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">UWI software engineering major, proficient in React.js, node.js, and web styling. Looking for flex part-time work.</p>
+            <div class="student-tags">
+              <span class="student-tag">Software</span>
+              <span class="student-tag">Technology</span>
+              <span class="student-tag">Part-time</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 14 -->
+          <article class="student-card"
+            data-type="Summer Job"
+            data-parish="St Andrew"
+            data-level="Undergraduate"
+            data-industry="Healthcare">
+            <div class="student-card-top">
+              <div class="student-avatar">GC</div>
+              <div class="student-info">
+                <div class="student-name">Gabrielle Chin</div>
+                <div class="student-school">University of Technology</div>
+                <div class="student-location">St Andrew · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Pre-med major seeking clinical or wellness admin assistant job to support summer healthcare operations.</p>
+            <div class="student-tags">
+              <span class="student-tag">Healthcare</span>
+              <span class="student-tag">Admin</span>
+              <span class="student-tag">Summer Job</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+          <!-- STUDENT CARD 15 -->
+          <article class="student-card"
+            data-type="Internship"
+            data-parish="Manchester"
+            data-level="Undergraduate"
+            data-industry="Business">
+            <div class="student-card-top">
+              <div class="student-avatar">CB</div>
+              <div class="student-info">
+                <div class="student-name">Christopher Bennett</div>
+                <div class="student-school">Northern Caribbean University</div>
+                <div class="student-location">Manchester · Undergraduate</div>
+              </div>
+              <div class="student-availability available">Available Now</div>
+            </div>
+            <p class="student-bio">Accounting major at NCU. Skilled in QuickBooks, bank reconciliations, and balance sheets. Looking for a summer internship.</p>
+            <div class="student-tags">
+              <span class="student-tag">Accounting</span>
+              <span class="student-tag">Business</span>
+              <span class="student-tag">Internship</span>
+            </div>
+            <div class="student-card-actions">
+              <button class="btn-contact">Contact Student</button>
+              <button class="btn-view">View Profile</button>
+            </div>
+          </article>
+
+        </div>
+
+        <div id="noResults" class="no-results hidden">
+          <div class="no-results-title">No Students Found</div>
+          <div class="no-results-sub">Try adjusting your filters or search query to find matching talent.</div>
+        </div>
+
+        <div class="pagination" id="studentPagination"></div>
+
+        <!-- GOOGLE-STYLE ADS -->
+        <div class="google-ads-section">
+          <div class="google-ads-label">Sponsored</div>
+          <div class="google-ads-grid">
+            <div class="gad-card gad-blue">
+              <div class="gad-sponsored">Jamaica Jobs Today</div>
+              <div class="gad-logo" style="background:#4285F4;">JT</div>
+              <div class="gad-title">Find Jobs Near You in Jamaica</div>
+              <div class="gad-domain">jamaicajobstoday.com</div>
+              <p class="gad-text">Browse 500+ live job postings updated daily across all parishes.</p>
+              <a href="#" class="gad-cta blue">Search Now</a>
+            </div>
+            <div class="gad-card gad-green">
+              <div class="gad-sponsored">Caribbean HR</div>
+              <div class="gad-logo" style="background:#188038;">CH</div>
+              <div class="gad-title">Free CV Builder for Students</div>
+              <div class="gad-domain">caribbeanhr.com</div>
+              <p class="gad-text">Build a professional resume in minutes. Get noticed by top Caribbean employers.</p>
+              <a href="#" class="gad-cta green">Build Free CV</a>
+            </div>
+            <div class="gad-card gad-red">
+              <div class="gad-sponsored">FlowJamaica</div>
+              <div class="gad-logo" style="background:#EA4335;">FL</div>
+              <div class="gad-title">Student Internet Plans from $1,200/mo</div>
+              <div class="gad-domain">flowjamaica.com</div>
+              <p class="gad-text">Work from home or campus. Blazing fast internet for remote work & study.</p>
+              <a href="#" class="gad-cta red">View Plans</a>
+            </div>
+            <div class="gad-card gad-purple">
+              <div class="gad-sponsored">UWI Open Campus</div>
+              <div class="gad-logo" style="background:#7c3aed;">UW</div>
+              <div class="gad-title">Online Degrees — Apply Now</div>
+              <div class="gad-domain">open.uwi.edu</div>
+              <p class="gad-text">Earn your bachelor's or diploma online. Flexible schedules built for working students.</p>
+              <a href="#" class="gad-cta purple">Apply Today</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="panel hidden" id="panel-listings">
+        <div class="feed-header">
+          <h2 class="feed-title">My Listings</h2>
+<button class="btn-post" onclick="document.getElementById('postJobModal').classList.remove('hidden')">Post a Job</button>
+        </div>
+        <div class="listing-card">
+          <div class="listing-left">
+            <div class="listing-title">Marketing Intern</div>
+            <div class="listing-sub">Kingston · Internship · 4 applicants</div>
+            <div class="tags-row"><span class="tag">Active</span></div>
+          </div>
+          <div class="listing-right">
+<button class="btn-outline-sm" onclick="this.closest('.listing-card').style.opacity='0.6'; this.textContent='Editing...';">Edit</button>
+            <button class="btn-danger-sm" onclick="if(confirm('Close this listing?')){ this.closest('.listing-card').querySelector('.tag').textContent='Closed'; this.closest('.listing-card').querySelector('.tag').classList.add('closed-tag'); this.closest('.listing-card').querySelector('.tag').classList.remove('status-active'); this.textContent='Reopen'; this.className='btn-outline-sm'; }">Close</button>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-left">
+            <div class="listing-title">Social Media Assistant</div>
+            <div class="listing-sub">Kingston · Part-time · 6 applicants</div>
+            <div class="tags-row"><span class="tag">Active</span></div>
+          </div>
+          <div class="listing-right">
+<button class="btn-outline-sm" onclick="this.closest('.listing-card').style.opacity='0.6'; this.textContent='Editing...';">Edit</button>
+            <button class="btn-danger-sm" onclick="if(confirm('Close this listing?')){ this.closest('.listing-card').querySelector('.tag').textContent='Closed'; this.closest('.listing-card').querySelector('.tag').classList.add('closed-tag'); this.closest('.listing-card').querySelector('.tag').classList.remove('status-active'); this.textContent='Reopen'; this.className='btn-outline-sm'; }">Close</button>
+          </div>
+        </div>
+        <div class="listing-card">
+          <div class="listing-left">
+            <div class="listing-title">Brand Photography Intern</div>
+            <div class="listing-sub">Kingston · Summer Job · 2 applicants</div>
+            <div class="tags-row"><span class="tag closed-tag">Closed</span></div>
+          </div>
+          <div class="listing-right">
+<button class="btn-outline-sm" onclick="this.closest('.listing-card').querySelector('.tag').textContent='Active'; this.closest('.listing-card').querySelector('.tag').classList.remove('closed-tag'); this.closest('.listing-card').querySelector('.tag').classList.add('status-active'); this.textContent='Edit'; ">Reopen</button>
+            <button class="btn-danger-sm" onclick="if(confirm('Delete this listing permanently?')){ this.closest('.listing-card').remove(); }">Delete</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="panel-applications">
+        <div class="feed-header">
+          <h2 class="feed-title">Applications</h2>
+          <span class="feed-count">3 total</span>
+        </div>
+        <div class="app-card">
+          <div class="app-left">
+            <div class="app-avatar">JB</div>
+            <div class="app-info">
+              <div class="app-name">Jerome Brown</div>
+              <div class="app-detail">UWI · Kingston · Undergraduate</div>
+              <div class="app-role">Applied for: Marketing Intern · 2 days ago</div>
+            </div>
+          </div>
+          <div class="app-right">
+<span class="status-new">New</span>
+            <button class="btn-outline-sm" onclick="window.location.href='student-view.html'">View Profile</button>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="app-left">
+            <div class="app-avatar">KT</div>
+            <div class="app-info">
+              <div class="app-name">Kayla Thompson</div>
+              <div class="app-detail">NCU · Mandeville · Undergraduate</div>
+              <div class="app-role">Applied for: Social Media Assistant · 4 days ago</div>
+            </div>
+          </div>
+          <div class="app-right">
+            <span class="status-viewed">Viewed</span>
+            <button class="btn-outline-sm" onclick="window.location.href='student-view.html'">View Profile</button>
+          </div>
+        </div>
+        <div class="app-card">
+          <div class="app-left">
+            <div class="app-avatar">MR</div>
+            <div class="app-info">
+              <div class="app-name">Marcus Reid</div>
+              <div class="app-detail">Campion · Kingston · Sixth Form</div>
+              <div class="app-role">Applied for: Marketing Intern · 1 week ago</div>
+            </div>
+          </div>
+          <div class="app-right">
+<span class="status-shortlisted">Shortlisted</span>
+            <button class="btn-outline-sm" onclick="window.location.href='student-view.html'">View Profile</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel hidden" id="panel-alerts">
+        <div class="feed-header">
+          <h2 class="feed-title">Alerts</h2>
+        </div>
+        <div class="alert-card">
+          <div class="alert-dot dot-black"></div>
+          <div class="alert-body">
+            <div class="alert-title">New application received</div>
+            <div class="alert-detail">Jerome Brown applied for Marketing Intern</div>
+            <div class="alert-time">2 days ago</div>
+          </div>
+        </div>
+        <div class="alert-card">
+          <div class="alert-dot dot-black"></div>
+          <div class="alert-body">
+            <div class="alert-title">New application received</div>
+            <div class="alert-detail">Kayla Thompson applied for Social Media Assistant</div>
+            <div class="alert-time">4 days ago</div>
+          </div>
+        </div>
+        <div class="alert-card">
+          <div class="alert-dot dot-grey"></div>
+          <div class="alert-body">
+            <div class="alert-title">Listing closed</div>
+            <div class="alert-detail">Brand Photography Intern was automatically closed after 30 days</div>
+            <div class="alert-time">1 week ago</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+      <!-- RIGHT PANEL -->
+      <aside class="dash-right">
+        <div class="right-card">
+          <div class="right-card-title">YOUR LISTINGS</div>
+          <div class="listing-item">
+            <div class="listing-title">Marketing Intern</div>
+            <div class="listing-apps">3 applications</div>
+          </div>
+          <div class="listing-item">
+            <div class="listing-title">Junior Developer</div>
+            <div class="listing-apps">7 applications</div>
+          </div>
+          <a href="#" class="right-link" onclick="event.preventDefault(); document.querySelector('.sidebar-link[data-panel=listings]').click();">View all listings →</a>
+        </div>
+
+        <div class="right-card">
+          <div class="right-card-title">POST A JOB</div>
+          <p class="right-card-desc">Reach hundreds of Jamaican students looking for opportunities like yours.</p>
+          <a href="#" class="btn-post-job" onclick="event.preventDefault(); document.getElementById('postJobModal').classList.remove('hidden');">Post a Listing →</a>
+        </div>
+
+        <div class="right-card">
+          <div class="right-card-title">RECENT ACTIVITY</div>
+          <div class="activity-item">Jerome B. applied to Marketing Intern</div>
+          <div class="activity-item">Alicia M. viewed your listing</div>
+          <div class="activity-item">2 new students match your criteria</div>
+        </div>
+      </aside>
+
+    </div>
+
+
+<div class="modal-overlay hidden" id="postJobModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title">Post a Job</div>
+      <button class="modal-close" onclick="document.getElementById('postJobModal').classList.add('hidden')">×</button>
+    </div>
+    <form id="postJobForm">
+
+      <div class="modal-field">
+        <label>Job Title</label>
+        <input type="text" id="pTitle" placeholder="e.g. Marketing Intern" required>
+      </div>
+
+      <div class="modal-row">
+
+        <div class="modal-field">
+          <label>Job Type</label>
+          <select id="pType">
+            <option>Internship</option>
+            <option>Part-time</option>
+            <option>Summer Job</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Parish</label>
+          <select id="pParish">
+            <option>Kingston</option>
+            <option>St Andrew</option>
+            <option>St Catherine</option>
+            <option>Clarendon</option>
+            <option>Manchester</option>
+            <option>St Elizabeth</option>
+            <option>Westmoreland</option>
+            <option>Hanover</option>
+            <option>St James</option>
+            <option>Trelawny</option>
+            <option>St Ann</option>
+            <option>St Mary</option>
+            <option>Portland</option>
+            <option>St Thomas</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Industry</label>
+          <select id="pIndustry">
+            <option>Business</option>
+            <option>Technology</option>
+            <option>Healthcare</option>
+            <option>Education</option>
+            <option>Media</option>
+            <option>Government</option>
+            <option>Retail</option>
+            <option>Finance</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label>Academic Level Required</label>
+          <select id="pLevel">
+            <option>Any</option>
+            <option>High School Graduate</option>
+            <option>Sixth Form</option>
+            <option>Undergraduate</option>
+            <option>Postgraduate</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label>Job Description</label>
+        <textarea id="pDesc" rows="4" placeholder="Describe the role, responsibilities, and day-to-day tasks..."></textarea>
+      </div>
+
+      <div class="modal-field">
+        <label>Requirements</label>
+        <textarea id="pReq" rows="3" placeholder="List qualifications, skills, or experience needed..."></textarea>
+      </div>
+
+      <div class="modal-row">
+        <div class="modal-field">
+          <label>Salary / Stipend (optional)</label>
+          <input type="text" id="pSalary" placeholder="e.g. $15,000/month or Unpaid">
+        </div>
+        <div class="modal-field">
+          <label>Application Deadline</label>
+          <input type="date" id="pDeadline">
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label>Company Website (optional)</label>
+        <input type="url" id="pWebsite" placeholder="https://yourcompany.com">
+      </div>
+
+      <div class="modal-field">
+        <label>Job Poster / Banner (optional)</label>
+        <input type="file" id="pPoster" accept="image/*" style="padding:8px;">
+        <div class="modal-hint">JPG or PNG. Shown on the listing card.</div>
+        <div id="posterPreview" style="margin-top:10px; display:none;">
+          <img id="posterImg" style="width:100%; border-radius:4px; border:1px solid #e0e0e0;">
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label>How to Apply</label>
+        <select id="pApplyMethod" onchange="toggleApplyMethod()">
+          <option value="jstp">Apply on JSTP</option>
+          <option value="link">External Link</option>
+          <option value="whatsapp">WhatsApp</option>
+          <option value="email">Email</option>
+        </select>
+      </div>
+
+      <div class="modal-field hidden" id="applyLinkField">
+        <label>Application Link</label>
+        <input type="url" id="pApplyLink" placeholder="https://forms.google.com/...">
+      </div>
+
+      <div class="modal-field hidden" id="applyWhatsappField">
+        <label>WhatsApp Number</label>
+        <input type="tel" id="pApplyWhatsapp" placeholder="+1 (876) 555-0123">
+      </div>
+
+      <div class="modal-field hidden" id="applyEmailField">
+        <label>Application Email</label>
+        <input type="email" id="pApplyEmail" placeholder="careers@yourcompany.com">
+      </div>
+
+      <button type="submit" class="modal-submit">Post Listing →</button>
+    </form>
+  </div>
+
+  <script>
+    // ── Load business profile from localStorage ──────────────────────────
+    (function() {
+      const biz = JSON.parse(localStorage.getItem('jstp_business') || '{}');
+      const user = JSON.parse(localStorage.getItem('jstp_user') || '{}');
+
+      const company = biz.company || user.company || 'Your Company';
+      const parish = biz.parish || user.parish || '';
+      const firstName = biz.firstName || user.firstName || '';
+      const isVerified = biz.emailVerified === true || user.emailVerified === true;
+      const skipped = localStorage.getItem('jstp_verify_skipped') === 'true';
+      const profileComplete = user.profileComplete === true;
+
+      // Compute initials
+      const words = company.trim().split(/\s+/).filter(Boolean);
+      const initials = words.length >= 2
+        ? (words[0][0] + words[words.length - 1][0]).toUpperCase()
+        : company.substring(0, 2).toUpperCase();
+
+      // Update sidebar
+      document.getElementById('sidebarInitials').textContent = initials;
+      document.getElementById('sidebarCompanyName').textContent = company;
+      document.getElementById('sidebarLocation').textContent =
+        parish ? parish + ', Jamaica' : 'Jamaica';
+
+      // Update nav avatar
+      document.getElementById('navAvatar').textContent = initials;
+
+      // Restore logo if uploaded
+      if (biz.logoDataUrl) {
+        const img = document.getElementById('sidebarLogoImg');
+        img.src = biz.logoDataUrl;
+        img.style.display = 'block';
+        document.getElementById('sidebarInitials').style.display = 'none';
+        document.getElementById('navAvatar').style.backgroundImage = 'url(' + biz.logoDataUrl + ')';
+        document.getElementById('navAvatar').style.backgroundSize = 'cover';
+        document.getElementById('navAvatar').textContent = '';
+      }
+
+      // Profile incomplete bar
+      if (!profileComplete) {
+        document.getElementById('dashCompleteBar').classList.remove('hidden');
+      }
+
+      // Escape key listener to close modals
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          const postJobModal = document.getElementById('postJobModal');
+          if (postJobModal) {
+            postJobModal.classList.add('hidden');
+          }
+        }
+      });
+
+      // Close Post a Job modal when clicking outside on overlay
+      const postJobModal = document.getElementById('postJobModal');
+      if (postJobModal) {
+        postJobModal.addEventListener('click', function(e) {
+          if (e.target === postJobModal) {
+            postJobModal.classList.add('hidden');
+          }
+        });
+      }
+    })();
+
+    // ── Search & Filters & Pagination for Student Pool ────────────────
+    (function() {
+      const searchInput = document.getElementById('searchInput');
+      let currentPage = 1;
+      const itemsPerPage = 6;
+
+      function applyStudentFilters(keepPage = false) {
+        if (!keepPage) {
+          currentPage = 1;
+        }
+        const q = searchInput ? searchInput.value.toLowerCase() : '';
+        const checked = { type: [], parish: [], level: [], industry: [] };
+
+        document.querySelectorAll('.dash-sidebar input[type="checkbox"]').forEach(function(cb) {
+          if (cb.checked && cb.dataset.filter) {
+            checked[cb.dataset.filter].push(cb.value.toLowerCase());
+          }
+        });
+
+        const matchedCards = [];
+
+        document.querySelectorAll('.student-card').forEach(function(card) {
+          const text = card.innerText.toLowerCase();
+          const matchQ = !q || text.includes(q);
+
+          const matchType = !checked.type.length || checked.type.includes((card.dataset.type || '').toLowerCase());
+          const matchParish = !checked.parish.length || checked.parish.includes((card.dataset.parish || '').toLowerCase());
+          const matchLevel = !checked.level.length || checked.level.includes((card.dataset.level || '').toLowerCase());
+
+          // Check if any checked industry is present in the card's industry list (comma-separated)
+          const cardIndustries = (card.dataset.industry || '').toLowerCase().split(',').map(s => s.trim());
+          const matchIndustry = !checked.industry.length || checked.industry.some(ind => cardIndustries.includes(ind));
+
+          const show = matchQ && matchType && matchParish && matchLevel && matchIndustry;
+          if (show) {
+            matchedCards.push(card);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        const noResults = document.getElementById('noResults');
+        if (noResults) noResults.classList.toggle('hidden', matchedCards.length > 0);
+
+        // Render pagination
+        const paginationContainer = document.getElementById('studentPagination');
+        if (paginationContainer) {
+          renderStudentPagination(paginationContainer, matchedCards);
+        }
+
+        // Update feed count
+        const total = matchedCards.length;
+        const countText = total + ' student' + (total === 1 ? '' : 's') + ' available';
+        const feedCountEl = document.querySelector('.feed-header .feed-count');
+        if (feedCountEl) {
+          feedCountEl.textContent = countText;
+        }
+      }
+
+      function renderStudentPagination(container, matchedCards) {
+        const totalPages = Math.ceil(matchedCards.length / itemsPerPage) || 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+        if (currentPage < 1) currentPage = 1;
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        matchedCards.forEach((card, index) => {
+          if (index >= startIndex && index < endIndex) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        if (totalPages <= 1) {
+          container.innerHTML = '';
+          return;
+        }
+
+        let html = '';
+        if (currentPage > 1) {
+          html += '<button class="page-btn page-btn-prev">← Prev</button>';
+        }
+
+        for (let i = 1; i <= totalPages; i++) {
+          const activeClass = i === currentPage ? 'active' : '';
+          html += `<button class="page-btn ${activeClass}" data-page="${i}">${i}</button>`;
+        }
+
+        if (currentPage < totalPages) {
+          html += '<button class="page-btn-next">Next →</button>';
+        }
+
+        container.innerHTML = html;
+
+        // Event listeners
+        container.querySelectorAll('.page-btn').forEach(btn => {
+          btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentPage = parseInt(this.dataset.page);
+            applyStudentFilters(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        });
+
+        const prevBtn = container.querySelector('.page-btn-prev');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentPage--;
+            applyStudentFilters(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+
+        const nextBtn = container.querySelector('.page-btn-next');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentPage++;
+            applyStudentFilters(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+      }
+
+      // Wire up events
+      if (searchInput) {
+        searchInput.addEventListener('input', () => applyStudentFilters(false));
+      }
+      document.querySelectorAll('.dash-sidebar input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', () => applyStudentFilters(false));
+      });
+
+      const clearFiltersBtn = document.querySelector('.clear-filters');
+      if (clearFiltersBtn) {
+        clearFiltersBtn.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          document.querySelectorAll('.dash-sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+          applyStudentFilters(false);
+        });
+      }
+
+      // Initialize
+      applyStudentFilters(false);
+    })();
+
+    // ── Card Action Handlers ──────────────────────────────────────────
+    document.querySelectorAll('.btn-contact').forEach(btn => {
+      btn.addEventListener('click', function() {
+        alert('Contact feature coming soon. Connect Supabase to enable messaging.');
+      });
+    });
+
+    document.querySelectorAll('.btn-view').forEach(btn => {
+      btn.addEventListener('click', function() {
+        window.location.href = 'student-view.html';
+      });
+    });
+
+    const sidebarLinks = document.querySelectorAll('.sidebar-link[data-panel]');
+    const panels = document.querySelectorAll('.panel');
+
+    sidebarLinks.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        panels.forEach(p => p.classList.add('hidden'));
+        link.classList.add('active');
+        const target = document.getElementById('panel-' + link.dataset.panel);
+        if (target) target.classList.remove('hidden');
+      });
+    });
+  </script>
+
+  <script>
+    document.getElementById('postJobForm').addEventListener('submit', function(e){
+      e.preventDefault();
+      document.getElementById('postJobModal').classList.add('hidden');
+      alert('Listing posted! Connect Supabase to save listings.');
+    });
+  </script>
+
+  <script>
+    function toggleApplyMethod() {
+      const method = document.getElementById('pApplyMethod').value;
+      document.getElementById('applyLinkField').classList.add('hidden');
+      document.getElementById('applyWhatsappField').classList.add('hidden');
+      document.getElementById('applyEmailField').classList.add('hidden');
+      if (method === 'link') document.getElementById('applyLinkField').classList.remove('hidden');
+      if (method === 'whatsapp') document.getElementById('applyWhatsappField').classList.remove('hidden');
+      if (method === 'email') document.getElementById('applyEmailField').classList.remove('hidden');
+    }
+
+    document.getElementById('pPoster').addEventListener('change', function() {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('posterImg').src = e.target.result;
+          document.getElementById('posterPreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
+
+
+</body>
+</html>
+

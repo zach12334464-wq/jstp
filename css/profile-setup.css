@@ -1,0 +1,232 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', system-ui, sans-serif; background: #f5f5f5; color: #0a0a0a; }
+
+.reg-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  background: #ffffff;
+  border-bottom: 2px solid #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  z-index: 100;
+}
+
+.reg-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.reg-mark {
+  width: 28px;
+  height: 28px;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.reg-name {
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #0a0a0a;
+}
+
+.reg-step-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #888888;
+}
+
+.setup-main {
+  min-height: 100vh;
+  padding: 96px 24px 64px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: #f5f5f5;
+}
+
+.setup-step {
+  width: 100%;
+  max-width: 560px;
+}
+
+.reg-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #888888;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.reg-headline {
+  font-size: 36px;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+}
+
+.setup-sub {
+  font-size: 14px;
+  color: #888888;
+  margin-bottom: 32px;
+  line-height: 1.5;
+}
+
+.reg-form {
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #0a0a0a;
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.avatar-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0a0a0a;
+  margin-bottom: 4px;
+}
+
+.avatar-hint {
+  font-size: 11px;
+  color: #888888;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #444444;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: 'Inter', sans-serif;
+  color: #0a0a0a;
+  background: #ffffff;
+  outline: none;
+  transition: border-color 0.15s;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus { border-color: #0a0a0a; }
+
+.field-hint {
+  font-size: 11px;
+  color: #888888;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.cb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #444444;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.setup-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: #0a0a0a;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.15s;
+}
+
+.btn-submit:hover { background: #2a2a2a; }
+
+.btn-skip {
+  text-align: center;
+  font-size: 12px;
+  color: #888888;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.btn-skip:hover { color: #0a0a0a; }
+
+@media (max-width: 600px) {
+  .reg-nav { padding: 0 20px; }
+  .setup-main { padding: 88px 16px 48px; }
+  .reg-form { padding: 24px; }
+  .reg-headline { font-size: 28px; }
+  .skills-grid { grid-template-columns: repeat(2, 1fr); }
+}
