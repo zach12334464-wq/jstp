@@ -14,20 +14,24 @@ def scrape() -> list[dict]:
     skipped = 0
 
     try:
-        url = "https://jamaica-gleaner.com/jobs"
+        url = "https://www.jamaica-gleaner.com/section/careers"
         headers = {
             "User-Agent": get_random_user_agent(),
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
-            "Referer": "https://jamaica-gleaner.com/"
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1"
         }
-        
+
         # Polite delay before requests
         polite_delay(extra=1.0)
-        
+
         response = requests.get(url, headers=headers, timeout=15)
         if response.status_code != 200:
-            raise Exception(f"Failed to fetch Gleaner jobs page, status code: {response.status_code}")
+            log_scraper_error("gleaner", Exception(f"Failed to fetch Gleaner jobs page, status code: {response.status_code}"))
+            log_scraper_done("gleaner", found, inserted, skipped)
+            return []
             
         soup = BeautifulSoup(response.text, "html.parser")
         

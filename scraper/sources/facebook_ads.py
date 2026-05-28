@@ -1,159 +1,105 @@
-import asyncio
 import urllib.parse
-from playwright.async_api import async_playwright
-from config import FACEBOOK_AD_SEARCH_TERMS, FACEBOOK_AD_COUNTRY
-from utils.helpers import polite_delay, build_job_dict
+
+import httpx
+from bs4 import BeautifulSoup
+
+from utils.helpers import build_job_dict
 from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
 
 from loguru import logger
 
+FACEBOOK_AD_LIBRARY_ASYNC_URL = (
+    "https://www.facebook.com/ads/library/async/search_typeahead/"
+    "?q=hiring+jamaica&session_id=1&country=JM&reload_on_failure=false"
+    "&should_query_ads_lib=true"
+)
+
+
 async def scrape() -> list[dict]:
-    """Scrapes hiring ads from Facebook Ad Library using Playwright (async)."""
+    """Requests-based Facebook Ad Library approach.
+
+    Note: Facebook frequently blocks automation/headless browsers. This scraper uses
+    a lightweight requests-based endpoint and fails gracefully when blocked.
+    """
     log_scraper_start("facebook_ads")
-    jobs = []
+
+    jobs: list[dict] = []
     found = 0
     inserted = 0
     skipped = 0
 
-    playwright = None
-    browser = None
-    
     try:
-        playwright = await async_playwright().start()
-        # Launch headless browser for background scraping
-        browser = await playwright.chromium.launch(headless=True)
-        context = await browser.new_context(
-            viewport={"width": 1280, "height": 800},
-            user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-        )
-        page = await context.new_page()
+        timeout = httpx.Timeout(30.0, connect=10.0)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1",
+        }
 
-        for term in FACEBOOK_AD_SEARCH_TERMS:
-            try:
-                logger.info(f"[FACEBOOK_ADS] Searching for term: '{term}'")
-                
-                # Polite delay between terms
-                polite_delay(extra=2.0)
-                
-                encoded_term = urllib.parse.quote(term)
-                search_url = f"https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country={FACEBOOK_AD_COUNTRY}&q={encoded_term}&search_type=keyword_unordered"
-                
-                await page.goto(search_url, wait_until="networkidle", timeout=30000)
-                
-                # Let dynamic scripts load
-                await page.wait_for_timeout(3000)
-                
-                # Facebook Ad Library containers are typically card elements
-                # Let's search for divs representing ad cards using class name matches or data-testids
-                cards = await page.query_selector_all("div[class*='_7jvw'], div[class*='_2e_b'], div[data-testid='ad_card']")
-                
-                if not cards:
-                    # Generic fallback container selection
-                    cards = await page.query_selector_all("div[class*='_9npi'], div[class*='_7jwv']")
+        async with httpx.AsyncClient(timeout=timeout, headers=headers, follow_redirects=True) as client:
+            resp = await client.get(FACEBOOK_AD_LIBRARY_ASYNC_URL)
 
-                logger.info(f"[FACEBOOK_ADS] Found {len(cards)} ad card elements for '{term}'")
+        if resp.status_code != 200:
+            logger.warning("[FACEBOOK_ADS] Skipped — Facebook blocks headless browsers on CI")
+            log_scraper_done("facebook_ads", found, inserted, skipped)
+            return []
 
-                for card in cards:
-                    try:
-                        # 1. Page Name (Advertiser Business Name)
-                        page_name = ""
-                        page_name_el = await card.query_selector("span[class*='_7jwc'], a[class*='_7jwc'], div[class*='_7jwc']")
-                        if page_name_el:
-                            page_name = await page_name_el.inner_text()
-                        
-                        if not page_name:
-                            # Sift bold tags/anchors
-                            anchors = await card.query_selector_all("a")
-                            for a in anchors:
-                                text = await a.inner_text()
-                                if text and len(text) > 2 and "see ad details" not in text.lower():
-                                    page_name = text
-                                    break
-                                    
-                        if not page_name:
-                            page_name = "Facebook Business"
-                            
-                        # 2. Ad Text (Copy body)
-                        ad_text = ""
-                        ad_text_el = await card.query_selector("div[class*='_1o0'], div[class*='_8thz'], div[class*='_8nhi']")
-                        if ad_text_el:
-                            ad_text = await ad_text_el.inner_text()
-                        else:
-                            # Search for divs with readable text
-                            divs = await card.query_selector_all("div")
-                            for d in divs:
-                                text = await d.inner_text()
-                                if text and len(text) > 40 and "id:" not in text.lower() and "active" not in text.lower():
-                                    ad_text = text
-                                    break
-                                    
-                        if not ad_text:
-                            continue  # If we can't get any text, discard this card
+        # Best-effort parsing: this endpoint returns HTML-ish payload; we extract ad links if present.
+        content_type = resp.headers.get("content-type", "")
+        text = resp.text or ""
+        if not text:
+            log_scraper_done("facebook_ads", found, inserted, skipped)
+            return []
 
-                        # 3. Image URL
-                        image_url = ""
-                        img_el = await card.query_selector("img[src*='fbcdn'], img")
-                        if img_el:
-                            src = await img_el.get_attribute("src")
-                            if src and src.startswith("http"):
-                                image_url = src
-                                
-                        # 4. Ad URL (Details Page Link)
-                        ad_url = ""
-                        ad_url_el = await card.query_selector("a[href*='ad_details'], a[href*='facebook.com/ads/library']")
-                        if ad_url_el:
-                            href = await ad_url_el.get_attribute("href")
-                            if href:
-                                ad_url = href
-                        
-                        if not ad_url:
-                            # Construct a general library link fallback
-                            ad_url = f"https://www.facebook.com/ads/library/?id={page_name}"
+        soup = BeautifulSoup(text, "html.parser")
 
-                        # Prevent duplicate insertions
-                        if any(j["source_url"] == ad_url for j in jobs):
-                            continue
+        # Try to find ad detail/library links
+        link_els = soup.select("a[href*='/ads/library/'], a[href*='ad_details']")
+        seen: set[str] = set()
 
-                        found += 1
-                        
-                        # Build simulated job posting
-                        # Title can be derived from advertiser name + term
-                        title = f"Hiring Opportunity at {page_name}"
-                        
-                        job_dict = build_job_dict(
-                            title=title,
-                            company=page_name,
-                            description=ad_text,
-                            source="facebook_ads",
-                            source_url=ad_url,
-                            location="Jamaica",
-                            image_url=image_url,
-                            is_remote=False,
-                            is_international=False
-                        )
-                        
-                        jobs.append(job_dict)
-                        inserted += 1
-                        
-                    except Exception as card_err:
-                        skipped += 1
-                        continue
-                        
-            except Exception as term_err:
-                logger.error(f"[FACEBOOK_ADS] Error searching for term '{term}': {term_err}")
+        for a in link_els:
+            href = a.get("href")
+            if not href:
                 continue
+            if href.startswith("http"):
+                source_url = href
+            else:
+                source_url = "https://www.facebook.com" + href
 
-        log_scraper_done("facebook_ads", found, inserted, skipped)
-        
+            if source_url in seen:
+                continue
+            seen.add(source_url)
+
+            # Minimal simulated job fields; endpoint often doesn’t contain full structured ad copy
+            page_name = a.get_text(strip=True) or "Facebook"
+            title = f"Hiring Opportunity at {page_name}"
+
+            description = "Facebook Ad Library listing. Visit source for details."
+
+            job_dict = build_job_dict(
+                title=title,
+                company=page_name,
+                description=description,
+                source="facebook_ads",
+                source_url=source_url,
+                location="Jamaica",
+                image_url="",
+                is_remote=False,
+                is_international=False,
+            )
+
+            jobs.append(job_dict)
+            found += 1
+            inserted += 1
+
     except Exception as e:
+        # Exact warning required by task when this also fails.
+        logger.warning("[FACEBOOK_ADS] Skipped — Facebook blocks headless browsers on CI")
         log_scraper_error("facebook_ads", e)
-        log_scraper_done("facebook_ads", found, inserted, skipped)
-        
-    finally:
-        # Secure resource cleanup
-        if browser:
-            await browser.close()
-        if playwright:
-            await playwright.stop()
-            
+
+    log_scraper_done("facebook_ads", found, inserted, skipped)
     return jobs
+

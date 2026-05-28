@@ -1,7 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+
+import time
+
 from utils.helpers import get_random_user_agent, polite_delay, build_job_dict
+
 from utils.logger import log_scraper_start, log_scraper_done, log_scraper_error
 
 
@@ -14,19 +18,36 @@ def scrape() -> list[dict]:
     skipped = 0
 
     try:
-        url = "https://remote.co/remote-jobs/entry-level/"
+        url = "https://remote.co/remote-jobs/"
         headers = {
             "User-Agent": get_random_user_agent(),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
             "Referer": "https://remote.co/"
         }
-        
+
         polite_delay(extra=1.0)
-        
-        response = requests.get(url, headers=headers, timeout=15)
-        if response.status_code != 200:
-            raise Exception(f"Failed to fetch Remote.co, status code: {response.status_code}")
+
+        response = None
+        last_err: Exception | None = None
+        for attempt in range(1, 4):
+            try:
+                response = requests.get(url, headers=headers, timeout=30)
+                if response.status_code == 200:
+                    break
+                last_err = Exception(f"Failed to fetch Remote.co, status code: {response.status_code}")
+            except Exception as e:
+                last_err = e
+
+            if attempt < 3:
+                import time
+                time.sleep(5)
+
+        if not response or response.status_code != 200:
+            if last_err:
+                log_scraper_error("remote_co", last_err)
+            log_scraper_done("remote_co", found, inserted, skipped)
+            return []
             
         soup = BeautifulSoup(response.text, "html.parser")
         

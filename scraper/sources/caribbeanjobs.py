@@ -14,19 +14,48 @@ def scrape() -> list[dict]:
     skipped = 0
 
     try:
-        url = "https://www.caribbeanjobs.com/ShowResults.aspx?Keywords=&autosuggest=&Location=Jamaica"
+        url = "https://www.caribbeanjobs.com/SearchResults.aspx?Keywords=&Location=131&Recruiter=All&DisciplineId=0&AltDisciplineId=0&JobType=All&OrderBy=1"
         headers = {
             "User-Agent": get_random_user_agent(),
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
-            "Referer": "https://www.caribbeanjobs.com/"
+            "Accept-Encoding": "gzip, deflate, br",
+            "Connection": "keep-alive",
+            "Upgrade-Insecure-Requests": "1"
         }
-        
+
         polite_delay(extra=1.0)
-        
-        response = requests.get(url, headers=headers, timeout=15)
+
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+        except Exception as e:
+            log_scraper_error("caribbeanjobs", e)
+            log_scraper_done("caribbeanjobs", found, inserted, skipped)
+            return []
+
         if response.status_code != 200:
-            raise Exception(f"Failed to fetch CaribbeanJobs page, status code: {response.status_code}")
+            # If blocked by bot protections, fail gracefully
+            log_scraper_error(
+                "caribbeanjobs",
+                Exception(f"Failed to fetch CaribbeanJobs page, status code: {response.status_code}"),
+            )
+            log_scraper_done("caribbeanjobs", found, inserted, skipped)
+            return []
+
+        blocked_markers = [
+            "captcha",
+            "access denied",
+            "unusual traffic",
+            "please verify",
+            "robot",
+        ]
+        lowered = (response.text or "").lower()
+
+        # Block/empty heuristics
+        if not response.text or len(response.text) < 500 or any(m in lowered for m in blocked_markers):
+            log_scraper_error("caribbeanjobs", Exception("CaribbeanJobs returned empty/blocked response"))
+            log_scraper_done("caribbeanjobs", found, inserted, skipped)
+            return []
             
         soup = BeautifulSoup(response.text, "html.parser")
         

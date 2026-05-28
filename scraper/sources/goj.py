@@ -14,19 +14,28 @@ def scrape() -> list[dict]:
     skipped = 0
 
     try:
-        url = "https://psc.gov.jm/vacancies"
+        url = "https://www.psc.gov.jm/vacancies"
         headers = {
             "User-Agent": get_random_user_agent(),
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
             "Accept-Language": "en-US,en;q=0.5",
-            "Referer": "https://psc.gov.jm/"
+            "Referer": "https://www.psc.gov.jm/"
         }
-        
+
         polite_delay(extra=1.0)
-        
-        response = requests.get(url, headers=headers, timeout=15)
+
+        response = None
+        try:
+            response = requests.get(url, headers=headers, timeout=30)
+        except requests.exceptions.Timeout as e:
+            log_scraper_error("goj", e)
+            log_scraper_done("goj", found, inserted, skipped)
+            return []
+
         if response.status_code != 200:
-            raise Exception(f"Failed to fetch GOJ vacancies, status code: {response.status_code}")
+            log_scraper_error("goj", Exception(f"Failed to fetch GOJ vacancies, status code: {response.status_code}"))
+            log_scraper_done("goj", found, inserted, skipped)
+            return []
             
         soup = BeautifulSoup(response.text, "html.parser")
         
