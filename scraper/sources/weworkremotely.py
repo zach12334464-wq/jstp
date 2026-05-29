@@ -93,11 +93,14 @@ def scrape() -> list[dict]:
                 if image_url and not image_url.startswith("http"):
                     image_url = "https://weworkremotely.com" + image_url
                 
+                requirements_text = description
+
                 # Build job object using build_job_dict helper
                 job_dict = build_job_dict(
                     title=title,
                     company=company,
                     description=description,
+                    requirements=requirements_text,
                     source="weworkremotely",
                     source_url=source_url,
                     location="Remote — Work from Anywhere",

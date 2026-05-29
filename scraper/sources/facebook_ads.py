@@ -79,10 +79,13 @@ async def scrape() -> list[dict]:
 
             description = "Facebook Ad Library listing. Visit source for details."
 
+            requirements_text = description
+
             job_dict = build_job_dict(
                 title=title,
                 company=page_name,
                 description=description,
+                requirements=requirements_text,
                 source="facebook_ads",
                 source_url=source_url,
                 location="Jamaica",

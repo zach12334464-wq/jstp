@@ -84,11 +84,14 @@ def scrape() -> list[dict]:
                         if any(j["source_url"] == source_url for j in jobs):
                             continue
                             
+                        requirements_text = f"Explore exciting career opportunities at {company_name}. Visit their official careers portal for requirements, roles, and benefits."
+
                         # Build job dictionary
                         job_dict = build_job_dict(
                             title=title_text,
                             company=company_name,
-                            description=f"Explore exciting career opportunities at {company_name}. Visit their official careers portal for requirements, roles, and benefits.",
+                            description=requirements_text,
+                            requirements=requirements_text,
                             source="company_pages",
                             source_url=source_url,
                             location="Jamaica",
@@ -126,10 +129,13 @@ def scrape() -> list[dict]:
                         if not title_text:
                             title_text = f"Career Opportunity at {company_name}"
                             
+                        requirements_text = f"Explore career opportunities at {company_name}. Complete requirements and job descriptions are available on the careers portal."
+
                         job_dict = build_job_dict(
                             title=title_text,
                             company=company_name,
-                            description=f"Explore career opportunities at {company_name}. Complete requirements and job descriptions are available on the careers portal.",
+                            description=requirements_text,
+                            requirements=requirements_text,
                             source="company_pages",
                             source_url=source_url,
                             location="Jamaica",

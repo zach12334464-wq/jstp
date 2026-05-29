@@ -123,6 +123,7 @@ def build_job_dict(
     image_url: str = "",
     salary: str = "",
     deadline: str = "",
+    requirements: str = "",
     is_remote: bool = False,
     is_international: bool = False,
     payment_methods: list = []
@@ -138,6 +139,7 @@ def build_job_dict(
         "academic_level": "Any",
         "salary": clean_text(salary),
         "deadline": parse_date(deadline),
+        "requirements": clean_text(requirements),
         "source": source,
         "source_url": source_url,
         "image_url": clean_text(image_url),

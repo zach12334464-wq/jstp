@@ -55,11 +55,14 @@ def scrape() -> list[dict]:
 
                 found += 1
                 
+                requirements_text = description
+
                 # Build job object using build_job_dict helper
                 job_dict = build_job_dict(
                     title=title,
                     company=company,
                     description=description,
+                    requirements=requirements_text,
                     source="remotive",
                     source_url=source_url,
                     location="Remote — Work from Anywhere",

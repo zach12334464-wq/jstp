@@ -105,11 +105,14 @@ def scrape() -> list[dict]:
                 desc_el = card.find(class_="jobCardShelfContainer") or card.find(class_="job-snippet") or card.find(class_="summary")
                 description = desc_el.get_text().strip() if desc_el else f"Hiring for {title} at {company} in {location}. Visit Indeed Jamaica for details."
                 
+                requirements_text = description
+
                 # Build job object using build_job_dict helper
                 job_dict = build_job_dict(
                     title=title,
                     company=company,
                     description=description,
+                    requirements=requirements_text,
                     source="indeed_jamaica",
                     source_url=source_url,
                     location=location,

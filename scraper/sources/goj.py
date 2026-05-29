@@ -91,11 +91,14 @@ def scrape() -> list[dict]:
                 if not description:
                     description = f"Government vacancy for {title} at {company}. Please visit the Public Service Commission website to view full specifications."
                 
+                requirements_text = description
+
                 # Build job object using build_job_dict helper
                 job_dict = build_job_dict(
                     title=title,
                     company=company,
                     description=description,
+                    requirements=requirements_text,
                     source="goj",
                     source_url=source_url,
                     location="Jamaica",

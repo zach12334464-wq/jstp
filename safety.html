@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safety Briefing — JSTP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/safety.css">
+</head>
+<body>
+
+  <header class="safety-nav">
+    <div class="safety-brand">
+      <span class="safety-mark">J</span>
+      <span class="safety-name">JSTP</span>
+    </div>
+    <span class="safety-step">Required — Safety Briefing</span>
+  </header>
+
+  <main class="safety-main">
+    <div class="safety-card">
+
+      <div class="safety-header">
+        <div class="safety-icon">!</div>
+        <div>
+          <p class="safety-eyebrow">BEFORE YOU CONTINUE</p>
+          <h1 class="safety-title">Read This. It Could Save You Money.</h1>
+          <p class="safety-sub">Scammers actively target Jamaican students on Instagram, WhatsApp and Telegram pretending to offer jobs. JSTP has documented their exact playbook. Read each point and confirm you understand it before accessing the platform.</p>
+        </div>
+      </div>
+
+      <div class="safety-scam-box">
+        <div class="scam-box-label">REAL SCAM EXAMPLE — DOCUMENTED BY JSTP</div>
+        <div class="scam-flow">
+          <div class="scam-step">Instagram DM<br><span>"I saw your post, I'm interested"</span></div>
+          <div class="scam-arrow">→</div>
+          <div class="scam-step">Moved to WhatsApp<br><span>"Let me explain how it works"</span></div>
+          <div class="scam-arrow">→</div>
+          <div class="scam-step">Fake Platform<br><span>syamazon168.com — register with invite code</span></div>
+          <div class="scam-arrow">→</div>
+          <div class="scam-step">Moved to Telegram<br><span>"All task updates are on Telegram"</span></div>
+          <div class="scam-arrow">→</div>
+          <div class="scam-step red">Fee Appears<br><span>"540 JMD to activate your account"</span></div>
+        </div>
+        <p class="scam-note">They never mention the fee upfront. By the time it appears you feel too invested to stop. That is the trap.</p>
+      </div>
+
+      <div class="safety-checks">
+        <div class="safety-checks-label">TICK ALL FIVE TO CONTINUE — YOU CANNOT SKIP THIS</div>
+
+        <label class="check-item" id="check1">
+          <input type="checkbox" onchange="updateButton()">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>I understand that legitimate employers NEVER charge fees to start a job.</strong>
+            Not for activation, not for training, not for equipment. Any upfront payment request is 100% a scam.
+          </div>
+        </label>
+
+        <label class="check-item" id="check2">
+          <input type="checkbox" onchange="updateButton()">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>I understand that being moved to Telegram or WhatsApp is a major red flag.</strong>
+            Real companies communicate through official email or their own secure portals — not personal messaging apps.
+          </div>
+        </label>
+
+        <label class="check-item" id="check3">
+          <input type="checkbox" onchange="updateButton()">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>I understand that promises of $15,000–$30,000 JMD per day for simple tasks are scams.</strong>
+            No entry-level student job in Jamaica pays that. If the daily pay is higher than a doctor's wage, it is not real.
+          </div>
+        </label>
+
+        <label class="check-item" id="check4">
+          <input type="checkbox" onchange="updateButton()">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>I understand that screenshots of withdrawals and bank alerts are easily faked.</strong>
+            Scammers send these to create FOMO and make the opportunity feel real. They are not proof of anything.
+          </div>
+        </label>
+
+        <label class="check-item" id="check5">
+          <input type="checkbox" onchange="updateButton()">
+          <div class="check-box"></div>
+          <div class="check-text">
+            <strong>I will use the Report button if I see anything suspicious on JSTP.</strong>
+            Every report protects the entire student community. JSTP reviews every report within 24 hours.
+          </div>
+        </label>
+      </div>
+
+      <div class="safety-action">
+        <button class="safety-continue" id="continueBtn" disabled onclick="proceed()">
+          Tick All 5 Points Above to Continue
+        </button>
+        <p class="safety-note">This briefing cannot be skipped. JSTP is committed to keeping students safe.</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    function updateButton() {
+      const checkboxes = document.querySelectorAll('.check-item input[type="checkbox"]');
+      const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+      const btn = document.getElementById('continueBtn');
+
+      checkboxes.forEach(function(cb, i) {
+        const item = cb.closest('.check-item');
+        if (cb.checked) {
+          item.classList.add('checked');
+        } else {
+          item.classList.remove('checked');
+        }
+      });
+
+      const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+      if (allChecked) {
+        btn.disabled = false;
+        btn.textContent = 'I Understand — Take Me to My Profile →';
+      } else {
+        btn.disabled = true;
+        btn.textContent = checked + ' of 5 confirmed — tick all to continue';
+      }
+    }
+
+    function proceed() {
+      // TODO: save safety_acknowledged = true to Supabase student profile
+      window.location.href = 'profile-setup.html';
+    }
+
+    // Block back navigation — student cannot go back and skip this
+    history.pushState(null, null, location.href);
+    window.onpopstate = function() {
+      history.pushState(null, null, location.href);
+    };
+  </script>
+
+</body>
+</html>
+
