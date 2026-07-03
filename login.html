@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In — JSTP</title>
+  <meta name="description" content="Sign in to your JSTP account to browse Jamaican student internships and job opportunities." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header class="reg-nav">
+    <a href="index.html" class="reg-brand" aria-label="JSTP Home">
+      <div class="reg-logo-mark">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="28" height="28" rx="4" fill="#0a0a0a"/>
+          <text x="14" y="20" text-anchor="middle" fill="white" font-family="Inter, sans-serif" font-weight="800" font-size="16">J</text>
+        </svg>
+      </div>
+      <span class="reg-name">JSTP</span>
+    </a>
+    <a href="index.html" class="reg-back">← Back to Home</a>
+  </header>
+
+  <main class="reg-main">
+
+    <!-- SIGN IN FORM -->
+    <div class="reg-step" id="stepSignIn">
+      <p class="reg-eyebrow">WELCOME BACK</p>
+      <h1 class="reg-headline">Sign In</h1>
+
+      <form class="reg-form" id="signInForm" novalidate>
+        <div class="field">
+          <label for="siEmail">Email</label>
+          <input type="email" id="siEmail" placeholder="your@email.com" required autocomplete="email">
+        </div>
+
+        <div class="field" style="position:relative;">
+          <label for="siPassword">Password</label>
+          <input type="password" id="siPassword" placeholder="Your password" required autocomplete="current-password">
+          <button type="button" class="toggle-pw" id="toggleSiPw" aria-label="Show/hide password" style="font-size:11px; font-weight:600; text-transform:uppercase;">Show</button>
+        </div>
+
+        <div class="form-extras">
+          <label class="cb remember-me"><input type="checkbox" id="rememberMe"> Remember me</label>
+          <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot password?</a>
+        </div>
+
+        <div class="form-error hidden" id="signInError">Invalid email or password. Please try again.</div>
+
+        <button type="submit" class="btn-submit" id="signInSubmit">Sign In →</button>
+        <p class="tiny-muted">By signing in you agree to our <a href="terms.html">Terms of Service</a></p>
+      </form>
+
+      <p class="reg-signin">Don't have an account? <a href="register.html" id="goToRegister">Sign Up</a></p>
+    </div>
+
+  </main>
+
+  <script>
+    // ─── Supabase stub (swap in real client when ready) ───────────────────────
+    // import { createClient } from '@supabase/supabase-js'
+    // const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    const supabase = {
+      auth: {
+        signInWithPassword: async (opts) => ({ data: { user: { id: 'demo' } }, error: null }),
+      },
+    };
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // Password toggle
+    (function() {
+      const input = document.getElementById('siPassword');
+      const btn = document.getElementById('toggleSiPw');
+      if (!input || !btn) return;
+      btn.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+        btn.textContent = input.type === 'password' ? 'Show' : 'Hide';
+      });
+    })();
+
+    // Forgot password placeholder
+    document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      alert('Password reset is coming soon. Please contact support if you need immediate access.');
+    });
+
+    // Sign In submit — same localStorage logic as register.html
+    document.getElementById('signInForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = document.getElementById('signInSubmit');
+      const errEl = document.getElementById('signInError');
+      errEl.classList.add('hidden');
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+
+      const email = document.getElementById('siEmail').value.trim();
+      const password = document.getElementById('siPassword').value;
+
+      // TODO: connect Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errEl.classList.remove('hidden');
+        btn.textContent = 'Sign In →';
+        btn.disabled = false;
+        return;
+      }
+
+      // Save session stub (same keys as register.html)
+      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'student' }));
+      window.location.href = 'jobs.html';
+    });
+  </script>
+
+</body>
+</html>

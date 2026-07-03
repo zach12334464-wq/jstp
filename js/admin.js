@@ -142,14 +142,54 @@ if (!localStorage.getItem('jstp_students')) localStorage.setItem('jstp_students'
 if (!localStorage.getItem('jstp_businesses')) localStorage.setItem('jstp_businesses', JSON.stringify(defaultBusinesses));
 if (!localStorage.getItem('jstp_jobs')) localStorage.setItem('jstp_jobs', JSON.stringify(defaultJobs));
 if (!localStorage.getItem('jstp_reports')) localStorage.setItem('jstp_reports', JSON.stringify(defaultReports));
+if (!localStorage.getItem('jstp_history')) localStorage.setItem('jstp_history', JSON.stringify([]));
+
+// Seed admins if missing with Master Admin
+const defaultAdmins = [
+  {
+    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'admin_' + Math.random().toString(36).substr(2, 9),
+    email: "zach12334464@gmail.com",
+    password: "JSTP_ADMIN_2026",
+    role: "master",
+    createdAt: new Date().toISOString()
+  }
+];
+if (!localStorage.getItem('jstp_admins')) {
+  localStorage.setItem('jstp_admins', JSON.stringify(defaultAdmins));
+}
+
+function toggleAdminTabVisibility(role) {
+  const link = document.getElementById('tabAdminsLink');
+  if (link) {
+    if (role === 'master') {
+      link.classList.remove('hidden');
+    } else {
+      link.classList.add('hidden');
+      const activeLink = document.querySelector('.sb-link.active');
+      if (activeLink && activeLink.dataset.tab === 'admins') {
+        document.querySelector('.sb-link[data-tab="overview"]')?.click();
+      }
+    }
+  }
+}
 
 // ── LOGIN ──
 document.getElementById('loginBtn').addEventListener('click', function() {
-  const input = document.getElementById('adminPassword').value;
-  if (input === ADMIN_PASSWORD) {
+  const emailInput = document.getElementById('adminEmail').value.trim();
+  const passwordInput = document.getElementById('adminPassword').value;
+  
+  const admins = JSON.parse(localStorage.getItem('jstp_admins') || '[]');
+  const matchedAdmin = admins.find(a => a.email.toLowerCase() === emailInput.toLowerCase() && a.password === passwordInput);
+  
+  if (matchedAdmin) {
     document.getElementById('loginScreen').classList.add('hidden');
     document.getElementById('adminDashboard').classList.remove('hidden');
-    sessionStorage.setItem('jstp_admin', 'true');
+    sessionStorage.setItem('jstp_admin', JSON.stringify({
+      id: matchedAdmin.id,
+      email: matchedAdmin.email,
+      role: matchedAdmin.role
+    }));
+    toggleAdminTabVisibility(matchedAdmin.role);
     renderAll();
   } else {
     document.getElementById('loginError').classList.remove('hidden');
@@ -157,14 +197,19 @@ document.getElementById('loginBtn').addEventListener('click', function() {
   }
 });
 
+document.getElementById('adminEmail')?.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') document.getElementById('loginBtn').click();
+});
 document.getElementById('adminPassword').addEventListener('keydown', function(e) {
   if (e.key === 'Enter') document.getElementById('loginBtn').click();
 });
 
 // Auto-login if already authenticated this session
-if (sessionStorage.getItem('jstp_admin') === 'true') {
+const loggedInAdmin = JSON.parse(sessionStorage.getItem('jstp_admin') || 'null');
+if (loggedInAdmin) {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('adminDashboard').classList.remove('hidden');
+  toggleAdminTabVisibility(loggedInAdmin.role);
 }
 
 // ── LOGOUT ──
@@ -172,6 +217,7 @@ document.getElementById('logoutBtn').addEventListener('click', function() {
   sessionStorage.removeItem('jstp_admin');
   document.getElementById('adminDashboard').classList.add('hidden');
   document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('adminEmail').value = '';
   document.getElementById('adminPassword').value = '';
 });
 
@@ -182,13 +228,22 @@ const tabTitles = {
   businesses: 'Businesses',
   jobs: 'Job Posts',
   reports: 'Reports',
-  breaches: 'Data Breach'
+  breaches: 'Data Breach',
+  admins: 'Admins'
 };
 
 document.querySelectorAll('.sb-link').forEach(function(link) {
   link.addEventListener('click', function(e) {
     e.preventDefault();
     const tab = this.dataset.tab;
+    
+    // Check master admin permission for admins tab
+    const currentAdmin = JSON.parse(sessionStorage.getItem('jstp_admin') || 'null');
+    if (tab === 'admins' && (!currentAdmin || currentAdmin.role !== 'master')) {
+      alert('Access denied: Master admin role required.');
+      return;
+    }
+
     document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
     this.classList.add('active');
     document.querySelectorAll('.tab-content').forEach(t => t.classList.add('hidden'));
@@ -204,6 +259,7 @@ document.querySelectorAll('.sb-link').forEach(function(link) {
 document.getElementById('studentSearch')?.addEventListener('input', renderStudents);
 document.getElementById('businessSearch')?.addEventListener('input', renderBusinesses);
 document.getElementById('jobSearch')?.addEventListener('input', renderJobs);
+document.getElementById('historySearch')?.addEventListener('input', renderHistory);
 
 // ── JOB FILTER CHIPS ──
 let currentJobFilter = 'all';
@@ -227,11 +283,12 @@ function renderStudents() {
     s.name.toLowerCase().includes(q) ||
     s.school.toLowerCase().includes(q) ||
     s.parish.toLowerCase().includes(q) ||
-    s.level.toLowerCase().includes(q)
+    s.level.toLowerCase().includes(q) ||
+    (s.id || '').toLowerCase().includes(q)
   );
 
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;padding:24px;">No students found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;padding:24px;">No students found.</td></tr>';
     return;
   }
 
@@ -243,6 +300,7 @@ function renderStudents() {
     
     return `
       <tr>
+        <td><code style="font-size: 11px; background: #eee; padding: 2px 4px; border-radius: 3px;">${s.id || 'N/A'}</code></td>
         <td><strong>${s.name}</strong></td>
         <td>${s.school}</td>
         <td>${s.parish}</td>
@@ -269,11 +327,12 @@ function renderBusinesses() {
   const filtered = businesses.filter(b =>
     b.company.toLowerCase().includes(q) ||
     b.industry.toLowerCase().includes(q) ||
-    b.parish.toLowerCase().includes(q)
+    b.parish.toLowerCase().includes(q) ||
+    (b.id || '').toLowerCase().includes(q)
   );
 
   if (filtered.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#888;padding:24px;">No businesses found.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#888;padding:24px;">No businesses found.</td></tr>';
     return;
   }
 
@@ -289,6 +348,7 @@ function renderBusinesses() {
 
     return `
       <tr>
+        <td><code style="font-size: 11px; background: #eee; padding: 2px 4px; border-radius: 3px;">${b.id || 'N/A'}</code></td>
         <td><strong>${b.company}</strong></td>
         <td>${b.industry}</td>
         <td>${b.parish}</td>
@@ -398,7 +458,7 @@ function renderReports() {
           <div class="report-row"><span class="report-label">AI FLAG / SCORE</span><span class="${scoreClass}">${r.score} &mdash; ${riskLevel}</span></div>
         </div>
         <div class="report-actions">
-          <button class="action-btn remove" onclick="resolveReport('${r.id}', 'remove')">Take Action</button>
+          <button class="action-btn remove" onclick="resolveReport('${r.id}', 'remove')">${r.type === 'JOB REPORT' ? 'Remove Listing' : r.type === 'BUSINESS REPORT' ? 'Remove Business' : 'Suspend Account'}</button>
           <button class="action-btn warn" onclick="resolveReport('${r.id}', 'warn')">Send Warning</button>
           <button class="action-btn view" onclick="resolveReport('${r.id}', 'dismiss')">Dismiss</button>
         </div>
@@ -414,14 +474,177 @@ function renderOverviewMetrics() {
   const jobs = JSON.parse(localStorage.getItem('jstp_jobs') || '[]');
   const reports = JSON.parse(localStorage.getItem('jstp_reports') || '[]');
 
-  const metrics = document.querySelectorAll('.metric-card .metric-value');
-  if (metrics.length >= 4) {
-    metrics[0].textContent = students.length;
-    metrics[1].textContent = businesses.length;
-    metrics[2].textContent = jobs.length;
-    metrics[3].textContent = reports.length;
-  }
+  const totalStudentsEl = document.getElementById('metricTotalStudents');
+  const totalBusinessesEl = document.getElementById('metricTotalBusinesses');
+  const activeJobsEl = document.getElementById('metricActiveJobs');
+  const openReportsEl = document.getElementById('metricOpenReports');
+
+  if (totalStudentsEl) totalStudentsEl.textContent = students.length;
+  if (totalBusinessesEl) totalBusinessesEl.textContent = businesses.length;
+  if (activeJobsEl) activeJobsEl.textContent = jobs.length;
+  if (openReportsEl) openReportsEl.textContent = reports.length;
 }
+
+// ── HISTORY HELPERS ──
+function pushHistory(action, target) {
+  const history = JSON.parse(localStorage.getItem('jstp_history') || '[]');
+  const currentAdmin = JSON.parse(sessionStorage.getItem('jstp_admin') || 'null');
+  const adminEmail = currentAdmin ? currentAdmin.email : 'system@jstp.com';
+
+  history.unshift({
+    adminEmail,
+    action,
+    target,
+    timestamp: new Date().toLocaleString('en-JM', { dateStyle: 'medium', timeStyle: 'short' })
+  });
+  localStorage.setItem('jstp_history', JSON.stringify(history));
+}
+
+// ── HISTORY RENDERER ──
+function renderHistory() {
+  const list = document.getElementById('historyLogList');
+  if (!list) return;
+  const history = JSON.parse(localStorage.getItem('jstp_history') || '[]');
+  const q = (document.getElementById('historySearch')?.value || '').toLowerCase();
+
+  const filtered = history.filter(h =>
+    h.action.toLowerCase().includes(q) ||
+    h.target.toLowerCase().includes(q) ||
+    (h.adminEmail || '').toLowerCase().includes(q)
+  );
+
+  if (filtered.length === 0) {
+    list.innerHTML = '<div class="activity-row" style="color:#888;font-size:13px;padding:16px 0;">No history recorded yet.</div>';
+    return;
+  }
+
+  list.innerHTML = filtered.map(h => {
+    const author = h.adminEmail || 'system@jstp.com';
+    return `
+      <div class="activity-row">
+        <span class="activity-type" style="background:#e0e0e0;color:#444;">${h.action.split(' ')[0].toUpperCase()}</span>
+        <span class="activity-text"><strong>${author}</strong> ${h.action} — <strong>${h.target}</strong></span>
+        <span class="activity-time">${h.timestamp}</span>
+      </div>
+    `;
+  }).join('');
+}
+
+// ── CLEAR HISTORY ──
+function clearHistory() {
+  if (!confirm('Are you sure you want to clear all history? This cannot be undone.')) return;
+  localStorage.setItem('jstp_history', JSON.stringify([]));
+  renderHistory();
+}
+
+// ── ADMINS RENDERER ──
+function renderAdmins() {
+  const tbody = document.getElementById('adminTableBody');
+  if (!tbody) return;
+  const admins = JSON.parse(localStorage.getItem('jstp_admins') || '[]');
+  
+  tbody.innerHTML = admins.map(admin => {
+    const currentAdmin = JSON.parse(sessionStorage.getItem('jstp_admin') || 'null');
+    const isSelf = currentAdmin && currentAdmin.id === admin.id;
+    const deleteBtn = isSelf 
+      ? '<span style="color: #888; font-size: 12px; font-weight: 600;">(Current Admin)</span>'
+      : `<button class="action-btn remove" onclick="removeAdmin('${admin.id}', '${admin.email}')">Remove</button>`;
+      
+    const formattedDate = admin.createdAt ? new Date(admin.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'N/A';
+    
+    return `
+      <tr>
+        <td><strong>${admin.email}</strong></td>
+        <td><span class="source-tag ${admin.role === 'master' ? 'direct' : 'scraper'}">${admin.role.toUpperCase()}</span></td>
+        <td>${formattedDate}</td>
+        <td>${deleteBtn}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+// ── ADMIN ACTIONS ──
+function removeAdmin(id, email) {
+  const currentAdmin = JSON.parse(sessionStorage.getItem('jstp_admin') || 'null');
+  if (currentAdmin && currentAdmin.id === id) {
+    alert("You cannot remove your own admin account.");
+    return;
+  }
+  if (!confirm(`Are you sure you want to remove admin account "${email}"? This action cannot be undone.`)) {
+    return;
+  }
+  let admins = JSON.parse(localStorage.getItem('jstp_admins') || '[]');
+  admins = admins.filter(a => a.id !== id);
+  localStorage.setItem('jstp_admins', JSON.stringify(admins));
+  
+  pushHistory('removed admin', email);
+  
+  renderAdmins();
+}
+window.removeAdmin = removeAdmin;
+
+function openAddAdminModal() {
+  document.getElementById('newAdminEmail').value = '';
+  document.getElementById('newAdminPassword').value = '';
+  document.getElementById('newAdminRole').value = 'regular';
+  document.getElementById('addAdminError').classList.add('hidden');
+  document.getElementById('addAdminModal').classList.remove('hidden');
+}
+window.openAddAdminModal = openAddAdminModal;
+
+function closeAddAdminModal() {
+  document.getElementById('addAdminModal').classList.add('hidden');
+}
+window.closeAddAdminModal = closeAddAdminModal;
+
+// Close add admin modal on overlay click
+document.getElementById('addAdminModal')?.addEventListener('click', function(e) {
+  if (e.target === this) closeAddAdminModal();
+});
+
+document.getElementById('addAdminConfirm')?.addEventListener('click', function() {
+  const email = document.getElementById('newAdminEmail').value.trim();
+  const password = document.getElementById('newAdminPassword').value;
+  const role = document.getElementById('newAdminRole').value;
+  const errorEl = document.getElementById('addAdminError');
+  
+  errorEl.classList.add('hidden');
+  
+  if (!email || !password) {
+    errorEl.textContent = 'Please fill in all fields.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorEl.textContent = 'Please enter a valid email address.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  
+  const admins = JSON.parse(localStorage.getItem('jstp_admins') || '[]');
+  if (admins.some(a => a.email.toLowerCase() === email.toLowerCase())) {
+    errorEl.textContent = 'An admin account with this email already exists.';
+    errorEl.classList.remove('hidden');
+    return;
+  }
+  
+  const newAdmin = {
+    id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'admin_' + Math.random().toString(36).substr(2, 9),
+    email,
+    password,
+    role,
+    createdAt: new Date().toISOString()
+  };
+  
+  admins.push(newAdmin);
+  localStorage.setItem('jstp_admins', JSON.stringify(admins));
+  
+  pushHistory('added new admin', email);
+  
+  renderAdmins();
+  closeAddAdminModal();
+});
 
 function renderAll() {
   renderStudents();
@@ -429,6 +652,8 @@ function renderAll() {
   renderJobs();
   renderReports();
   renderOverviewMetrics();
+  renderHistory();
+  renderAdmins();
 }
 
 // ── VIEW ITEM MODAL logic ──
@@ -537,25 +762,71 @@ document.getElementById('warnModal')?.addEventListener('click', function(e) {
 });
 
 // ── SUSPEND / UNSUSPEND account toggling ──
+let pendingSuspend = null;
+
 function toggleSuspend(type, id) {
   if (type === 'student') {
     const list = JSON.parse(localStorage.getItem('jstp_students') || '[]');
     const item = list.find(x => x.id === id);
     if (!item) return;
-    item.status = item.status === 'suspended' ? 'active' : 'suspended';
-    localStorage.setItem('jstp_students', JSON.stringify(list));
-    alert(item.name + ' account status is now: ' + item.status.toUpperCase());
-    renderStudents();
+    const action = item.status === 'suspended' ? 'unsuspend' : 'suspend';
+    pendingSuspend = { type, id, name: item.name, action };
   } else if (type === 'business') {
     const list = JSON.parse(localStorage.getItem('jstp_businesses') || '[]');
     const item = list.find(x => x.id === id);
     if (!item) return;
-    item.status = item.status === 'suspended' ? 'active' : 'suspended';
-    localStorage.setItem('jstp_businesses', JSON.stringify(list));
-    alert(item.company + ' account status is now: ' + item.status.toUpperCase());
-    renderBusinesses();
+    const action = item.status === 'suspended' ? 'unsuspend' : 'suspend';
+    pendingSuspend = { type, id, name: item.company, action };
+  }
+
+  if (pendingSuspend) {
+    const actionLabel = pendingSuspend.action === 'suspend' ? 'Suspend Account' : 'Unsuspend Account';
+    document.getElementById('suspendModalTitle').textContent = actionLabel;
+    document.getElementById('suspendModalSubtitle').textContent = `Are you sure you want to ${pendingSuspend.action} ${type} "${pendingSuspend.name}"?`;
+    document.getElementById('suspendReason').value = '';
+    document.getElementById('suspendModalConfirm').textContent = actionLabel;
+    document.getElementById('suspendModal').classList.remove('hidden');
   }
 }
+
+function closeSuspendModal() {
+  document.getElementById('suspendModal').classList.add('hidden');
+  pendingSuspend = null;
+}
+window.closeSuspendModal = closeSuspendModal;
+
+document.getElementById('suspendModalConfirm')?.addEventListener('click', function() {
+  if (!pendingSuspend) return;
+  const { type, id, name, action } = pendingSuspend;
+
+  if (type === 'student') {
+    const list = JSON.parse(localStorage.getItem('jstp_students') || '[]');
+    const item = list.find(x => x.id === id);
+    if (item) {
+      item.status = action === 'suspend' ? 'suspended' : 'active';
+      localStorage.setItem('jstp_students', JSON.stringify(list));
+      pushHistory(item.status === 'suspended' ? 'Suspended student' : 'Unsuspended student', name);
+      renderStudents();
+    }
+  } else if (type === 'business') {
+    const list = JSON.parse(localStorage.getItem('jstp_businesses') || '[]');
+    const item = list.find(x => x.id === id);
+    if (item) {
+      item.status = action === 'suspend' ? 'suspended' : 'active';
+      localStorage.setItem('jstp_businesses', JSON.stringify(list));
+      pushHistory(item.status === 'suspended' ? 'Suspended business' : 'Unsuspended business', name);
+      renderBusinesses();
+    }
+  }
+
+  renderHistory();
+  closeSuspendModal();
+});
+
+// Close suspend modal on overlay click
+document.getElementById('suspendModal')?.addEventListener('click', function(e) {
+  if (e.target === this) closeSuspendModal();
+});
 
 // ── CONFIRM REMOVE MODAL logic ──
 let pendingRemove = null;
@@ -586,6 +857,7 @@ document.getElementById('modalConfirm').addEventListener('click', function() {
     localStorage.setItem('jstp_jobs', JSON.stringify(list));
   }
 
+  pushHistory('Removed ' + type, name);
   alert('Successfully removed ' + type + ': "' + name + '".');
   closeModal();
   renderAll();
@@ -674,9 +946,15 @@ function completeResolveReport(id, action) {
   note.textContent = '\u2713 ' + messages[action];
   card.appendChild(note);
   
+  // Record in history
+  const allReports = JSON.parse(localStorage.getItem('jstp_reports') || '[]');
+  const resolvedReport = allReports.find(r => String(r.id) === String(id));
+  const reportTarget = resolvedReport ? resolvedReport.subject : 'Report #' + id;
+  const actionLabels = { remove: 'Resolved report (action taken)', warn: 'Resolved report (warning sent)', dismiss: 'Dismissed report' };
+  pushHistory(actionLabels[action] || 'Resolved report', reportTarget);
+
   // Remove from localStorage
-  let reports = JSON.parse(localStorage.getItem('jstp_reports') || '[]');
-  reports = reports.filter(r => String(r.id) !== String(id));
+  let reports = allReports.filter(r => String(r.id) !== String(id));
   localStorage.setItem('jstp_reports', JSON.stringify(reports));
 
   setTimeout(() => {
@@ -685,6 +963,7 @@ function completeResolveReport(id, action) {
     
     const metricVal = document.querySelector('.metric-card.alert .metric-value');
     if (metricVal) metricVal.textContent = reports.length;
+    renderHistory();
   }, 1000);
 }
 

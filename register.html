@@ -65,7 +65,7 @@
           <button class="card-btn outline" id="chooseBusiness">Continue as Business</button>
         </div>
       </div>
-      <p class="reg-signin">Already have an account? <a href="#" id="goToSignIn">Sign In</a></p>
+      <p class="reg-signin">Already have an account? <a href="login.html">Sign In</a></p>
     </div>
 
     <!-- SIGN IN FORM -->
@@ -87,7 +87,7 @@
 
         <div class="form-extras">
           <label class="cb remember-me"><input type="checkbox" id="rememberMe"> Remember me</label>
-          <a href="#" class="forgot-link">Forgot password?</a>
+          <a href="#" class="forgot-link" id="forgotPwLink">Forgot password?</a>
         </div>
 
         <div class="form-error hidden" id="signInError">Invalid email or password. Please try again.</div>
@@ -190,7 +190,7 @@
         <div class="terms-check">
           <label class="cb terms-cb">
             <input type="checkbox" id="studentTerms" required>
-            I have read and agree to the <a href="terms.html" target="_blank">Terms of Service</a>. I confirm I am at least 16 years old.
+            I have read and agree to the <a href="#" id="studentTosLink">Terms of Service</a>. I confirm I am at least 16 years old.
           </label>
         </div>
 
@@ -278,7 +278,7 @@
         <div class="terms-check">
           <label class="cb terms-cb">
             <input type="checkbox" id="businessTerms" required>
-            I have read and agree to the <a href="terms.html" target="_blank">Terms of Service</a>. I confirm this is a legally registered business or organisation.
+            I have read and agree to the <a href="#" id="businessTosLink">Terms of Service</a>. I confirm this is a legally registered business or organisation.
           </label>
         </div>
 
@@ -289,6 +289,17 @@
     </div>
 
   </main>
+
+  <!-- FORGOT PASSWORD MODAL -->
+  <div class="modal-overlay hidden" id="forgotPwModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:white;border-radius:8px;padding:36px;width:100%;max-width:460px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,0.2);">
+      <button id="forgotPwClose" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:#888;line-height:1;padding:4px;" aria-label="Close">&times;</button>
+      <p style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#888;font-weight:700;margin-bottom:6px;">ACCOUNT SUPPORT</p>
+      <h2 style="font-size:20px;font-weight:800;color:#0a0a0a;margin-bottom:16px;line-height:1.3;">Password Reset</h2>
+      <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:20px;">Password reset isn't available yet — this is a demo account system.<br><br>For account access help, contact us at <strong><a href="mailto:support@jstp.com" style="color:#0a0a0a;">support@jstp.com</a></strong> and we'll assist you manually.</p>
+      <button id="forgotPwModalClose" style="width:100%;padding:14px;background:#0a0a0a;color:white;border:none;border-radius:4px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;cursor:pointer;font-family:Inter,sans-serif;">Close</button>
+    </div>
+  </div>
 
   <script>
     // ─── Supabase stub (swap in real client when ready) ───────────────────────
@@ -318,6 +329,56 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // ── Restore registration draft after returning from ToS ───────────────
+    (function() {
+      const savedStep = localStorage.getItem('jstp_reg_draft_step');
+      if (!savedStep) return;
+      const savedData = JSON.parse(localStorage.getItem('jstp_reg_draft_data') || '{}');
+      localStorage.removeItem('jstp_reg_draft_step');
+      localStorage.removeItem('jstp_reg_draft_data');
+      // Restore step
+      showStep(savedStep);
+      // Refill form fields
+      Object.keys(savedData).forEach(function(id) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.type === 'checkbox') {
+          el.checked = savedData[id];
+        } else {
+          el.value = savedData[id];
+        }
+      });
+    })();
+
+    // Helper: collect all input/select values from a step div
+    function collectStepData(stepKey) {
+      const stepEl = steps[stepKey];
+      if (!stepEl) return {};
+      const data = {};
+      stepEl.querySelectorAll('input, select, textarea').forEach(function(el) {
+        if (!el.id) return;
+        if (el.type === 'checkbox') {
+          data[el.id] = el.checked;
+        } else {
+          data[el.id] = el.value;
+        }
+      });
+      return data;
+    }
+
+    // Helper: detect which step is currently visible
+    function currentStepKey() {
+      return Object.keys(steps).find(k => !steps[k].classList.contains('hidden')) || 'choice';
+    }
+
+    // Helper: navigate to ToS saving current step draft
+    function goToToS() {
+      const stepKey = currentStepKey();
+      localStorage.setItem('jstp_reg_draft_step', stepKey);
+      localStorage.setItem('jstp_reg_draft_data', JSON.stringify(collectStepData(stepKey)));
+      window.location.href = 'terms.html?from=register';
+    }
+
     // Check URL param to jump directly to sign-in
     const params = new URLSearchParams(window.location.search);
     if (params.get('mode') === 'signin') showStep('signIn');
@@ -329,10 +390,28 @@
     // Navigation
     document.getElementById('chooseStudent').addEventListener('click', () => showStep('student'));
     document.getElementById('chooseBusiness').addEventListener('click', () => showStep('business'));
-    document.getElementById('goToSignIn').addEventListener('click', (e) => { e.preventDefault(); showStep('signIn'); });
     document.getElementById('goToRegisterFromSignIn').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
     document.getElementById('backToChoice').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
     document.getElementById('backToChoiceBusiness').addEventListener('click', (e) => { e.preventDefault(); showStep('choice'); });
+
+    // Forgot password modal
+    document.getElementById('forgotPwLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('forgotPwModal').classList.remove('hidden');
+    });
+    document.getElementById('forgotPwClose').addEventListener('click', function() {
+      document.getElementById('forgotPwModal').classList.add('hidden');
+    });
+    document.getElementById('forgotPwModalClose').addEventListener('click', function() {
+      document.getElementById('forgotPwModal').classList.add('hidden');
+    });
+    document.getElementById('forgotPwModal').addEventListener('click', function(e) {
+      if (e.target === this) this.classList.add('hidden');
+    });
+
+    // ToS links — same-tab navigation with draft save
+    document.getElementById('studentTosLink').addEventListener('click', function(e) { e.preventDefault(); goToToS(); });
+    document.getElementById('businessTosLink').addEventListener('click', function(e) { e.preventDefault(); goToToS(); });
 
     // Password toggles
     function setupPasswordToggle(inputId, btnId) {
@@ -454,10 +533,29 @@
         return;
       }
 
+      // Generate unique user ID
+      const userId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'stud_' + Math.random().toString(36).substr(2, 9);
+
       // Persist profile data for profile.html
-      const profile = { firstName, lastName, email, phone, school, level, parish };
+      const profile = { id: userId, firstName, lastName, email, phone, school, level, parish };
       localStorage.setItem('jstp_profile', JSON.stringify(profile));
-      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'student', firstName, lastName }));
+      localStorage.setItem('jstp_user', JSON.stringify({ userId, email, type: 'student', firstName, lastName }));
+
+      // Append to jstp_students list so they show up in admin
+      const studentsList = JSON.parse(localStorage.getItem('jstp_students') || '[]');
+      studentsList.push({
+        id: userId,
+        name: `${firstName} ${lastName}`,
+        school: school || 'Not specified',
+        parish: parish || 'Not specified',
+        level: level || 'Not specified',
+        status: 'active',
+        joined: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        email: email,
+        phone: phone || '',
+        bio: ''
+      });
+      localStorage.setItem('jstp_students', JSON.stringify(studentsList));
 
       window.location.href = 'safety.html';
     });
@@ -510,8 +608,12 @@
         return;
       }
 
+      // Generate unique business ID
+      const businessId = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : 'biz_' + Math.random().toString(36).substr(2, 9);
+
       // Save full registration data so business-setup.html can pre-populate fields
       const businessData = {
+        id: businessId,
         company,
         firstName,
         lastName,
@@ -522,7 +624,24 @@
         createdAt: new Date().toISOString()
       };
       localStorage.setItem('jstp_business', JSON.stringify(businessData));
-      localStorage.setItem('jstp_user', JSON.stringify({ email, type: 'business', company, firstName, lastName, emailVerified: false }));
+      localStorage.setItem('jstp_user', JSON.stringify({ businessId, email, type: 'business', company, firstName, lastName, emailVerified: false }));
+
+      // Append to jstp_businesses list so they show up in admin
+      const businessesList = JSON.parse(localStorage.getItem('jstp_businesses') || '[]');
+      businessesList.push({
+        id: businessId,
+        company: company,
+        industry: industry || 'Not specified',
+        parish: parish || 'Not specified',
+        verified: false,
+        status: 'active',
+        joined: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+        email: email,
+        phone: '',
+        desc: ''
+      });
+      localStorage.setItem('jstp_businesses', JSON.stringify(businessesList));
+
       window.location.href = 'business-setup.html';
     });
   </script>

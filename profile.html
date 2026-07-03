@@ -8,6 +8,144 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/global.css" />
     <link rel="stylesheet" href="css/profile.css" />
+    <style>
+      /* Resume-style visual tweaks */
+      .resume-section-item {
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+        border-bottom: 1px dashed #e0e0e0;
+      }
+      .resume-section-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+      }
+      .resume-item-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 4px;
+      }
+      .resume-item-title {
+        font-size: 15px;
+        font-weight: 700;
+        color: #0a0a0a;
+      }
+      .resume-item-subtitle {
+        font-size: 13px;
+        color: #555;
+        font-weight: 600;
+      }
+      .resume-item-date {
+        font-size: 12px;
+        color: #888;
+        font-weight: 500;
+      }
+      .resume-item-desc {
+        font-size: 13px;
+        color: #444;
+        line-height: 1.6;
+        margin-top: 6px;
+        white-space: pre-line;
+      }
+      .links-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 12px;
+      }
+      .link-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        color: #0a0a0a;
+        text-decoration: none;
+        font-weight: 600;
+        background: #f5f5f5;
+        border: 1px solid #e0e0e0;
+        padding: 8px 12px;
+        border-radius: 4px;
+        transition: background 0.15s, border-color 0.15s;
+      }
+      .link-item:hover {
+        background: #eaeaea;
+        border-color: #0a0a0a;
+      }
+      .link-icon {
+        opacity: 0.7;
+      }
+      
+      /* Print Styling for Resume */
+      @media print {
+        body {
+          background: white !important;
+          color: black !important;
+          font-family: 'Inter', sans-serif !important;
+        }
+        .navbar, .profile-sidebar, .profile-right-panel, .btn-edit, .print-resume-row, .edit-actions, #editMode, .tiny-muted, .view-section-header {
+          display: none !important;
+        }
+        .profile-page {
+          margin-top: 0 !important;
+          padding: 0 !important;
+        }
+        .dash-layout {
+          display: block !important;
+          min-height: auto !important;
+        }
+        .profile-main {
+          padding: 0 !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+        .profile-section {
+          border: none !important;
+          border-radius: 0 !important;
+          padding: 0 !important;
+          margin-bottom: 24px !important;
+          box-shadow: none !important;
+          page-break-inside: avoid;
+        }
+        .section-label {
+          font-size: 12px !important;
+          border-bottom: 1.5px solid #000 !important;
+          padding-bottom: 4px !important;
+          margin-bottom: 12px !important;
+          color: #000 !important;
+        }
+        /* Printed Resume Header */
+        .print-header {
+          display: block !important;
+          text-align: center;
+          margin-bottom: 24px;
+          border-bottom: 2px solid #000;
+          padding-bottom: 12px;
+        }
+        .print-name {
+          font-size: 26px;
+          font-weight: 800;
+          text-transform: uppercase;
+          margin-bottom: 6px;
+          letter-spacing: 0.02em;
+        }
+        .print-meta {
+          font-size: 12px;
+          color: #444;
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+        .print-meta span {
+          display: inline-block;
+        }
+      }
+      
+      /* Screen-only printed header hide */
+      .print-header {
+        display: none;
+      }
+    </style>
   </head>
 
   <body>
@@ -72,6 +210,23 @@
 
           <!-- ── VIEW MODE ── -->
           <div id="viewMode">
+            <!-- PRINT-ONLY HEADER FOR RESUME -->
+            <div class="print-header">
+              <div class="print-name" id="printName">Your Name</div>
+              <div class="print-meta">
+                <span id="printSchool">Your School</span> |
+                <span id="printLevel">Academic Level</span> |
+                <span id="printParish">Parish</span>
+              </div>
+              <div class="print-meta" style="margin-top: 4px;">
+                <span>WhatsApp: <strong id="printWhatsapp">—</strong></span> |
+                <span>Email: <strong id="printEmail">—</strong></span>
+              </div>
+              <div class="print-meta" style="margin-top: 4px;" id="printLinksRow">
+                <!-- Dynamically populated links -->
+              </div>
+            </div>
+
             <div class="profile-section view-section-header">
               <div class="section-header-row">
                 <div class="section-label" style="border:none; padding:0; margin:0;">YOUR PROFILE</div>
@@ -99,6 +254,30 @@
               <div class="view-row"><span class="view-label">Years</span><span class="view-val" id="viewYears">—</span></div>
             </div>
 
+            <!-- WORK EXPERIENCE SECTION -->
+            <div class="profile-section" id="viewWorkSection" style="display: none;">
+              <div class="section-label">WORK EXPERIENCE</div>
+              <div id="viewWorkContent">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- PROJECTS & LEADERSHIP SECTION -->
+            <div class="profile-section" id="viewProjSection" style="display: none;">
+              <div class="section-label">PROJECTS & LEADERSHIP</div>
+              <div id="viewProjContent">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
+            <!-- AWARDS & CERTIFICATIONS SECTION -->
+            <div class="profile-section" id="viewCertSection" style="display: none;">
+              <div class="section-label">AWARDS & CERTIFICATIONS</div>
+              <div id="viewCertContent">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
             <div class="profile-section">
               <div class="section-label">SKILLS</div>
               <div class="skills-display" id="viewSkills">
@@ -106,10 +285,38 @@
               </div>
             </div>
 
+            <!-- ONLINE PROFILES & LINKS SECTION -->
+            <div class="profile-section" id="viewLinksSection" style="display: none;">
+              <div class="section-label">ONLINE PROFILES & LINKS</div>
+              <div class="links-grid" id="viewLinksContent">
+                <!-- Populated dynamically -->
+              </div>
+            </div>
+
             <div class="profile-section">
               <div class="section-label">JOB PREFERENCES</div>
               <div class="view-row"><span class="view-label">Job Type</span><span class="view-val" id="viewJobType">—</span></div>
               <div class="view-row"><span class="view-label">Industry</span><span class="view-val" id="viewIndustry">—</span></div>
+            </div>
+
+            <!-- PRINT ACTION ROW -->
+            <div class="print-resume-row" style="margin-top: 36px; border-top: 2px dashed #e0e0e0; padding-top: 24px; text-align: center;">
+              <div class="pdf-instructions" style="max-width: 500px; margin: 0 auto 20px; background: #fafafa; border: 1.5px solid #eaeaea; border-radius: 6px; padding: 16px; text-align: left; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                <div style="font-size: 13px; font-weight: 700; color: #0a0a0a; display: flex; align-items: center; gap: 6px; margin-bottom: 8px;">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:#0a0a0a;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  How to Download Your Resume as a PDF:
+                </div>
+                <ol style="margin-left: 20px; font-size: 12px; color: #555; line-height: 1.6; padding: 0;">
+                  <li style="margin-bottom: 4px;">Click the black <strong>Print Profile as Resume</strong> button below.</li>
+                  <li style="margin-bottom: 4px;">In your browser's print preview window, find the <strong>Destination</strong> dropdown.</li>
+                  <li style="margin-bottom: 4px;">Select <strong>Save as PDF</strong> (or <em>Microsoft Print to PDF</em>).</li>
+                  <li style="margin-bottom: 0;">Click <strong>Save</strong> to download a perfectly formatted PDF resume to your device!</li>
+                </ol>
+              </div>
+              <button class="btn-print-resume" onclick="window.print()" style="background: #0a0a0a; color: white; border: none; padding: 14px 28px; font-size: 13px; font-weight: 700; border-radius: 4px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 10px; transition: background 0.15s;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                Print Profile as Resume
+              </button>
             </div>
           </div>
 
@@ -170,6 +377,75 @@
               <label>School or University<input type="text" id="eduSchool" placeholder="e.g. UWI, UTech, Campion College"></label>
               <label>Programme or Course<input type="text" id="eduProgramme" placeholder="e.g. BSc Computer Science"></label>
               <label>Years<input type="text" id="eduYears" placeholder="e.g. 2023 — Present"></label>
+            </div>
+
+            <!-- RESUME WORK EXPERIENCE -->
+            <div class="profile-section">
+              <div class="section-label">WORK EXPERIENCE</div>
+              <p class="field-hint-block">List your most recent job, internship, or volunteer role.</p>
+              <div class="edit-field-row">
+                <label>Job Title / Position
+                  <input type="text" id="workRole" placeholder="e.g. Marketing Intern, Retail Assistant">
+                </label>
+                <label>Company / Organisation
+                  <input type="text" id="workCompany" placeholder="e.g. Island Co., Caribbean Foods">
+                </label>
+              </div>
+              <label>Employment Dates
+                <input type="text" id="workDates" placeholder="e.g. June 2024 — Present, Jan 2023 — Dec 2023">
+              </label>
+              <label>Key Responsibilities & Achievements
+                <textarea id="workDescription" rows="4" placeholder="Describe what you did. Use bullet points or short sentences. e.g. Managed social media campaigns, assisted 50+ customers daily..."></textarea>
+              </label>
+            </div>
+
+            <!-- RESUME PROJECTS & LEADERSHIP -->
+            <div class="profile-section">
+              <div class="section-label">PROJECTS & LEADERSHIP</div>
+              <p class="field-hint-block">Highlight key projects, student club involvement, or volunteer leadership roles.</p>
+              <div class="edit-field-row">
+                <label>Role or Project Title
+                  <input type="text" id="projTitle" placeholder="e.g. Web Developer Project, Club Treasurer">
+                </label>
+                <label>Date or Academic Year
+                  <input type="text" id="projDates" placeholder="e.g. 2024, Academic Year 2023/24">
+                </label>
+              </div>
+              <label>Project / Role Description
+                <textarea id="projDescription" rows="4" placeholder="Detail your role and key accomplishments in this project or leadership capacity..."></textarea>
+              </label>
+            </div>
+
+            <!-- RESUME CERTIFICATIONS & HONOURS -->
+            <div class="profile-section">
+              <div class="section-label">AWARDS & CERTIFICATIONS</div>
+              <p class="field-hint-block">Add certifications, course credentials, or academic honours.</p>
+              <div class="edit-field-row" style="grid-template-columns: 2fr 1fr; gap: 12px;">
+                <label>Award or Certificate Title
+                  <input type="text" id="certTitle" placeholder="e.g. Google Digital Marketing, CAPE Honour Roll">
+                </label>
+                <label>Year
+                  <input type="text" id="certYear" placeholder="e.g. 2024">
+                </label>
+              </div>
+              <label>Issuing Institution
+                <input type="text" id="certIssuer" placeholder="e.g. Google Coursera, Campion College">
+              </label>
+            </div>
+
+            <!-- RESUME ONLINE PROFILES & LINKS -->
+            <div class="profile-section">
+              <div class="section-label">ONLINE PROFILES & LINKS</div>
+              <p class="field-hint-block">Add links to help employers learn more about you online.</p>
+              <label>LinkedIn URL
+                <input type="url" id="linkedinUrl" placeholder="e.g. https://linkedin.com/in/yourname">
+              </label>
+              <label>GitHub URL (highly recommended for technology roles)
+                <input type="url" id="githubUrl" placeholder="e.g. https://github.com/yourusername">
+              </label>
+              <label>Portfolio or Website URL
+                <input type="url" id="portfolioUrl" placeholder="e.g. https://yourname.com">
+              </label>
             </div>
 
             <div class="profile-section">
@@ -358,6 +634,28 @@
     document.getElementById('eduSchool').value = data.eduSchool || '';
     document.getElementById('eduProgramme').value = data.eduProgramme || '';
     document.getElementById('eduYears').value = data.eduYears || '';
+    
+    // Resume work experience
+    document.getElementById('workRole').value = data.workRole || '';
+    document.getElementById('workCompany').value = data.workCompany || '';
+    document.getElementById('workDates').value = data.workDates || '';
+    document.getElementById('workDescription').value = data.workDescription || '';
+    
+    // Resume projects
+    document.getElementById('projTitle').value = data.projTitle || '';
+    document.getElementById('projDates').value = data.projDates || '';
+    document.getElementById('projDescription').value = data.projDescription || '';
+    
+    // Resume certifications
+    document.getElementById('certTitle').value = data.certTitle || '';
+    document.getElementById('certYear').value = data.certYear || '';
+    document.getElementById('certIssuer').value = data.certIssuer || '';
+    
+    // Resume links
+    document.getElementById('linkedinUrl').value = data.linkedinUrl || '';
+    document.getElementById('githubUrl').value = data.githubUrl || '';
+    document.getElementById('portfolioUrl').value = data.portfolioUrl || '';
+
     document.getElementById('job_intern').checked = !!data.job_intern;
     document.getElementById('job_part').checked = !!data.job_part;
     document.getElementById('job_summer').checked = !!data.job_summer;
@@ -529,6 +827,118 @@
     setCheck('strengthEdu', checks.edu);
     setCheck('strengthSkills', checks.skills);
     setCheck('strengthJob', checks.job);
+
+    // Render Work Experience
+    const workSection = document.getElementById('viewWorkSection');
+    const workContent = document.getElementById('viewWorkContent');
+    if (data.workRole || data.workCompany || data.workDescription) {
+      workSection.style.display = 'block';
+      workContent.innerHTML = `
+        <div class="resume-section-item">
+          <div class="resume-item-header">
+            <span class="resume-item-title">${data.workRole || 'Position'}</span>
+            <span class="resume-item-date">${data.workDates || ''}</span>
+          </div>
+          <div class="resume-item-subtitle">${data.workCompany || ''}</div>
+          <p class="resume-item-desc">${data.workDescription || ''}</p>
+        </div>
+      `;
+    } else {
+      workSection.style.display = 'none';
+    }
+
+    // Render Projects & Leadership
+    const projSection = document.getElementById('viewProjSection');
+    const projContent = document.getElementById('viewProjContent');
+    if (data.projTitle || data.projDescription) {
+      projSection.style.display = 'block';
+      projContent.innerHTML = `
+        <div class="resume-section-item">
+          <div class="resume-item-header">
+            <span class="resume-item-title">${data.projTitle || 'Role / Project'}</span>
+            <span class="resume-item-date">${data.projDates || ''}</span>
+          </div>
+          <p class="resume-item-desc">${data.projDescription || ''}</p>
+        </div>
+      `;
+    } else {
+      projSection.style.display = 'none';
+    }
+
+    // Render Certifications & Awards
+    const certSection = document.getElementById('viewCertSection');
+    const certContent = document.getElementById('viewCertContent');
+    if (data.certTitle || data.certIssuer) {
+      certSection.style.display = 'block';
+      certContent.innerHTML = `
+        <div class="resume-section-item">
+          <div class="resume-item-header">
+            <span class="resume-item-title">${data.certTitle || 'Award / Certification'}</span>
+            <span class="resume-item-date">${data.certYear || ''}</span>
+          </div>
+          <div class="resume-item-subtitle">${data.certIssuer || ''}</div>
+        </div>
+      `;
+    } else {
+      certSection.style.display = 'none';
+    }
+
+    // Render Links
+    const linksSection = document.getElementById('viewLinksSection');
+    const linksContent = document.getElementById('viewLinksContent');
+    const linksHtml = [];
+    const printLinksHtml = [];
+
+    if (data.linkedinUrl) {
+      linksHtml.push(`
+        <a href="${data.linkedinUrl}" target="_blank" rel="noopener" class="link-item">
+          <svg class="link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          LinkedIn
+        </a>
+      `);
+      printLinksHtml.push(`LinkedIn: ${data.linkedinUrl}`);
+    }
+    if (data.githubUrl) {
+      linksHtml.push(`
+        <a href="${data.githubUrl}" target="_blank" rel="noopener" class="link-item">
+          <svg class="link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          GitHub
+        </a>
+      `);
+      printLinksHtml.push(`GitHub: ${data.githubUrl}`);
+    }
+    if (data.portfolioUrl) {
+      linksHtml.push(`
+        <a href="${data.portfolioUrl}" target="_blank" rel="noopener" class="link-item">
+          <svg class="link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Portfolio
+        </a>
+      `);
+      printLinksHtml.push(`Portfolio: ${data.portfolioUrl}`);
+    }
+
+    if (linksHtml.length > 0) {
+      linksSection.style.display = 'block';
+      linksContent.innerHTML = linksHtml.join('');
+    } else {
+      linksSection.style.display = 'none';
+    }
+
+    // Populate Print-Only Resume Header Details
+    document.getElementById('printName').textContent = full || 'Name';
+    document.getElementById('printSchool').textContent = data.eduSchool || '';
+    document.getElementById('printLevel').textContent = data.level || '';
+    document.getElementById('printParish').textContent = data.parish ? `${data.parish}, Jamaica` : '';
+    document.getElementById('printWhatsapp').textContent = data.whatsapp || '';
+    document.getElementById('printEmail').textContent = data.email || user.email || '';
+    
+    const printLinksRow = document.getElementById('printLinksRow');
+    if (printLinksHtml.length > 0) {
+      printLinksRow.innerHTML = printLinksHtml.map(l => `<span>${l}</span>`).join(' | ');
+      printLinksRow.style.display = 'flex';
+    } else {
+      printLinksRow.style.display = 'none';
+    }
   }
 
   // ── Mode switching ────────────────────────────────────────────────────────
@@ -548,6 +958,7 @@
   // ── Save ──────────────────────────────────────────────────────────────────
   document.getElementById('saveBtn').addEventListener('click', function(e){
     e.preventDefault();
+    const existing = loadData();
     const data = {
       firstName: document.getElementById('firstName').value.trim(),
       lastName: document.getElementById('lastName').value.trim(),
@@ -558,6 +969,31 @@
       eduSchool: document.getElementById('eduSchool').value.trim(),
       eduProgramme: document.getElementById('eduProgramme').value.trim(),
       eduYears: document.getElementById('eduYears').value.trim(),
+      
+      // Resume work experience
+      workRole: document.getElementById('workRole').value.trim(),
+      workCompany: document.getElementById('workCompany').value.trim(),
+      workDates: document.getElementById('workDates').value.trim(),
+      workDescription: document.getElementById('workDescription').value.trim(),
+      
+      // Resume projects
+      projTitle: document.getElementById('projTitle').value.trim(),
+      projDates: document.getElementById('projDates').value.trim(),
+      projDescription: document.getElementById('projDescription').value.trim(),
+      
+      // Resume certifications
+      certTitle: document.getElementById('certTitle').value.trim(),
+      certYear: document.getElementById('certYear').value.trim(),
+      certIssuer: document.getElementById('certIssuer').value.trim(),
+      
+      // Resume links
+      linkedinUrl: document.getElementById('linkedinUrl').value.trim(),
+      githubUrl: document.getElementById('githubUrl').value.trim(),
+      portfolioUrl: document.getElementById('portfolioUrl').value.trim(),
+      
+      // Preserve email
+      email: existing.email || user.email || '',
+
       skills: [...skills],
       photoDataUrl: uploadedPhotoUrl,
       job_intern: document.getElementById('job_intern').checked,

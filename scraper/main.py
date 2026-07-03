@@ -15,6 +15,7 @@ import sources.weworkremotely
 import sources.remotive
 import sources.appen
 import sources.facebook_ads
+import sources.instagram_apify
 import sources.contra
 import sources.wellfound
 
@@ -128,12 +129,21 @@ def run_remote_sources():
 
 def run_ads_sources():
     """Runs all social media/ad library scrapers."""
+    import datetime
     logger.info("[ORCHESTRATOR] Starting ad-library source scrapers...")
-    raw_jobs = []
     
-    raw_jobs.extend(execute_scraper_source("facebook_ads", sources.facebook_ads.scrape))
+    fb_jobs = []
+    fb_jobs.extend(execute_scraper_source("facebook_ads", sources.facebook_ads.scrape))
+    process_and_save_batch("facebook_ads", fb_jobs)
     
-    process_and_save_batch("facebook_ads", raw_jobs)
+    # Run instagram_apify ONLY once per day to conserve Apify credits (e.g. between 00:00 and 05:59 UTC)
+    current_utc_hour = datetime.datetime.now(datetime.timezone.utc).hour
+    if current_utc_hour < 6:
+        ig_jobs = []
+        ig_jobs.extend(execute_scraper_source("instagram_apify", sources.instagram_apify.scrape))
+        process_and_save_batch("instagram_apify", ig_jobs)
+    else:
+        logger.info("[ORCHESTRATOR] Skipping instagram_apify this run to conserve Apify free credit (only runs on the first daily run).")
 
 def run_all():
     """Runs all scraper categories sequentially."""

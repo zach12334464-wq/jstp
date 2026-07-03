@@ -295,7 +295,7 @@
       <div style="width:28px;height:28px;background:#0a0a0a;color:white;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;border-radius:4px;">J</div>
       <span class="tos-brand-name">JSTP</span>
     </a>
-    <a href="javascript:history.back()" class="tos-back">← Back</a>
+    <a href="#" id="tosBackLink" class="tos-back">← Back</a>
   </header>
 
   <div class="tos-page">
@@ -628,5 +628,21 @@
 
   </div>
 
+  <script>
+    (function() {
+      const backLink = document.getElementById('tosBackLink');
+      if (backLink) {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('from') === 'register') {
+          backLink.href = 'register.html';
+        } else {
+          backLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            history.back();
+          });
+        }
+      }
+    })();
+  </script>
 </body>
 </html>

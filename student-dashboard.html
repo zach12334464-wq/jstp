@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -7,6 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/student-dashboard.css">
+  <style>
+    /* Override 3-col grid to 2-col since right panel is removed */
+    .dash-layout {
+      grid-template-columns: 240px 1fr !important;
+    }
+  </style>
 </head>
 <body>
 
@@ -36,10 +42,10 @@
       </div>
 
       <nav class="sidebar-nav">
-        <a href="student-dashboard.html" class="sidebar-link active">📋 Job Feed</a>
+        <a href="#" class="sidebar-link active" data-panel="feed">📋 Job Feed</a>
         <a href="profile.html" class="sidebar-link">👤 My Profile</a>
-        <a href="#" class="sidebar-link">📩 Applications</a>
-        <a href="#" class="sidebar-link">🔔 Alerts</a>
+        <a href="#" class="sidebar-link" data-panel="applications">📩 Applications</a>
+        <a href="#" class="sidebar-link" data-panel="alerts">🔔 Alerts</a>
       </nav>
 
       <div class="sidebar-filters">
@@ -77,7 +83,10 @@
     <!-- MAIN FEED -->
     <main class="dash-feed">
 
-      <div class="feed-header">
+      <!-- PANEL: Job Feed -->
+      <div id="panel-feed">
+
+        <div class="feed-header">
   <div class="feed-tabs">
     <button class="feed-tab active" data-feed="local">Jamaica Jobs</button>
     <button class="feed-tab" data-feed="global">Global Remote</button>
@@ -85,8 +94,8 @@
   <span class="feed-count" id="feedCount">24 opportunities</span>
 </div>
 
-      <div class="feed-panel" id="feed-local">
-        <div class="job-feed" id="jobFeed">
+        <div class="feed-panel" id="feed-local">
+          <div class="job-feed" id="jobFeed">
 
 
         <!-- JOB CARD 1 -->
@@ -233,10 +242,10 @@
           </div>
         </article>
 
-      </div>
-      </div>
+          </div>
+        </div>
 
-      <div class="feed-panel hidden" id="feed-global">
+        <div class="feed-panel hidden" id="feed-global">
 
   <div class="global-info-banner">
     <div class="global-info-title">Work from anywhere in Jamaica. Get paid in USD.</div>
@@ -321,34 +330,34 @@
   </article>
 
 </div>
-    </main>
 
+      </div><!-- end panel-feed -->
 
-    <!-- RIGHT PANEL -->
-    <aside class="dash-right">
-      <div class="right-card">
-        <div class="right-card-title">YOUR PROFILE</div>
-        <div class="profile-completion">
-          <div class="completion-bar">
-            <div class="completion-fill" style="width: 60%"></div>
-          </div>
-          <div class="completion-label">60% complete</div>
+      <!-- PANEL: Applications -->
+      <div id="panel-applications" style="display:none;">
+        <div class="feed-header">
+          <h2 class="feed-title" style="font-size:18px;font-weight:800;">My Applications</h2>
         </div>
-        <a href="profile-setup.html" class="right-link">Complete your profile →</a>
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:48px 32px;text-align:center;">
+          <div style="font-size:36px;margin-bottom:16px;">📩</div>
+          <div style="font-size:16px;font-weight:800;color:#0a0a0a;margin-bottom:8px;">No applications yet</div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">When you apply to jobs, your applications will appear here so you can track their status.</div>
+        </div>
       </div>
 
-      <div class="right-card">
-        <div class="right-card-title">WHATSAPP ALERTS</div>
-        <p class="right-card-desc">Get notified on WhatsApp when new jobs match your profile.</p>
-        <a href="profile-setup.html" class="right-link">Set up alerts →</a>
+      <!-- PANEL: Alerts -->
+      <div id="panel-alerts" style="display:none;">
+        <div class="feed-header">
+          <h2 class="feed-title" style="font-size:18px;font-weight:800;">Alerts</h2>
+        </div>
+        <div style="background:#fff;border:1px solid #e0e0e0;border-radius:4px;padding:48px 32px;text-align:center;">
+          <div style="font-size:36px;margin-bottom:16px;">🔔</div>
+          <div style="font-size:16px;font-weight:800;color:#0a0a0a;margin-bottom:8px;">No alerts yet</div>
+          <div style="font-size:13px;color:#888;line-height:1.6;">Job match alerts and important notifications will appear here. Set up WhatsApp alerts to get notified instantly.</div>
+        </div>
       </div>
 
-      <div class="right-card">
-        <div class="right-card-title">RECENTLY VIEWED</div>
-        <div class="recent-item">Marketing Intern — Island Co.</div>
-        <div class="recent-item">Junior Web Developer — Tech Wave</div>
-      </div>
-    </aside>
+    </main>
 
   </div>
 
@@ -401,6 +410,26 @@
         document.getElementById('feed-' + tab.dataset.feed).classList.remove('hidden');
         document.getElementById('feedCount').textContent =
           tab.dataset.feed === 'local' ? '24 opportunities' : '3 global remote roles';
+      });
+    });
+
+    // ── Sidebar panel switching (Applications / Alerts) ──────────────────────
+    const allPanels = ['panel-feed', 'panel-applications', 'panel-alerts'];
+    document.querySelectorAll('.sidebar-link[data-panel]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = this.dataset.panel;
+
+        // Update active state on nav links (skip Profile which has no data-panel)
+        document.querySelectorAll('.sidebar-link[data-panel]').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+
+        // Show/hide panels
+        allPanels.forEach(function(id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.style.display = (id === 'panel-' + target) ? '' : 'none';
+        });
       });
     });
 

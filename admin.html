@@ -20,10 +20,14 @@
     <h1 class="login-title">Restricted Access</h1>
     <p class="login-sub">This page is not publicly linked. Admin credentials required.</p>
     <div class="login-field">
+      <label>Admin Email</label>
+      <input type="email" id="adminEmail" placeholder="Enter admin email" />
+    </div>
+    <div class="login-field">
       <label>Admin Password</label>
       <input type="password" id="adminPassword" placeholder="Enter admin password" />
     </div>
-    <div class="login-error hidden" id="loginError">Incorrect password. Access denied.</div>
+    <div class="login-error hidden" id="loginError">Incorrect credentials. Access denied.</div>
     <button class="login-btn" id="loginBtn">Access Admin Panel &rarr;</button>
     <p class="login-footer">Unauthorized access attempts are logged.</p>
   </div>
@@ -52,6 +56,7 @@
       </a>
       <a href="#" class="sb-link" data-tab="breaches">Data Breach</a>
       <a href="#" class="sb-link" data-tab="history">History</a>
+      <a href="#" class="sb-link hidden" data-tab="admins" id="tabAdminsLink">Admins</a>
     </nav>
     <div class="sidebar-bottom">
       <button class="sb-logout" id="logoutBtn">Logout</button>
@@ -78,22 +83,22 @@
       <div class="metrics-grid">
         <div class="metric-card">
           <div class="metric-label">TOTAL STUDENTS</div>
-          <div class="metric-value">247</div>
+          <div class="metric-value" id="metricTotalStudents">247</div>
           <div class="metric-sub">+12 this week</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">TOTAL BUSINESSES</div>
-          <div class="metric-value">34</div>
+          <div class="metric-value" id="metricTotalBusinesses">34</div>
           <div class="metric-sub">+2 this week</div>
         </div>
         <div class="metric-card">
           <div class="metric-label">ACTIVE JOB POSTS</div>
-          <div class="metric-value">89</div>
+          <div class="metric-value" id="metricActiveJobs">89</div>
           <div class="metric-sub">61 scraper &middot; 28 direct</div>
         </div>
         <div class="metric-card alert">
           <div class="metric-label">OPEN REPORTS</div>
-          <div class="metric-value">3</div>
+          <div class="metric-value" id="metricOpenReports">3</div>
           <div class="metric-sub">Needs review</div>
         </div>
       </div>
@@ -136,6 +141,7 @@
       <table class="admin-table" id="studentTable">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Name</th>
             <th>School</th>
             <th>Parish</th>
@@ -159,6 +165,7 @@
       <table class="admin-table" id="businessTable">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Company</th>
             <th>Industry</th>
             <th>Parish</th>
@@ -206,61 +213,7 @@
     <section class="tab-content hidden" id="tab-reports">
       <div class="section-title">Open Reports</div>
       <div class="report-list" id="reportList">
-
-        <div class="report-card" id="report-1">
-          <div class="report-card-top">
-            <span class="report-type job">JOB REPORT</span>
-            <span class="report-time">1 hour ago</span>
-          </div>
-          <div class="report-subject">Reported listing: &ldquo;Work from Home $50k/week&rdquo;</div>
-          <div class="report-body">
-            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Alicia Morgan (student)</span></div>
-            <div class="report-row"><span class="report-label">REASON</span><span>Possible scam &mdash; unrealistic salary promise and vague company</span></div>
-            <div class="report-row"><span class="report-label">AI SCAM SCORE</span><span class="score-high">0.91 &mdash; High Risk</span></div>
-          </div>
-          <div class="report-actions">
-            <button class="action-btn remove" onclick="resolveReport(1, 'remove')">Remove Listing</button>
-            <button class="action-btn warn" onclick="resolveReport(1, 'warn')">Warn Business</button>
-            <button class="action-btn view" onclick="resolveReport(1, 'dismiss')">Dismiss</button>
-          </div>
-        </div>
-
-        <div class="report-card" id="report-2">
-          <div class="report-card-top">
-            <span class="report-type business">BUSINESS REPORT</span>
-            <span class="report-time">3 hours ago</span>
-          </div>
-          <div class="report-subject">Reported business: &ldquo;QuickCash Jobs JA&rdquo;</div>
-          <div class="report-body">
-            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Kemar Thompson (student)</span></div>
-            <div class="report-row"><span class="report-label">REASON</span><span>Asked for bank account info during application &mdash; suspicious behaviour</span></div>
-            <div class="report-row"><span class="report-label">AI SCAM SCORE</span><span class="score-high">0.87 &mdash; High Risk</span></div>
-          </div>
-          <div class="report-actions">
-            <button class="action-btn remove" onclick="resolveReport(2, 'remove')">Remove Business</button>
-            <button class="action-btn warn" onclick="resolveReport(2, 'warn')">Send Warning</button>
-            <button class="action-btn view" onclick="resolveReport(2, 'dismiss')">Dismiss</button>
-          </div>
-        </div>
-
-        <div class="report-card" id="report-3">
-          <div class="report-card-top">
-            <span class="report-type student">STUDENT REPORT</span>
-            <span class="report-time">5 hours ago</span>
-          </div>
-          <div class="report-subject">Reported student: &ldquo;testuser123@mail.com&rdquo;</div>
-          <div class="report-body">
-            <div class="report-row"><span class="report-label">REPORTED BY</span><span>Island Co. (business)</span></div>
-            <div class="report-row"><span class="report-label">REASON</span><span>Submitted 40 applications in 2 minutes &mdash; bulk spam behaviour</span></div>
-            <div class="report-row"><span class="report-label">AI FLAG</span><span class="score-medium">Anomaly detected &mdash; unusual activity pattern</span></div>
-          </div>
-          <div class="report-actions">
-            <button class="action-btn remove" onclick="resolveReport(3, 'remove')">Suspend Account</button>
-            <button class="action-btn warn" onclick="resolveReport(3, 'warn')">Send Warning</button>
-            <button class="action-btn view" onclick="resolveReport(3, 'dismiss')">Dismiss</button>
-          </div>
-        </div>
-
+        <!-- Rendered dynamically by renderReports() in js/admin.js -->
       </div>
     </section>
 
@@ -345,6 +298,27 @@
       </div>
     </section>
 
+    <!-- ── TAB: ADMINS ── -->
+    <section class="tab-content hidden" id="tab-admins">
+      <div class="tab-header" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 16px; flex-wrap: wrap;">
+        <h2 style="font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #0a0a0a; margin-bottom: 0;">Manage Admin Accounts</h2>
+        <button class="filter-chip" onclick="openAddAdminModal()" style="background: #0a0a0a; color: white; border: none; font-weight: 700; margin-bottom: 0; padding: 8px 16px;">+ Add New Admin</button>
+      </div>
+      <table class="admin-table" id="adminTable">
+        <thead>
+          <tr>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminTableBody">
+          <!-- Rendered dynamically -->
+        </tbody>
+      </table>
+    </section>
+
   </main>
 </div>
 
@@ -399,6 +373,35 @@
     <div class="modal-actions">
       <button class="modal-confirm" id="suspendModalConfirm" style="background:#333; color:#fff; border:none; border-radius:4px; padding:12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer; flex: 1;">Suspend Account</button>
       <button class="modal-cancel" onclick="closeSuspendModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ADMIN MODAL -->
+<div class="modal-overlay hidden" id="addAdminModal">
+  <div class="modal-card">
+    <div class="modal-title">Add New Admin Account</div>
+    <div class="modal-body" style="margin-top: 16px;">
+      <div class="login-field" style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #555;">Admin Email</label>
+        <input type="email" id="newAdminEmail" placeholder="admin@email.com" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;" />
+      </div>
+      <div class="login-field" style="margin-bottom: 12px; display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #555;">Password</label>
+        <input type="password" id="newAdminPassword" placeholder="Create password" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px;" />
+      </div>
+      <div class="login-field" style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 6px;">
+        <label style="font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #555;">Role</label>
+        <select id="newAdminRole" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 4px; background: white; height: 38px;">
+          <option value="regular">Regular Admin</option>
+          <option value="master">Master Admin</option>
+        </select>
+      </div>
+      <div class="login-error hidden" id="addAdminError" style="margin-bottom: 12px; color: #c62828; font-size: 12px; font-weight: 600;"></div>
+    </div>
+    <div class="modal-actions" style="display: flex; gap: 10px;">
+      <button class="modal-confirm" id="addAdminConfirm" style="background:#0a0a0a; color:#fff; border:none; border-radius:4px; padding:12px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; cursor:pointer; flex: 1;">Create Account</button>
+      <button class="modal-cancel" onclick="closeAddAdminModal()" style="flex: 1;">Cancel</button>
     </div>
   </div>
 </div>

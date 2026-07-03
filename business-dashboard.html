@@ -110,6 +110,18 @@
     .modal-overlay.hidden { display: none !important; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+    .student-card {
+      background: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      cursor: pointer;
+    }
+
     .modal {
       background: white;
       border-radius: 8px;
@@ -691,7 +703,7 @@
               <div class="gad-title">Find Jobs Near You in Jamaica</div>
               <div class="gad-domain">jamaicajobstoday.com</div>
               <p class="gad-text">Browse 500+ live job postings updated daily across all parishes.</p>
-              <a href="#" class="gad-cta blue">Search Now</a>
+              <a href="#" class="gad-cta blue" onclick="event.preventDefault();alert('This is a demo ad placement.')">Search Now</a>
             </div>
             <div class="gad-card gad-green">
               <div class="gad-sponsored">Caribbean HR</div>
@@ -699,7 +711,7 @@
               <div class="gad-title">Free CV Builder for Students</div>
               <div class="gad-domain">caribbeanhr.com</div>
               <p class="gad-text">Build a professional resume in minutes. Get noticed by top Caribbean employers.</p>
-              <a href="#" class="gad-cta green">Build Free CV</a>
+              <a href="#" class="gad-cta green" onclick="event.preventDefault();alert('This is a demo ad placement.')">Build Free CV</a>
             </div>
             <div class="gad-card gad-red">
               <div class="gad-sponsored">FlowJamaica</div>
@@ -707,7 +719,7 @@
               <div class="gad-title">Student Internet Plans from $1,200/mo</div>
               <div class="gad-domain">flowjamaica.com</div>
               <p class="gad-text">Work from home or campus. Blazing fast internet for remote work & study.</p>
-              <a href="#" class="gad-cta red">View Plans</a>
+              <a href="#" class="gad-cta red" onclick="event.preventDefault();alert('This is a demo ad placement.')">View Plans</a>
             </div>
             <div class="gad-card gad-purple">
               <div class="gad-sponsored">UWI Open Campus</div>
@@ -715,7 +727,7 @@
               <div class="gad-title">Online Degrees — Apply Now</div>
               <div class="gad-domain">open.uwi.edu</div>
               <p class="gad-text">Earn your bachelor's or diploma online. Flexible schedules built for working students.</p>
-              <a href="#" class="gad-cta purple">Apply Today</a>
+              <a href="#" class="gad-cta purple" onclick="event.preventDefault();alert('This is a demo ad placement.')">Apply Today</a>
             </div>
           </div>
         </div>
@@ -1224,14 +1236,27 @@
     })();
 
     // ── Card Action Handlers ──────────────────────────────────────────
-    document.querySelectorAll('.btn-contact').forEach(btn => {
-      btn.addEventListener('click', function() {
+    // Whole card navigates to student-view.html
+    document.querySelectorAll('.student-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        window.location.href = 'student-view.html';
+      });
+    });
+
+    // Contact button fires its own action and does NOT bubble up to the card
+    document.querySelectorAll('.btn-contact').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
         alert('Contact feature coming soon. Connect Supabase to enable messaging.');
       });
     });
 
-    document.querySelectorAll('.btn-view').forEach(btn => {
-      btn.addEventListener('click', function() {
+    // View Profile button still works; card-level click already handles navigation
+    // stopPropagation not needed here — navigating twice to the same page is harmless,
+    // but we stop it anyway to keep behaviour clean and avoid double-fire.
+    document.querySelectorAll('.btn-view').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
         window.location.href = 'student-view.html';
       });
     });
